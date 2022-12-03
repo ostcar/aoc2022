@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Days.Day1
+import Days.Day2
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -22,7 +23,7 @@ type Model
 
 
 type alias Day =
-    ( String, String )
+    ( () -> String, () -> String )
 
 
 type Msg
@@ -41,7 +42,9 @@ defaultDay =
 
 days : List ( String, Day )
 days =
-    [ ( "Day 1", Days.Day1.solution ) ]
+    [ ( "Day 1", Days.Day1.solution )
+    , ( "Day 2", Days.Day2.solution )
+    ]
 
 
 dayFromIndex : Int -> Day
@@ -91,8 +94,8 @@ viewBody model =
 
         ShowDay ( soltuon1, solution2 ) ->
             div []
-                [ p [] [ text soltuon1 ]
-                , p [] [ text solution2 ]
+                [ p [] [ text <|soltuon1 () ]
+                , p [] [ text <| solution2 () ]
                 ]
 
 

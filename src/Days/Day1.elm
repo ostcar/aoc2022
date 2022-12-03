@@ -1,12 +1,10 @@
 module Days.Day1 exposing (solution)
 
-import Html exposing (..)
 
-
-solution : ( String, String )
+solution : ( () -> String, () -> String )
 solution =
-    ( solution1 puzzleInput
-    , solution2 puzzleInput
+    ( \_ -> (solution1 puzzleInput)
+    , \_ -> (solution2 puzzleInput)
     )
 
 
@@ -28,8 +26,6 @@ solution2 input =
         |> List.take 3
         |> List.sum
         |> String.fromInt
-
-
 
 
 sumGroup : List IntOrEmpty -> List Int
