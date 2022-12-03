@@ -1,175 +1,102 @@
-module Days.Day2 exposing (solution, testPlayer1Result, testSolution1)
+module Days.Day2 exposing (solution, testSolution1, testSolution2)
 
 import Expect exposing (equal)
-import Test exposing (Test, describe, test)
+import Test exposing (Test, test)
 
 
 solution : ( () -> String, () -> String )
 solution =
-    ( \_ -> solution1 puzzleInput
-    , \_ -> "TODO"
+    ( \_ -> solve puzzleInput play1
+    , \_ -> solve puzzleInput play2
     )
 
 
-solution1 : String -> String
-solution1 input =
+solve : String -> (String -> Int) -> String
+solve input f =
     String.split "\n" input
-        |> List.map parseFor1
-        |> ignoreError
-        |> List.map play
+        |> List.map f
         |> List.sum
         |> String.fromInt
 
 
-play : ( RockPaperScissors, RockPaperScissors ) -> Int
-play ( p1, p2 ) =
-    toPoint p2
-        + (case player1Result ( p2, p1 ) of
-            Win ->
-                6
+play1 : String -> Int
+play1 input =
+    case input of
+        "A X" ->
+            3 + 1
 
-            Draw ->
-                3
+        "A Y" ->
+            6 + 2
 
-            Loose ->
-                0
-          )
+        "A Z" ->
+            0 + 3
 
+        "B X" ->
+            0 + 1
 
-type RockPaperScissors
-    = Rock
-    | Paper
-    | Scissors
+        "B Y" ->
+            3 + 2
 
+        "B Z" ->
+            6 + 3
 
-toString : RockPaperScissors -> String
-toString rps =
-    case rps of
-        Rock ->
-            "Rock"
+        "C X" ->
+            6 + 1
 
-        Paper ->
-            "Paper"
+        "C Y" ->
+            0 + 2
 
-        Scissors ->
-            "Scissors"
-
-
-type WinLooseDraw
-    = Win
-    | Loose
-    | Draw
-
-
-player1Result : ( RockPaperScissors, RockPaperScissors ) -> WinLooseDraw
-player1Result turn =
-    let
-        ( p1, p2 ) =
-            Tuple.mapBoth toPoint toPoint turn
-    in
-    if p1 == p2 then
-        Draw
-
-    else if modBy 3 p1 == (p2 - 1) then
-        Loose
-
-    else
-        Win
-
-
-testPlayer1Result : Test
-testPlayer1Result =
-    let
-        tt =
-            [ ( Rock, Rock, Draw )
-            , ( Rock, Paper, Loose )
-            , ( Rock, Scissors, Win )
-            , ( Paper, Rock, Win )
-            , ( Paper, Paper, Draw )
-            , ( Paper, Scissors, Loose )
-            , ( Scissors, Rock, Loose )
-            , ( Scissors, Paper, Win )
-            , ( Scissors, Scissors, Draw )
-            ]
-
-        testName rps1 rps2 =
-            toString rps1 ++ " " ++ toString rps2
-    in
-    describe
-        "test different games"
-        (List.map
-            (\( p1, p2, expect ) -> test (testName p1 p2) <| \_ -> player1Result ( p1, p2 ) |> equal expect)
-            tt
-        )
-
-
-toPoint : RockPaperScissors -> Int
-toPoint rps =
-    case rps of
-        Rock ->
-            1
-
-        Paper ->
-            2
-
-        Scissors ->
-            3
-
-
-parseFor1 : String -> Result String ( RockPaperScissors, RockPaperScissors )
-parseFor1 input =
-    case String.split " " input of
-        first :: second :: _ ->
-            Ok ( letterToSymbol1 first, letterToSymbol1 second )
-
-        list ->
-            Err <| "Invalid input: '" ++ input ++ "': " ++ String.join "," list
-
-
-letterToSymbol1 : String -> RockPaperScissors
-letterToSymbol1 s =
-    case s of
-        "A" ->
-            Rock
-
-        "B" ->
-            Paper
-
-        "C" ->
-            Scissors
-
-        "X" ->
-            Rock
-
-        "Y" ->
-            Paper
-
-        "Z" ->
-            Scissors
+        "C Z" ->
+            3 + 3
 
         _ ->
-            Rock
+            0
 
 
-ignoreError : List (Result x a) -> List a
-ignoreError list =
-    List.foldl
-        (\e r ->
-            case e of
-                Err _ ->
-                    r
+play2 : String -> Int
+play2 input =
+    case input of
+        "A X" ->
+            0 + 3
 
-                Ok good ->
-                    good :: r
-        )
-        []
-        list
+        "A Y" ->
+            3 + 1
+
+        "A Z" ->
+            6 + 2
+
+        "B X" ->
+            0 + 1
+
+        "B Y" ->
+            3 + 2
+
+        "B Z" ->
+            6 + 3
+
+        "C X" ->
+            0 + 2
+
+        "C Y" ->
+            3 + 3
+
+        "C Z" ->
+            6 + 1
+
+        _ ->
+            0
 
 
 testSolution1 : Test
 testSolution1 =
-    test "test input" <|
-        \_ -> equal (solution1 testInput) "15"
+    test "test input1" <|
+        \_ -> equal (solve testInput play1) "15"
+
+
+testSolution2 : Test
+testSolution2 =
+    test "test input2" <|
+        \_ -> equal (solve testInput play2) "12"
 
 
 testInput : String
