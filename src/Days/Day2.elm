@@ -1,7 +1,7 @@
-module Days.Day2 exposing (solution, testSolution1)
+module Days.Day2 exposing (solution, testPlayer1Result, testSolution1)
 
 import Expect exposing (equal)
-import Test exposing (Test, test)
+import Test exposing (Test, describe, test)
 
 
 solution : ( () -> String, () -> String )
@@ -42,6 +42,19 @@ type RockPaperScissors
     | Scissors
 
 
+toString : RockPaperScissors -> String
+toString rps =
+    case rps of
+        Rock ->
+            "Rock"
+
+        Paper ->
+            "Paper"
+
+        Scissors ->
+            "Scissors"
+
+
 type WinLooseDraw
     = Win
     | Loose
@@ -57,11 +70,37 @@ player1Result turn =
     if p1 == p2 then
         Draw
 
-    else if modBy 3 (p1 + 1) == p2 then
+    else if modBy 3 p1 == (p2 - 1) then
         Loose
 
     else
         Win
+
+
+testPlayer1Result : Test
+testPlayer1Result =
+    let
+        tt =
+            [ ( Rock, Rock, Draw )
+            , ( Rock, Paper, Loose )
+            , ( Rock, Scissors, Win )
+            , ( Paper, Rock, Win )
+            , ( Paper, Paper, Draw )
+            , ( Paper, Scissors, Loose )
+            , ( Scissors, Rock, Loose )
+            , ( Scissors, Paper, Win )
+            , ( Scissors, Scissors, Draw )
+            ]
+
+        testName rps1 rps2 =
+            toString rps1 ++ " " ++ toString rps2
+    in
+    describe
+        "test different games"
+        (List.map
+            (\( p1, p2, expect ) -> test (testName p1 p2) <| \_ -> player1Result ( p1, p2 ) |> equal expect)
+            tt
+        )
 
 
 toPoint : RockPaperScissors -> Int
@@ -117,11 +156,7 @@ ignoreError list =
     List.foldl
         (\e r ->
             case e of
-                Err v ->
-                    let
-                        _ =
-                            Debug.log "Ignore error:" v
-                    in
+                Err _ ->
                     r
 
                 Ok good ->
