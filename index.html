@@ -4387,6 +4387,136 @@ function _Browser_load(url)
 
 
 
+
+// STRINGS
+
+
+var _Parser_isSubString = F5(function(smallString, offset, row, col, bigString)
+{
+	var smallLength = smallString.length;
+	var isGood = offset + smallLength <= bigString.length;
+
+	for (var i = 0; isGood && i < smallLength; )
+	{
+		var code = bigString.charCodeAt(offset);
+		isGood =
+			smallString[i++] === bigString[offset++]
+			&& (
+				code === 0x000A /* \n */
+					? ( row++, col=1 )
+					: ( col++, (code & 0xF800) === 0xD800 ? smallString[i++] === bigString[offset++] : 1 )
+			)
+	}
+
+	return _Utils_Tuple3(isGood ? offset : -1, row, col);
+});
+
+
+
+// CHARS
+
+
+var _Parser_isSubChar = F3(function(predicate, offset, string)
+{
+	return (
+		string.length <= offset
+			? -1
+			:
+		(string.charCodeAt(offset) & 0xF800) === 0xD800
+			? (predicate(_Utils_chr(string.substr(offset, 2))) ? offset + 2 : -1)
+			:
+		(predicate(_Utils_chr(string[offset]))
+			? ((string[offset] === '\n') ? -2 : (offset + 1))
+			: -1
+		)
+	);
+});
+
+
+var _Parser_isAsciiCode = F3(function(code, offset, string)
+{
+	return string.charCodeAt(offset) === code;
+});
+
+
+
+// NUMBERS
+
+
+var _Parser_chompBase10 = F2(function(offset, string)
+{
+	for (; offset < string.length; offset++)
+	{
+		var code = string.charCodeAt(offset);
+		if (code < 0x30 || 0x39 < code)
+		{
+			return offset;
+		}
+	}
+	return offset;
+});
+
+
+var _Parser_consumeBase = F3(function(base, offset, string)
+{
+	for (var total = 0; offset < string.length; offset++)
+	{
+		var digit = string.charCodeAt(offset) - 0x30;
+		if (digit < 0 || base <= digit) break;
+		total = base * total + digit;
+	}
+	return _Utils_Tuple2(offset, total);
+});
+
+
+var _Parser_consumeBase16 = F2(function(offset, string)
+{
+	for (var total = 0; offset < string.length; offset++)
+	{
+		var code = string.charCodeAt(offset);
+		if (0x30 <= code && code <= 0x39)
+		{
+			total = 16 * total + code - 0x30;
+		}
+		else if (0x41 <= code && code <= 0x46)
+		{
+			total = 16 * total + code - 55;
+		}
+		else if (0x61 <= code && code <= 0x66)
+		{
+			total = 16 * total + code - 87;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return _Utils_Tuple2(offset, total);
+});
+
+
+
+// FIND STRING
+
+
+var _Parser_findSubString = F5(function(smallString, offset, row, col, bigString)
+{
+	var newOffset = bigString.indexOf(smallString, offset);
+	var target = newOffset < 0 ? bigString.length : newOffset + smallString.length;
+
+	while (offset < target)
+	{
+		var code = bigString.charCodeAt(offset++);
+		code === 0x000A /* \n */
+			? ( col=1, row++ )
+			: ( col++, (code & 0xF800) === 0xD800 && offset++ )
+	}
+
+	return _Utils_Tuple3(newOffset, row, col);
+});
+
+
+
 var _Bitwise_and = F2(function(a, b)
 {
 	return a & b;
@@ -5945,17 +6075,477 @@ var $author$project$Days$Day3$solution = _Utils_Tuple2(
 	function (_v1) {
 		return $author$project$Days$Day3$solution2($author$project$Days$Day3$puzzleInput);
 	});
+var $author$project$Days$Day4$puzzleInput = '\n75-76,18-75\n2-54,1-50\n82-83,78-82\n13-37,37-75\n79-80,2-80\n29-90,30-89\n13-16,12-15\n20-93,20-94\n90-95,33-90\n16-77,76-92\n42-52,15-52\n6-34,9-89\n13-77,12-76\n18-81,17-81\n2-34,2-33\n17-92,20-93\n24-89,7-11\n6-49,27-49\n17-69,16-69\n34-57,35-58\n71-76,73-87\n69-72,70-72\n30-70,29-69\n48-85,52-84\n14-69,13-15\n2-61,3-70\n17-86,17-85\n7-98,8-98\n8-93,12-94\n16-35,35-49\n13-59,13-79\n5-95,4-95\n2-40,2-39\n16-44,22-60\n8-26,9-27\n48-89,88-91\n19-97,18-20\n10-81,9-9\n3-40,58-73\n2-93,92-92\n77-83,73-84\n7-84,6-6\n35-45,38-59\n28-79,57-74\n52-82,55-83\n60-60,9-60\n63-86,40-64\n44-80,13-26\n17-67,19-75\n33-69,5-68\n5-31,4-54\n81-82,64-81\n55-92,55-95\n28-29,29-82\n34-93,33-33\n88-95,62-88\n64-81,65-81\n81-82,64-81\n28-94,28-94\n9-76,6-75\n34-36,35-58\n86-89,12-89\n29-31,30-31\n46-78,83-87\n11-77,1-11\n27-34,37-68\n3-4,4-93\n7-89,89-90\n18-94,14-16\n28-89,10-88\n89-91,33-89\n17-53,17-52\n70-87,70-86\n1-33,1-86\n67-68,33-67\n13-75,14-27\n26-73,26-72\n28-57,17-19\n65-65,3-65\n5-92,28-29\n2-19,19-81\n29-42,29-37\n16-70,47-87\n5-77,1-2\n28-40,28-41\n98-98,10-98\n11-21,3-74\n4-32,5-31\n5-98,4-4\n23-99,22-97\n77-99,82-94\n8-91,9-91\n1-60,59-93\n9-11,10-37\n88-88,11-89\n71-89,48-70\n6-77,6-76\n82-91,84-90\n7-97,47-96\n54-64,54-67\n7-34,16-35\n5-97,4-97\n1-1,3-18\n42-51,42-45\n69-70,69-80\n16-86,16-88\n58-59,58-58\n56-86,57-57\n11-35,10-35\n15-20,37-98\n4-97,96-98\n32-34,32-34\n53-66,12-33\n65-65,3-66\n82-83,9-82\n5-59,2-5\n74-90,43-91\n34-86,35-87\n65-91,5-92\n7-86,8-87\n46-48,47-56\n87-92,8-83\n21-21,22-54\n50-97,50-93\n8-74,8-96\n45-46,46-57\n82-98,34-79\n29-62,29-55\n15-68,16-69\n26-88,37-88\n45-78,46-46\n60-65,60-61\n3-36,36-37\n55-84,56-91\n7-99,7-97\n2-98,1-99\n51-89,63-90\n4-99,3-99\n6-50,6-51\n37-98,62-98\n38-86,38-39\n1-96,1-95\n88-90,78-84\n44-61,4-45\n6-89,89-90\n7-93,19-93\n56-94,93-97\n5-25,13-28\n28-35,29-63\n62-70,63-76\n20-20,21-48\n13-48,45-72\n13-50,50-89\n25-79,25-78\n44-74,33-73\n87-87,62-87\n30-57,54-56\n30-64,20-65\n4-95,5-96\n22-54,13-88\n11-11,8-9\n66-84,67-83\n6-95,7-74\n36-84,23-36\n18-35,18-35\n96-97,42-96\n10-11,11-91\n9-96,95-98\n8-68,8-8\n15-18,13-20\n37-50,8-98\n9-10,10-98\n12-93,13-13\n6-79,7-79\n18-59,18-41\n25-52,41-53\n6-82,6-80\n74-74,6-74\n1-98,1-99\n51-94,93-98\n84-98,5-85\n26-35,23-35\n45-89,34-88\n36-78,37-37\n2-11,17-59\n20-96,20-97\n30-46,13-47\n15-86,15-88\n30-60,12-29\n82-97,12-82\n2-2,3-87\n60-89,59-87\n5-85,6-86\n16-84,15-16\n10-29,18-73\n64-93,65-99\n37-60,37-67\n2-98,1-96\n7-14,8-14\n29-64,29-29\n34-58,33-58\n1-97,2-97\n13-20,23-59\n64-64,65-76\n16-48,6-47\n81-90,81-89\n76-91,23-40\n22-46,21-46\n13-74,74-74\n34-35,18-34\n38-90,37-37\n34-61,36-61\n41-52,42-42\n3-12,3-87\n96-97,43-96\n97-98,4-96\n24-67,40-68\n13-31,4-23\n27-57,26-26\n3-84,84-85\n16-94,93-99\n16-16,17-74\n34-60,2-34\n17-98,17-30\n45-61,34-40\n12-17,11-14\n95-95,3-94\n48-69,11-68\n8-51,50-99\n44-80,44-76\n4-4,5-94\n31-47,30-55\n27-35,36-36\n3-57,3-98\n2-90,3-90\n22-79,22-80\n28-46,27-46\n1-1,3-30\n36-81,36-50\n19-40,19-41\n22-93,11-22\n32-58,31-58\n35-44,24-43\n1-8,1-80\n7-27,9-19\n78-90,14-78\n1-37,36-51\n32-36,30-37\n43-45,30-44\n65-80,66-79\n96-97,43-96\n62-94,61-92\n4-96,96-97\n15-75,14-76\n39-82,38-82\n3-95,3-57\n22-98,32-96\n2-93,3-93\n25-62,62-63\n6-58,57-87\n3-25,2-80\n50-54,51-52\n2-91,1-86\n97-98,38-97\n54-74,3-96\n6-31,31-87\n37-39,38-97\n8-55,8-42\n6-33,7-33\n18-96,81-97\n9-95,94-99\n6-13,5-46\n14-73,34-73\n7-94,7-89\n56-86,57-86\n12-53,11-53\n25-60,24-59\n39-75,28-28\n52-53,52-54\n6-35,12-34\n57-88,38-58\n57-58,7-58\n45-64,4-63\n26-84,3-80\n15-84,15-85\n16-89,17-89\n34-91,33-90\n24-67,94-95\n43-45,44-73\n29-65,66-74\n23-83,22-84\n2-99,1-99\n24-52,25-52\n4-6,5-87\n5-96,1-5\n5-18,24-31\n49-93,55-94\n11-94,43-95\n18-41,17-40\n86-88,85-87\n12-56,16-57\n45-71,45-54\n65-73,62-73\n93-93,61-92\n33-94,34-93\n7-62,14-62\n4-99,1-2\n6-69,1-1\n5-84,83-87\n6-82,93-99\n81-81,1-81\n2-81,1-74\n23-93,22-93\n9-11,3-3\n13-40,12-40\n10-87,9-94\n53-63,54-54\n25-72,45-71\n1-2,5-98\n63-67,23-64\n98-98,63-97\n63-87,50-58\n9-80,10-75\n1-1,3-40\n11-75,76-99\n32-98,33-97\n44-44,34-43\n49-52,33-51\n1-97,2-97\n82-82,82-82\n84-97,4-96\n1-95,13-96\n31-87,4-30\n15-40,5-7\n87-91,40-79\n6-99,5-99\n6-67,55-84\n56-94,83-99\n5-48,49-49\n14-25,24-35\n21-66,22-66\n93-96,94-95\n64-65,18-64\n69-96,68-84\n3-98,2-99\n3-95,2-95\n35-98,94-98\n19-28,29-88\n48-94,49-94\n29-47,29-35\n3-50,1-3\n1-4,1-61\n20-63,19-89\n11-96,11-50\n2-2,5-94\n76-97,76-95\n14-33,47-75\n88-91,12-87\n12-64,12-89\n4-84,3-84\n13-98,6-13\n65-75,64-75\n30-30,19-30\n99-99,39-99\n18-70,18-44\n1-31,1-42\n49-84,83-90\n94-95,54-94\n9-94,95-95\n69-69,68-94\n10-82,10-81\n98-99,63-93\n82-82,75-81\n59-66,25-64\n28-88,88-88\n50-81,81-98\n80-80,27-81\n11-95,10-72\n23-96,22-95\n15-73,14-73\n13-13,3-13\n29-77,29-71\n52-89,78-96\n6-52,25-53\n16-87,15-87\n37-85,63-86\n2-26,11-27\n27-48,28-28\n17-29,9-17\n21-70,21-76\n85-99,85-86\n47-77,48-77\n4-35,36-36\n92-96,58-92\n48-80,47-79\n4-29,82-90\n26-88,27-89\n37-92,36-38\n10-93,11-94\n72-72,17-73\n58-66,60-67\n19-46,19-19\n39-78,30-39\n61-99,39-60\n8-92,8-91\n7-83,5-7\n3-80,1-1\n90-99,5-91\n5-92,92-93\n6-88,6-89\n57-95,19-94\n30-76,31-31\n12-94,93-93\n35-49,36-49\n15-67,16-66\n88-91,63-89\n56-79,55-55\n1-5,4-12\n31-87,30-88\n72-79,73-80\n69-81,70-91\n20-42,43-43\n3-65,15-66\n46-46,45-72\n16-21,15-22\n98-99,34-97\n10-28,48-80\n1-97,3-98\n14-99,15-99\n25-25,25-75\n12-91,12-92\n94-98,11-79\n9-90,9-92\n50-54,49-51\n64-82,64-83\n8-10,9-59\n9-96,96-96\n1-17,23-86\n66-91,66-98\n3-93,2-82\n7-8,8-83\n24-28,25-28\n94-95,7-94\n38-86,38-93\n4-50,32-49\n7-61,61-88\n86-86,9-85\n10-94,7-10\n96-96,10-96\n13-67,40-68\n21-53,22-53\n12-38,13-39\n4-7,21-63\n26-90,91-96\n56-99,56-98\n19-20,18-19\n86-90,7-85\n18-59,18-32\n73-75,69-75\n24-77,25-77\n28-94,25-26\n17-79,79-80\n55-57,54-80\n8-22,8-22\n96-96,7-96\n51-63,53-63\n14-99,15-99\n20-98,20-97\n93-95,9-66\n79-93,78-79\n20-48,20-53\n43-81,44-82\n28-93,29-94\n1-28,28-29\n81-86,56-86\n30-86,89-89\n79-79,78-90\n87-93,27-62\n37-87,37-87\n95-96,4-95\n40-72,38-41\n67-80,48-79\n63-63,19-63\n3-98,16-99\n64-93,37-43\n8-85,16-83\n66-69,50-68\n11-87,12-86\n77-92,5-92\n99-99,96-98\n3-94,2-4\n29-97,28-96\n57-76,65-76\n58-75,58-63\n67-88,66-88\n77-88,57-86\n5-84,84-97\n10-71,8-70\n7-17,3-18\n42-89,43-89\n30-31,3-30\n42-87,41-43\n68-93,67-94\n3-85,3-86\n26-81,27-27\n82-99,74-83\n50-88,51-89\n7-9,11-81\n17-53,25-53\n5-95,5-99\n34-73,74-90\n34-40,35-40\n10-68,46-69\n28-96,95-98\n58-59,5-58\n1-99,2-99\n4-98,5-87\n3-96,2-98\n84-88,83-85\n11-96,10-97\n19-88,2-87\n19-72,23-51\n6-96,2-96\n18-64,14-16\n96-99,3-97\n75-91,13-75\n18-57,32-58\n17-33,17-37\n43-64,63-63\n97-97,14-84\n89-99,9-89\n63-85,64-85\n77-78,47-77\n20-21,1-16\n23-33,23-28\n58-90,59-67\n39-80,20-40\n15-46,3-15\n13-82,81-89\n1-4,9-92\n15-45,3-15\n18-78,12-12\n3-3,2-61\n1-9,1-3\n7-7,6-99\n5-35,4-34\n5-74,6-74\n18-55,17-55\n92-94,11-68\n27-97,27-83\n14-57,57-58\n25-69,26-36\n72-94,72-95\n4-80,4-94\n7-77,7-99\n42-91,42-92\n38-67,22-37\n40-93,40-87\n31-65,5-64\n34-96,96-97\n1-28,27-27\n12-63,13-13\n97-99,71-91\n17-69,16-68\n56-67,56-65\n5-68,6-68\n17-93,23-99\n8-14,7-14\n18-89,18-18\n3-38,39-62\n4-4,5-39\n27-85,84-84\n32-95,96-99\n7-68,17-67\n20-69,19-70\n92-92,32-91\n3-18,4-46\n13-94,13-94\n52-80,52-81\n29-87,3-86\n79-80,35-79\n23-67,47-68\n22-96,24-95\n7-68,4-4\n5-98,3-5\n84-89,84-99\n18-21,1-15\n41-85,40-85\n38-63,60-60\n43-89,43-43\n11-83,10-84\n43-61,11-43\n25-91,26-26\n23-23,22-95\n2-2,1-92\n79-94,9-79\n6-96,34-96\n58-75,57-67\n11-14,14-15\n20-93,19-21\n7-85,7-85\n19-56,20-55\n87-89,6-87\n90-90,2-91\n23-50,22-49\n78-92,22-77\n75-77,74-76\n81-90,81-94\n26-81,81-81\n12-58,41-90\n14-84,13-84\n38-89,39-90\n66-73,65-73\n8-75,8-63\n6-67,3-4\n2-69,3-68\n15-61,15-69\n57-75,57-76\n9-98,98-99\n6-6,20-67\n47-91,46-90\n26-96,26-97\n25-56,24-56\n28-53,27-53\n26-55,25-55\n25-68,26-68\n6-11,11-37\n24-27,25-25\n44-56,8-57\n29-30,29-98\n28-33,27-67\n7-17,7-11\n4-5,25-77\n33-35,34-75\n1-72,73-73\n10-92,92-93\n2-22,83-94\n4-97,96-99\n38-50,18-51\n39-42,41-41\n55-57,55-58\n19-89,36-88\n47-67,48-68\n83-90,83-85\n3-80,46-81\n22-92,48-61\n19-93,33-94\n2-3,1-72\n98-99,30-97\n35-54,54-54\n4-97,5-98\n7-90,8-91\n31-61,4-29\n14-18,15-25\n26-27,26-63\n26-26,9-26\n25-60,60-60\n66-97,63-96\n70-91,6-71\n21-88,22-22\n18-92,14-18\n11-87,4-7\n57-88,58-88\n37-81,3-44\n67-89,55-98\n25-91,24-90\n68-82,67-67\n70-72,43-71\n4-74,74-75\n18-83,9-19\n16-80,81-81\n3-75,2-74\n3-71,11-72\n38-55,7-38\n19-65,20-49\n17-98,16-18\n45-95,24-94\n11-16,15-89\n28-68,29-43\n26-26,25-48\n4-98,3-30\n9-95,95-96\n31-54,31-58\n31-43,30-30\n8-10,10-89\n2-15,1-90\n26-76,46-77\n63-91,62-91\n4-62,19-63\n36-88,36-87\n19-98,19-97\n2-98,98-98\n11-84,11-85\n26-29,6-28\n22-61,26-72\n38-56,38-57\n9-73,1-72\n24-73,23-73\n80-80,9-79\n31-33,32-96\n3-94,4-93\n26-26,25-83\n1-99,1-97\n7-94,7-99\n10-52,3-51\n39-47,42-47\n44-96,43-44\n3-94,2-94\n30-44,29-43\n60-99,60-92\n18-69,69-69\n20-32,1-20\n2-81,13-82\n16-75,9-16\n69-79,80-91\n12-90,12-15\n55-67,56-93\n17-45,3-17\n3-3,2-78\n12-27,28-28\n42-90,59-90\n30-96,31-98\n47-68,63-64\n1-97,2-97\n28-81,22-81\n10-88,1-88\n15-84,15-81\n67-72,68-68\n1-72,1-72\n90-91,86-90\n89-94,79-93\n92-98,15-92\n2-99,1-99\n1-99,99-99\n16-99,17-99\n11-17,17-95\n38-87,39-87\n24-47,28-46\n38-94,38-99\n58-85,59-67\n20-22,21-21\n82-88,59-87\n90-99,89-98\n12-21,20-91\n64-99,61-64\n6-43,5-44\n23-23,24-76\n4-95,3-3\n23-71,24-71\n39-47,38-38\n73-91,92-92\n23-93,87-96\n46-76,27-77\n78-79,65-78\n27-46,26-46\n77-82,83-85\n2-54,54-55\n1-3,6-99\n42-42,22-43\n7-96,8-96\n28-33,28-87\n1-31,1-85\n2-93,3-94\n4-96,2-96\n30-30,29-99\n30-39,30-30\n4-18,34-88\n68-69,68-87\n30-95,30-76\n10-63,10-99\n2-98,98-98\n12-37,11-11\n9-80,9-81\n37-37,38-83\n95-99,7-95\n3-26,60-98\n3-99,4-28\n5-95,6-95\n41-86,42-85\n72-95,39-94\n1-51,1-62\n3-95,95-96\n73-83,74-79\n93-97,93-96\n33-93,32-93\n22-40,21-39\n11-14,18-79\n96-97,58-95\n16-40,40-89\n1-88,2-88\n5-51,5-29\n20-48,31-49\n3-95,95-96\n23-89,23-90\n55-80,56-79\n43-43,42-59\n55-84,54-83\n13-76,76-77\n22-94,9-35\n23-96,68-91\n1-85,60-84\n27-27,11-27\n33-35,33-64\n9-77,10-10\n69-81,90-91\n16-95,16-96\n21-94,21-22\n7-95,3-94\n47-79,1-57\n5-39,5-39\n12-82,13-82\n70-70,63-70\n64-64,26-63\n2-4,4-94\n80-80,79-97\n38-75,37-38\n54-91,92-92\n63-83,63-65\n8-56,8-55\n98-98,27-97\n26-91,28-92\n24-85,20-72\n13-18,30-84\n29-67,29-68\n87-95,8-87\n13-26,11-41\n16-99,17-99\n16-98,17-98\n18-54,18-83\n63-80,64-87\n63-63,58-63\n37-91,37-85\n6-12,4-7\n6-58,30-59\n18-52,53-96\n17-61,17-75\n49-72,71-97\n11-69,11-36\n22-84,22-83\n1-64,1-65\n27-39,38-38\n48-49,49-88\n1-1,3-74\n55-92,55-98\n51-51,8-52\n2-26,1-26\n23-64,64-64\n57-82,57-81\n91-91,26-91\n6-97,41-98\n1-94,1-95\n56-83,16-99\n8-8,10-88\n38-43,6-42\n22-84,2-89\n14-76,72-88\n31-93,30-93\n72-92,73-92\n57-58,21-57\n4-94,6-94\n11-85,86-86\n9-61,8-61\n69-91,69-69\n27-77,77-78\n10-52,10-51\n9-9,8-49\n66-67,65-78\n2-90,2-98\n42-42,41-79\n3-86,3-42\n15-93,25-73\n26-94,27-95\n16-99,15-99\n1-1,3-65\n97-98,4-96\n25-87,26-97\n3-20,20-96\n32-81,32-80\n22-85,22-95\n4-96,97-98\n97-99,62-75\n87-99,46-87\n98-99,44-76\n26-93,26-33\n56-87,34-63\n1-91,95-98\n12-97,11-80\n19-36,19-91\n19-25,25-98\n99-99,7-92\n37-46,38-43\n73-75,73-78\n18-97,97-97\n4-98,4-94\n88-88,25-88\n95-95,4-95\n3-70,9-71\n20-54,19-21\n34-40,24-39\n3-3,2-95\n5-37,4-37\n5-81,5-80\n2-95,9-95\n12-87,13-13\n2-3,2-96\n19-63,19-94\n64-84,35-35\n8-96,5-95\n37-69,38-52\n91-98,12-92\n66-87,66-83\n36-58,20-57\n8-82,82-83\n11-71,13-70\n40-43,39-43\n1-73,1-1\n12-91,12-92\n73-97,41-57\n6-83,7-7\n20-36,19-41\n15-91,14-90\n18-51,13-50\n12-97,97-97\n1-89,89-89\n13-34,12-34\n46-52,46-79\n34-36,34-35\n22-76,76-76\n3-93,4-76\n34-35,22-34\n7-20,20-20\n16-47,2-27\n59-60,2-59\n96-99,37-94\n4-92,4-94\n12-30,8-29\n22-32,22-22\n1-99,2-98\n61-70,53-70\n45-96,46-96\n84-99,2-85\n1-2,1-99\n19-99,20-94\n77-86,86-88\n25-83,3-82\n6-70,5-70\n38-85,85-86\n55-83,55-84\n87-98,86-97\n29-31,29-74\n5-42,5-41\n21-99,21-77\n47-71,46-51\n33-51,50-50\n52-60,5-40\n28-94,29-29\n6-23,11-14\n31-33,32-48\n74-75,44-74\n84-96,84-96\n38-38,37-45\n53-90,92-94\n12-32,2-8\n39-70,38-70\n93-96,17-93\n43-60,33-37\n4-22,3-95\n1-89,2-90\n27-76,26-77\n34-71,57-71\n49-62,20-62\n48-97,2-95\n11-72,2-5\n72-72,72-92\n22-65,64-78\n24-96,24-25\n38-93,32-94\n70-71,59-70\n38-76,38-76\n31-50,30-50\n22-97,21-69\n22-79,24-80\n69-88,88-88\n47-48,46-87\n27-29,28-42\n24-24,25-71\n11-94,20-95\n1-10,29-85\n32-52,32-86\n15-72,73-93\n15-28,15-47\n14-64,15-64\n88-88,25-89\n80-80,15-80\n3-58,58-59\n19-96,95-99\n39-74,40-87\n64-71,71-72\n49-80,36-80\n61-79,49-78\n';
+var $author$project$Days$Day4$countFunc = F2(
+	function (func, list) {
+		return A3(
+			$elm$core$List$foldl,
+			F2(
+				function (e, count) {
+					return func(e) ? (count + 1) : count;
+				}),
+			0,
+			list);
+	});
+var $elm$core$Basics$ge = _Utils_ge;
+var $author$project$Days$Day4$isFullIntersect = function (_v0) {
+	var first = _v0.a;
+	var second = _v0.b;
+	var firstIsFullIntersect = F2(
+		function (_v1, _v2) {
+			var a = _v1.a;
+			var b = _v1.b;
+			var c = _v2.a;
+			var d = _v2.b;
+			return (_Utils_cmp(a, c) > -1) && (_Utils_cmp(b, d) < 1);
+		});
+	return A2(firstIsFullIntersect, first, second) || A2(firstIsFullIntersect, second, first);
+};
+var $elm$core$Basics$always = F2(
+	function (a, _v0) {
+		return a;
+	});
+var $elm$parser$Parser$Advanced$Bad = F2(
+	function (a, b) {
+		return {$: 'Bad', a: a, b: b};
+	});
+var $elm$parser$Parser$Advanced$Good = F3(
+	function (a, b, c) {
+		return {$: 'Good', a: a, b: b, c: c};
+	});
+var $elm$parser$Parser$Advanced$Parser = function (a) {
+	return {$: 'Parser', a: a};
+};
+var $elm$parser$Parser$Advanced$map2 = F3(
+	function (func, _v0, _v1) {
+		var parseA = _v0.a;
+		var parseB = _v1.a;
+		return $elm$parser$Parser$Advanced$Parser(
+			function (s0) {
+				var _v2 = parseA(s0);
+				if (_v2.$ === 'Bad') {
+					var p = _v2.a;
+					var x = _v2.b;
+					return A2($elm$parser$Parser$Advanced$Bad, p, x);
+				} else {
+					var p1 = _v2.a;
+					var a = _v2.b;
+					var s1 = _v2.c;
+					var _v3 = parseB(s1);
+					if (_v3.$ === 'Bad') {
+						var p2 = _v3.a;
+						var x = _v3.b;
+						return A2($elm$parser$Parser$Advanced$Bad, p1 || p2, x);
+					} else {
+						var p2 = _v3.a;
+						var b = _v3.b;
+						var s2 = _v3.c;
+						return A3(
+							$elm$parser$Parser$Advanced$Good,
+							p1 || p2,
+							A2(func, a, b),
+							s2);
+					}
+				}
+			});
+	});
+var $elm$parser$Parser$Advanced$ignorer = F2(
+	function (keepParser, ignoreParser) {
+		return A3($elm$parser$Parser$Advanced$map2, $elm$core$Basics$always, keepParser, ignoreParser);
+	});
+var $elm$parser$Parser$ignorer = $elm$parser$Parser$Advanced$ignorer;
+var $elm$parser$Parser$ExpectingInt = {$: 'ExpectingInt'};
+var $elm$parser$Parser$Advanced$consumeBase = _Parser_consumeBase;
+var $elm$parser$Parser$Advanced$consumeBase16 = _Parser_consumeBase16;
+var $elm$parser$Parser$Advanced$bumpOffset = F2(
+	function (newOffset, s) {
+		return {col: s.col + (newOffset - s.offset), context: s.context, indent: s.indent, offset: newOffset, row: s.row, src: s.src};
+	});
+var $elm$parser$Parser$Advanced$chompBase10 = _Parser_chompBase10;
+var $elm$parser$Parser$Advanced$isAsciiCode = _Parser_isAsciiCode;
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$parser$Parser$Advanced$consumeExp = F2(
+	function (offset, src) {
+		if (A3($elm$parser$Parser$Advanced$isAsciiCode, 101, offset, src) || A3($elm$parser$Parser$Advanced$isAsciiCode, 69, offset, src)) {
+			var eOffset = offset + 1;
+			var expOffset = (A3($elm$parser$Parser$Advanced$isAsciiCode, 43, eOffset, src) || A3($elm$parser$Parser$Advanced$isAsciiCode, 45, eOffset, src)) ? (eOffset + 1) : eOffset;
+			var newOffset = A2($elm$parser$Parser$Advanced$chompBase10, expOffset, src);
+			return _Utils_eq(expOffset, newOffset) ? (-newOffset) : newOffset;
+		} else {
+			return offset;
+		}
+	});
+var $elm$parser$Parser$Advanced$consumeDotAndExp = F2(
+	function (offset, src) {
+		return A3($elm$parser$Parser$Advanced$isAsciiCode, 46, offset, src) ? A2(
+			$elm$parser$Parser$Advanced$consumeExp,
+			A2($elm$parser$Parser$Advanced$chompBase10, offset + 1, src),
+			src) : A2($elm$parser$Parser$Advanced$consumeExp, offset, src);
+	});
+var $elm$parser$Parser$Advanced$AddRight = F2(
+	function (a, b) {
+		return {$: 'AddRight', a: a, b: b};
+	});
+var $elm$parser$Parser$Advanced$DeadEnd = F4(
+	function (row, col, problem, contextStack) {
+		return {col: col, contextStack: contextStack, problem: problem, row: row};
+	});
+var $elm$parser$Parser$Advanced$Empty = {$: 'Empty'};
+var $elm$parser$Parser$Advanced$fromState = F2(
+	function (s, x) {
+		return A2(
+			$elm$parser$Parser$Advanced$AddRight,
+			$elm$parser$Parser$Advanced$Empty,
+			A4($elm$parser$Parser$Advanced$DeadEnd, s.row, s.col, x, s.context));
+	});
+var $elm$parser$Parser$Advanced$finalizeInt = F5(
+	function (invalid, handler, startOffset, _v0, s) {
+		var endOffset = _v0.a;
+		var n = _v0.b;
+		if (handler.$ === 'Err') {
+			var x = handler.a;
+			return A2(
+				$elm$parser$Parser$Advanced$Bad,
+				true,
+				A2($elm$parser$Parser$Advanced$fromState, s, x));
+		} else {
+			var toValue = handler.a;
+			return _Utils_eq(startOffset, endOffset) ? A2(
+				$elm$parser$Parser$Advanced$Bad,
+				_Utils_cmp(s.offset, startOffset) < 0,
+				A2($elm$parser$Parser$Advanced$fromState, s, invalid)) : A3(
+				$elm$parser$Parser$Advanced$Good,
+				true,
+				toValue(n),
+				A2($elm$parser$Parser$Advanced$bumpOffset, endOffset, s));
+		}
+	});
+var $elm$parser$Parser$Advanced$fromInfo = F4(
+	function (row, col, x, context) {
+		return A2(
+			$elm$parser$Parser$Advanced$AddRight,
+			$elm$parser$Parser$Advanced$Empty,
+			A4($elm$parser$Parser$Advanced$DeadEnd, row, col, x, context));
+	});
+var $elm$core$String$toFloat = _String_toFloat;
+var $elm$parser$Parser$Advanced$finalizeFloat = F6(
+	function (invalid, expecting, intSettings, floatSettings, intPair, s) {
+		var intOffset = intPair.a;
+		var floatOffset = A2($elm$parser$Parser$Advanced$consumeDotAndExp, intOffset, s.src);
+		if (floatOffset < 0) {
+			return A2(
+				$elm$parser$Parser$Advanced$Bad,
+				true,
+				A4($elm$parser$Parser$Advanced$fromInfo, s.row, s.col - (floatOffset + s.offset), invalid, s.context));
+		} else {
+			if (_Utils_eq(s.offset, floatOffset)) {
+				return A2(
+					$elm$parser$Parser$Advanced$Bad,
+					false,
+					A2($elm$parser$Parser$Advanced$fromState, s, expecting));
+			} else {
+				if (_Utils_eq(intOffset, floatOffset)) {
+					return A5($elm$parser$Parser$Advanced$finalizeInt, invalid, intSettings, s.offset, intPair, s);
+				} else {
+					if (floatSettings.$ === 'Err') {
+						var x = floatSettings.a;
+						return A2(
+							$elm$parser$Parser$Advanced$Bad,
+							true,
+							A2($elm$parser$Parser$Advanced$fromState, s, invalid));
+					} else {
+						var toValue = floatSettings.a;
+						var _v1 = $elm$core$String$toFloat(
+							A3($elm$core$String$slice, s.offset, floatOffset, s.src));
+						if (_v1.$ === 'Nothing') {
+							return A2(
+								$elm$parser$Parser$Advanced$Bad,
+								true,
+								A2($elm$parser$Parser$Advanced$fromState, s, invalid));
+						} else {
+							var n = _v1.a;
+							return A3(
+								$elm$parser$Parser$Advanced$Good,
+								true,
+								toValue(n),
+								A2($elm$parser$Parser$Advanced$bumpOffset, floatOffset, s));
+						}
+					}
+				}
+			}
+		}
+	});
+var $elm$parser$Parser$Advanced$number = function (c) {
+	return $elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			if (A3($elm$parser$Parser$Advanced$isAsciiCode, 48, s.offset, s.src)) {
+				var zeroOffset = s.offset + 1;
+				var baseOffset = zeroOffset + 1;
+				return A3($elm$parser$Parser$Advanced$isAsciiCode, 120, zeroOffset, s.src) ? A5(
+					$elm$parser$Parser$Advanced$finalizeInt,
+					c.invalid,
+					c.hex,
+					baseOffset,
+					A2($elm$parser$Parser$Advanced$consumeBase16, baseOffset, s.src),
+					s) : (A3($elm$parser$Parser$Advanced$isAsciiCode, 111, zeroOffset, s.src) ? A5(
+					$elm$parser$Parser$Advanced$finalizeInt,
+					c.invalid,
+					c.octal,
+					baseOffset,
+					A3($elm$parser$Parser$Advanced$consumeBase, 8, baseOffset, s.src),
+					s) : (A3($elm$parser$Parser$Advanced$isAsciiCode, 98, zeroOffset, s.src) ? A5(
+					$elm$parser$Parser$Advanced$finalizeInt,
+					c.invalid,
+					c.binary,
+					baseOffset,
+					A3($elm$parser$Parser$Advanced$consumeBase, 2, baseOffset, s.src),
+					s) : A6(
+					$elm$parser$Parser$Advanced$finalizeFloat,
+					c.invalid,
+					c.expecting,
+					c._int,
+					c._float,
+					_Utils_Tuple2(zeroOffset, 0),
+					s)));
+			} else {
+				return A6(
+					$elm$parser$Parser$Advanced$finalizeFloat,
+					c.invalid,
+					c.expecting,
+					c._int,
+					c._float,
+					A3($elm$parser$Parser$Advanced$consumeBase, 10, s.offset, s.src),
+					s);
+			}
+		});
+};
+var $elm$parser$Parser$Advanced$int = F2(
+	function (expecting, invalid) {
+		return $elm$parser$Parser$Advanced$number(
+			{
+				binary: $elm$core$Result$Err(invalid),
+				expecting: expecting,
+				_float: $elm$core$Result$Err(invalid),
+				hex: $elm$core$Result$Err(invalid),
+				_int: $elm$core$Result$Ok($elm$core$Basics$identity),
+				invalid: invalid,
+				octal: $elm$core$Result$Err(invalid)
+			});
+	});
+var $elm$parser$Parser$int = A2($elm$parser$Parser$Advanced$int, $elm$parser$Parser$ExpectingInt, $elm$parser$Parser$ExpectingInt);
+var $elm$parser$Parser$Advanced$keeper = F2(
+	function (parseFunc, parseArg) {
+		return A3($elm$parser$Parser$Advanced$map2, $elm$core$Basics$apL, parseFunc, parseArg);
+	});
+var $elm$parser$Parser$keeper = $elm$parser$Parser$Advanced$keeper;
+var $elm$parser$Parser$DeadEnd = F3(
+	function (row, col, problem) {
+		return {col: col, problem: problem, row: row};
+	});
+var $elm$parser$Parser$problemToDeadEnd = function (p) {
+	return A3($elm$parser$Parser$DeadEnd, p.row, p.col, p.problem);
+};
+var $elm$parser$Parser$Advanced$bagToList = F2(
+	function (bag, list) {
+		bagToList:
+		while (true) {
+			switch (bag.$) {
+				case 'Empty':
+					return list;
+				case 'AddRight':
+					var bag1 = bag.a;
+					var x = bag.b;
+					var $temp$bag = bag1,
+						$temp$list = A2($elm$core$List$cons, x, list);
+					bag = $temp$bag;
+					list = $temp$list;
+					continue bagToList;
+				default:
+					var bag1 = bag.a;
+					var bag2 = bag.b;
+					var $temp$bag = bag1,
+						$temp$list = A2($elm$parser$Parser$Advanced$bagToList, bag2, list);
+					bag = $temp$bag;
+					list = $temp$list;
+					continue bagToList;
+			}
+		}
+	});
+var $elm$parser$Parser$Advanced$run = F2(
+	function (_v0, src) {
+		var parse = _v0.a;
+		var _v1 = parse(
+			{col: 1, context: _List_Nil, indent: 1, offset: 0, row: 1, src: src});
+		if (_v1.$ === 'Good') {
+			var value = _v1.b;
+			return $elm$core$Result$Ok(value);
+		} else {
+			var bag = _v1.b;
+			return $elm$core$Result$Err(
+				A2($elm$parser$Parser$Advanced$bagToList, bag, _List_Nil));
+		}
+	});
+var $elm$parser$Parser$run = F2(
+	function (parser, source) {
+		var _v0 = A2($elm$parser$Parser$Advanced$run, parser, source);
+		if (_v0.$ === 'Ok') {
+			var a = _v0.a;
+			return $elm$core$Result$Ok(a);
+		} else {
+			var problems = _v0.a;
+			return $elm$core$Result$Err(
+				A2($elm$core$List$map, $elm$parser$Parser$problemToDeadEnd, problems));
+		}
+	});
+var $elm$parser$Parser$Advanced$succeed = function (a) {
+	return $elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			return A3($elm$parser$Parser$Advanced$Good, false, a, s);
+		});
+};
+var $elm$parser$Parser$succeed = $elm$parser$Parser$Advanced$succeed;
+var $elm$parser$Parser$ExpectingSymbol = function (a) {
+	return {$: 'ExpectingSymbol', a: a};
+};
+var $elm$parser$Parser$Advanced$Token = F2(
+	function (a, b) {
+		return {$: 'Token', a: a, b: b};
+	});
+var $elm$parser$Parser$Advanced$isSubString = _Parser_isSubString;
+var $elm$parser$Parser$Advanced$token = function (_v0) {
+	var str = _v0.a;
+	var expecting = _v0.b;
+	var progress = !$elm$core$String$isEmpty(str);
+	return $elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.offset, s.row, s.col, s.src);
+			var newOffset = _v1.a;
+			var newRow = _v1.b;
+			var newCol = _v1.c;
+			return _Utils_eq(newOffset, -1) ? A2(
+				$elm$parser$Parser$Advanced$Bad,
+				false,
+				A2($elm$parser$Parser$Advanced$fromState, s, expecting)) : A3(
+				$elm$parser$Parser$Advanced$Good,
+				progress,
+				_Utils_Tuple0,
+				{col: newCol, context: s.context, indent: s.indent, offset: newOffset, row: newRow, src: s.src});
+		});
+};
+var $elm$parser$Parser$Advanced$symbol = $elm$parser$Parser$Advanced$token;
+var $elm$parser$Parser$symbol = function (str) {
+	return $elm$parser$Parser$Advanced$symbol(
+		A2(
+			$elm$parser$Parser$Advanced$Token,
+			str,
+			$elm$parser$Parser$ExpectingSymbol(str)));
+};
+var $elm$core$Result$withDefault = F2(
+	function (def, result) {
+		if (result.$ === 'Ok') {
+			var a = result.a;
+			return a;
+		} else {
+			return def;
+		}
+	});
+var $author$project$Days$Day4$parseLine = function (input) {
+	var inputParser = A2(
+		$elm$parser$Parser$keeper,
+		A2(
+			$elm$parser$Parser$keeper,
+			A2(
+				$elm$parser$Parser$keeper,
+				A2(
+					$elm$parser$Parser$keeper,
+					$elm$parser$Parser$succeed(
+						F4(
+							function (a, b, c, d) {
+								return _Utils_Tuple2(
+									_Utils_Tuple2(a, b),
+									_Utils_Tuple2(c, d));
+							})),
+					A2(
+						$elm$parser$Parser$ignorer,
+						$elm$parser$Parser$int,
+						$elm$parser$Parser$symbol('-'))),
+				A2(
+					$elm$parser$Parser$ignorer,
+					$elm$parser$Parser$int,
+					$elm$parser$Parser$symbol(','))),
+			A2(
+				$elm$parser$Parser$ignorer,
+				$elm$parser$Parser$int,
+				$elm$parser$Parser$symbol('-'))),
+		$elm$parser$Parser$int);
+	return A2(
+		$elm$core$Result$withDefault,
+		_Utils_Tuple2(
+			_Utils_Tuple2(0, 0),
+			_Utils_Tuple2(0, 0)),
+		A2($elm$parser$Parser$run, inputParser, input));
+};
+var $author$project$Days$Day4$solution1 = A2(
+	$elm$core$Basics$composeR,
+	$elm$core$String$lines,
+	A2(
+		$elm$core$Basics$composeR,
+		$elm$core$List$filter(
+			A2($elm$core$Basics$composeR, $elm$core$String$isEmpty, $elm$core$Basics$not)),
+		A2(
+			$elm$core$Basics$composeR,
+			$elm$core$List$map($author$project$Days$Day4$parseLine),
+			A2(
+				$elm$core$Basics$composeR,
+				$author$project$Days$Day4$countFunc($author$project$Days$Day4$isFullIntersect),
+				$elm$core$String$fromInt))));
+var $author$project$Days$Day4$isPartlyIntersect = function (_v0) {
+	var first = _v0.a;
+	var second = _v0.b;
+	var firstInSecond = F2(
+		function (_v1, _v2) {
+			var a = _v1.a;
+			var b = _v1.b;
+			var c = _v2.a;
+			var d = _v2.b;
+			return (_Utils_cmp(a, c) < 1) && (_Utils_cmp(b, c) > -1);
+		});
+	return A2(firstInSecond, first, second) || A2(firstInSecond, second, first);
+};
+var $author$project$Days$Day4$solution2 = A2(
+	$elm$core$Basics$composeR,
+	$elm$core$String$lines,
+	A2(
+		$elm$core$Basics$composeR,
+		$elm$core$List$filter(
+			A2($elm$core$Basics$composeR, $elm$core$String$isEmpty, $elm$core$Basics$not)),
+		A2(
+			$elm$core$Basics$composeR,
+			$elm$core$List$map($author$project$Days$Day4$parseLine),
+			A2(
+				$elm$core$Basics$composeR,
+				$author$project$Days$Day4$countFunc($author$project$Days$Day4$isPartlyIntersect),
+				$elm$core$String$fromInt))));
+var $author$project$Days$Day4$solution = _Utils_Tuple2(
+	function (_v0) {
+		return $author$project$Days$Day4$solution1($author$project$Days$Day4$puzzleInput);
+	},
+	function (_v1) {
+		return $author$project$Days$Day4$solution2($author$project$Days$Day4$puzzleInput);
+	});
 var $author$project$Main$days = $elm$core$Array$fromList(
 	_List_fromArray(
 		[
 			_Utils_Tuple2('Day 1', $author$project$Days$Day1$solution),
 			_Utils_Tuple2('Day 2', $author$project$Days$Day2$solution),
-			_Utils_Tuple2('Day 3', $author$project$Days$Day3$solution)
+			_Utils_Tuple2('Day 3', $author$project$Days$Day3$solution),
+			_Utils_Tuple2('Day 4', $author$project$Days$Day4$solution)
 		]));
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
 var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
-var $elm$core$Basics$ge = _Utils_ge;
 var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
