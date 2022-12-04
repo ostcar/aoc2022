@@ -1,8 +1,10 @@
 module Main exposing (main)
 
+import Array exposing (Array)
 import Browser
 import Days.Day1
 import Days.Day2
+import Days.Day3
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -31,30 +33,20 @@ type Msg
     | ClickedBack
 
 
-defaultDay : Day
-defaultDay =
-    Days.Day1.solution
-
-
-
--- TODO Maybe use Array?
-
-
-days : List ( String, Day )
+days : Array ( String, Day )
 days =
-    [ ( "Day 1", Days.Day1.solution )
-    , ( "Day 2", Days.Day2.solution )
-    ]
+    Array.fromList
+        [ ( "Day 1", Days.Day1.solution )
+        , ( "Day 2", Days.Day2.solution )
+        , ( "Day 3", Days.Day3.solution )
+        ]
 
 
 dayFromIndex : Int -> Day
 dayFromIndex index =
-    case List.drop index days of
-        ( _, day ) :: _ ->
-            day
-
-        [] ->
-            defaultDay
+    Array.get index days
+        |> Maybe.andThen (Tuple.second >> Just)
+        |> Maybe.withDefault ( \() -> "Unknown", \() -> "day" )
 
 
 update : Msg -> Model -> Model
@@ -94,24 +86,21 @@ viewBody model =
 
         ShowDay ( soltuon1, solution2 ) ->
             div []
-                [ p [] [ text <|soltuon1 () ]
+                [ p [] [ text <| soltuon1 () ]
                 , p [] [ text <| solution2 () ]
                 ]
 
 
 viewShowList : Html Msg
 viewShowList =
-    let
-        lis =
-            List.indexedMap
-                (\index ( name, _ ) ->
+    ul []
+        (Array.toIndexedList days
+            |> List.map
+                (\( index, ( name, _ ) ) ->
                     li []
-                        [ a [ href "#", onClick (ClickedDay index) ] [ text name ]
-                        ]
+                        [ a [ href "#", onClick (ClickedDay index) ] [ text name ] ]
                 )
-                days
-    in
-    ul [] lis
+        )
 
 
 viewFooter : Model -> Html Msg

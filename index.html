@@ -4384,6 +4384,43 @@ function _Browser_load(url)
 		}
 	}));
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var $author$project$Main$ShowList = {$: 'ShowList'};
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
@@ -5198,6 +5235,55 @@ var $elm$browser$Browser$sandbox = function (impl) {
 var $author$project$Main$ShowDay = function (a) {
 	return {$: 'ShowDay', a: a};
 };
+var $elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (maybeValue.$ === 'Just') {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var $elm$core$Array$fromListHelp = F3(
+	function (list, nodeList, nodeListSize) {
+		fromListHelp:
+		while (true) {
+			var _v0 = A2($elm$core$Elm$JsArray$initializeFromList, $elm$core$Array$branchFactor, list);
+			var jsArray = _v0.a;
+			var remainingItems = _v0.b;
+			if (_Utils_cmp(
+				$elm$core$Elm$JsArray$length(jsArray),
+				$elm$core$Array$branchFactor) < 0) {
+				return A2(
+					$elm$core$Array$builderToArray,
+					true,
+					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
+			} else {
+				var $temp$list = remainingItems,
+					$temp$nodeList = A2(
+					$elm$core$List$cons,
+					$elm$core$Array$Leaf(jsArray),
+					nodeList),
+					$temp$nodeListSize = nodeListSize + 1;
+				list = $temp$list;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue fromListHelp;
+			}
+		}
+	});
+var $elm$core$Array$fromList = function (list) {
+	if (!list.b) {
+		return $elm$core$Array$empty;
+	} else {
+		return A3($elm$core$Array$fromListHelp, list, _List_Nil, 0);
+	}
+};
 var $author$project$Days$Day1$puzzleInput = '\n5104\n6131\n3553\n4496\n5847\n3253\n1828\n1045\n6369\n5544\n2756\n7382\n\n6879\n9715\n10122\n\n14438\n1135\n13406\n4888\n\n67712\n\n1965\n4515\n4150\n3583\n3007\n4852\n6397\n6237\n5505\n3106\n6357\n2504\n4074\n\n1689\n5612\n5531\n3138\n1203\n4821\n3468\n2424\n3425\n5566\n4374\n5233\n5452\n3049\n2260\n\n3933\n6073\n2260\n2376\n7298\n3397\n3479\n5316\n6750\n4800\n\n14581\n6385\n18287\n14353\n\n44790\n\n66296\n\n3368\n1373\n9644\n1682\n11146\n6876\n\n2544\n5471\n3632\n1837\n2272\n2956\n4989\n1754\n4574\n5076\n3201\n2199\n5688\n1161\n3326\n\n4897\n3510\n4961\n2747\n3931\n2722\n4021\n2231\n5466\n6371\n4691\n2851\n1846\n4720\n\n13096\n5576\n5765\n3715\n8851\n\n3339\n6453\n4991\n3935\n5900\n2326\n4731\n3323\n6270\n7505\n\n2208\n3058\n6908\n6343\n6513\n5383\n6087\n5836\n4824\n5588\n5039\n6138\n1077\n\n9045\n6898\n8327\n4103\n4006\n6797\n8591\n6515\n5228\n\n39541\n\n33536\n7614\n\n4637\n7862\n3038\n6682\n8880\n2784\n7924\n5589\n2107\n\n33278\n18120\n\n1005\n3479\n4129\n2799\n5324\n7799\n5380\n6998\n1877\n\n31663\n9259\n\n1009\n3987\n1254\n6449\n5134\n6090\n6341\n3229\n5902\n4492\n4025\n\n10079\n16006\n19943\n1970\n\n3428\n5671\n1030\n2461\n6073\n2875\n3493\n3103\n1476\n4305\n2664\n5017\n4210\n3629\n\n45170\n\n11282\n8209\n10075\n1366\n13841\n3412\n\n9981\n7808\n1565\n3171\n6684\n1905\n1087\n\n14447\n11220\n3519\n10317\n14174\n\n7518\n3810\n12824\n3137\n2272\n2616\n\n7827\n29197\n\n8799\n12459\n16530\n16661\n\n1965\n10267\n11399\n11562\n13367\n10223\n\n6410\n2536\n7255\n2151\n3190\n5786\n4114\n6875\n4013\n2381\n6020\n\n1751\n6262\n5190\n5091\n6453\n3652\n2929\n3411\n4954\n1275\n1468\n2689\n1200\n4362\n\n4928\n5282\n6845\n5328\n2101\n6522\n3929\n3276\n4740\n4493\n4003\n6797\n\n6529\n11489\n1696\n12922\n8959\n10927\n\n13381\n5921\n5375\n10424\n9279\n10031\n\n3800\n2166\n1964\n4182\n3395\n5956\n6024\n2473\n2780\n3686\n5791\n1449\n2698\n4430\n1008\n\n37175\n26191\n\n2863\n1329\n6266\n5911\n6331\n5211\n2420\n6006\n2259\n4125\n1885\n2284\n6213\n\n3560\n4007\n5585\n4484\n1828\n7935\n5895\n3139\n6413\n\n1201\n3350\n3763\n1920\n4653\n1662\n2559\n1918\n6378\n6688\n2569\n3180\n\n4347\n1526\n7318\n3860\n4250\n6191\n10198\n\n8179\n5824\n4470\n7569\n3163\n1859\n2541\n3433\n1851\n7360\n\n1028\n3103\n3166\n2025\n5630\n5067\n1819\n1590\n2290\n3636\n2411\n2856\n1918\n3050\n\n3582\n4564\n3311\n4695\n4780\n5863\n3626\n5304\n4009\n1499\n1528\n2261\n2743\n3992\n\n6432\n4354\n1747\n3799\n7415\n6951\n4928\n7862\n6082\n1010\n3586\n\n11375\n14308\n7595\n18952\n\n23213\n18972\n\n15795\n17712\n5850\n\n4756\n3643\n3397\n6067\n5206\n1658\n2436\n4293\n2352\n5096\n2038\n3780\n2620\n3124\n2525\n\n8776\n3372\n2945\n7681\n7636\n1851\n2755\n2058\n7856\n\n9353\n5890\n3167\n2211\n6056\n4894\n10709\n2793\n\n3477\n7013\n4750\n7568\n7135\n4165\n7490\n5932\n1434\n6230\n7262\n\n2988\n3138\n6692\n5152\n6590\n7063\n5578\n3263\n2918\n4021\n6292\n3340\n\n8043\n7625\n3391\n6085\n6245\n4824\n5767\n6627\n2367\n2729\n\n1520\n6438\n2132\n1601\n4488\n5254\n2935\n2368\n1569\n3680\n5772\n6031\n6288\n5836\n\n5254\n4257\n6075\n5658\n6032\n6121\n5074\n4844\n3709\n4521\n5464\n1705\n6448\n6340\n\n14988\n3400\n15846\n12040\n6216\n\n45130\n\n4014\n2376\n2115\n3132\n5487\n6934\n5925\n2810\n4421\n6486\n2346\n5692\n\n12105\n2383\n9893\n5469\n7597\n5977\n7022\n\n2795\n6488\n20406\n\n12538\n3692\n3757\n12964\n15776\n\n1139\n2432\n1346\n1249\n1454\n5679\n2131\n1057\n6395\n2604\n6336\n1444\n6703\n\n1499\n6392\n4154\n1207\n3827\n4646\n4283\n2106\n2958\n1327\n3760\n2575\n3961\n\n11023\n7199\n6134\n12194\n10621\n\n6715\n5245\n4073\n5978\n3950\n5613\n3517\n3845\n5611\n2993\n4704\n4468\n4833\n\n25207\n18060\n8124\n\n3263\n2985\n6577\n3964\n1392\n2316\n5224\n3923\n1392\n5569\n4833\n5873\n1627\n\n1347\n5148\n4046\n3618\n3677\n6767\n3809\n1979\n8779\n2274\n\n15152\n5482\n5835\n4176\n\n1191\n5296\n1107\n7245\n4121\n2598\n4148\n2388\n5949\n1851\n3747\n3829\n\n1942\n6426\n4916\n4572\n2965\n3453\n7020\n8067\n1144\n5931\n2985\n\n3315\n1989\n1609\n2161\n5836\n3243\n3901\n2795\n4187\n2790\n2083\n3164\n4843\n5887\n\n16209\n2858\n2586\n15877\n13993\n\n8898\n4191\n1864\n9272\n9284\n5581\n4912\n1084\n6000\n\n3410\n5934\n1609\n4699\n5008\n3104\n6016\n3130\n7286\n1906\n\n7381\n4765\n2427\n2044\n6493\n2845\n1431\n5109\n7242\n3930\n1350\n4999\n\n10119\n12971\n5407\n6448\n14453\n\n5647\n5083\n3317\n6707\n1586\n2179\n1468\n1214\n5992\n5732\n5813\n\n1260\n3272\n11607\n3794\n4599\n2890\n\n16930\n16192\n\n3140\n6499\n4094\n5617\n4379\n6309\n4400\n4764\n1143\n2004\n4451\n3034\n4209\n\n2653\n5514\n3335\n8021\n7656\n7956\n9425\n5902\n7280\n\n23692\n\n1097\n8621\n2372\n4381\n10625\n6138\n7127\n\n1719\n5845\n3170\n4103\n5550\n3430\n2824\n\n2489\n13880\n7484\n4617\n\n11152\n2300\n2349\n9548\n7018\n\n5745\n2571\n5758\n1580\n1411\n3944\n4867\n2541\n1998\n3769\n5598\n5138\n4369\n5419\n\n10223\n10283\n2268\n\n5604\n4701\n2054\n3920\n4925\n5118\n3707\n1838\n2159\n4192\n5164\n4419\n5630\n3127\n5255\n\n3686\n1791\n3543\n6111\n4260\n3612\n4021\n3316\n3100\n5383\n1962\n3323\n5630\n\n2391\n6494\n3948\n3811\n2101\n4075\n3030\n4553\n1170\n1604\n6209\n1122\n3951\n3447\n\n4687\n1165\n2511\n2316\n4002\n3832\n4968\n1082\n5374\n1960\n2355\n1975\n4569\n2324\n\n4285\n3885\n2613\n1102\n4284\n3439\n5074\n1279\n6287\n\n3501\n10232\n9878\n10401\n5166\n9221\n2356\n7718\n\n17368\n8643\n12092\n3319\n\n7510\n4438\n8329\n4973\n6213\n6441\n1801\n7936\n7802\n\n6491\n4569\n4130\n3144\n2275\n1831\n2833\n6234\n5260\n5476\n5066\n4356\n1835\n\n3842\n19003\n9012\n7301\n\n1596\n8020\n\n5794\n6031\n4868\n5488\n3633\n5019\n1113\n4435\n1258\n2866\n6007\n4006\n4164\n4748\n1899\n\n5388\n7788\n1063\n3566\n3185\n3839\n6396\n6052\n4822\n1345\n4405\n\n5048\n8412\n11211\n10874\n11580\n9113\n\n2921\n9381\n5501\n5959\n3511\n6107\n\n3827\n2400\n1465\n4592\n1070\n5953\n1252\n5820\n4496\n6461\n4105\n5273\n\n7867\n\n7212\n2869\n4893\n5449\n1790\n4027\n4863\n6804\n4589\n4431\n2978\n5646\n\n6820\n1830\n5561\n11648\n2836\n\n3711\n7705\n8802\n1093\n10308\n1310\n4998\n9163\n\n6599\n6302\n1817\n5460\n1686\n1639\n6831\n2245\n2026\n1250\n1521\n6664\n4326\n\n8495\n15655\n1144\n6597\n13967\n\n5998\n4313\n5903\n3692\n8234\n2692\n10457\n3100\n\n1861\n\n14744\n4779\n12847\n5418\n\n1755\n11466\n4824\n3036\n2407\n3799\n\n3703\n5199\n4767\n3220\n4703\n1618\n2408\n6934\n6244\n\n10247\n6489\n6234\n2992\n8650\n2238\n\n4281\n13678\n15074\n6788\n6291\n\n8999\n10740\n12070\n5488\n1840\n6026\n8971\n\n1663\n9127\n3582\n5593\n1469\n7933\n3315\n8614\n8179\n\n31510\n20867\n\n3135\n4978\n2113\n3443\n2488\n2805\n5385\n2765\n2443\n5948\n4798\n2685\n3580\n5153\n3035\n\n7786\n5488\n6868\n6016\n8457\n3381\n1057\n3370\n\n5493\n5175\n4669\n3522\n6305\n2560\n5075\n4445\n3881\n6694\n4367\n6287\n3496\n\n10356\n13146\n10433\n7922\n5423\n6508\n\n17729\n30047\n\n1564\n8859\n7596\n10579\n7432\n7320\n4046\n\n4402\n4813\n7497\n8596\n8944\n\n9946\n3497\n4322\n1990\n6240\n9993\n8309\n\n24706\n3277\n22881\n\n6766\n1997\n3845\n6791\n5254\n2251\n5959\n5030\n7267\n6440\n3457\n4772\n\n8589\n5044\n9480\n10563\n8685\n7787\n9630\n9199\n\n9423\n2006\n5708\n4116\n14214\n\n18376\n3635\n11243\n\n6763\n4005\n1430\n3727\n1574\n4517\n1253\n5880\n4091\n1499\n6714\n6510\n6452\n\n5479\n4798\n6197\n3737\n6874\n2965\n5032\n4024\n5051\n8053\n\n34588\n18765\n\n6659\n7468\n3910\n7243\n5199\n6073\n4412\n7824\n3338\n3599\n7017\n\n3490\n2272\n2824\n5088\n6335\n1716\n2386\n3356\n2055\n2013\n2983\n5382\n1507\n4581\n\n19218\n16697\n9274\n\n22122\n13616\n2703\n\n1794\n4376\n2241\n2705\n2104\n1658\n3543\n2607\n3770\n4622\n3370\n2443\n4444\n5476\n3714\n\n53258\n\n11510\n15672\n12872\n8622\n\n5586\n15502\n3056\n3890\n14551\n\n1608\n4148\n3884\n4981\n8494\n6494\n6595\n6983\n2298\n1599\n\n22767\n5219\n2814\n\n1034\n1031\n4757\n7276\n7064\n5309\n7766\n8161\n\n9332\n\n21322\n13644\n17204\n\n52338\n\n4741\n11019\n9823\n11376\n12363\n7345\n\n13565\n12029\n6517\n4188\n11311\n3153\n\n3172\n2579\n2147\n6643\n6720\n1518\n3920\n3744\n4907\n3887\n5811\n2260\n3640\n\n2065\n4288\n2840\n3551\n2354\n3243\n5448\n2120\n2476\n3959\n2807\n5822\n1824\n6027\n\n13354\n13217\n9371\n10773\n12933\n\n4706\n3934\n8085\n3861\n3474\n4037\n4333\n1915\n7439\n4724\n1584\n\n5587\n3880\n5972\n1568\n2925\n6189\n5112\n1034\n5146\n4456\n3302\n5930\n6509\n2232\n\n10574\n13136\n19197\n12598\n\n3319\n5343\n6042\n15163\n7853\n\n2549\n9485\n3150\n3717\n4202\n8582\n9314\n1959\n\n1651\n3584\n2353\n4100\n4642\n4105\n2675\n3241\n1441\n1093\n1012\n4275\n3727\n4598\n2407\n\n9617\n2108\n4265\n5498\n2914\n7770\n5898\n9319\n2295\n\n8587\n\n2644\n3717\n4921\n2297\n4454\n5287\n2479\n4581\n1824\n3108\n4297\n1055\n4726\n1859\n\n2170\n16319\n2974\n\n3092\n4627\n5913\n4495\n3009\n4501\n4341\n4668\n4858\n3240\n1347\n3448\n3748\n5811\n\n4644\n4571\n2358\n5466\n2255\n5075\n5466\n4229\n2211\n4262\n2900\n1966\n2627\n4728\n\n7682\n9016\n4473\n8449\n9257\n2068\n10641\n\n1499\n6224\n7304\n5201\n3451\n4984\n7737\n1728\n5302\n1062\n2178\n\n30845\n12424\n\n3483\n1244\n1700\n8543\n12788\n\n2430\n9187\n9178\n3168\n10377\n8889\n\n15000\n12965\n10098\n5507\n13346\n\n5401\n2056\n7490\n9384\n3312\n7124\n7199\n5571\n6029\n\n1218\n10456\n6922\n1815\n12092\n11303\n2461\n\n1766\n5195\n4704\n1476\n4579\n1104\n3018\n6172\n3826\n6543\n1323\n6306\n6367\n\n17963\n2012\n1664\n15479\n\n32869\n\n9473\n3761\n6631\n2522\n2878\n2435\n9087\n3261\n6032\n\n4461\n1087\n4793\n1273\n1848\n2882\n1662\n4454\n1347\n5600\n2619\n\n2300\n8563\n3317\n2462\n1118\n6131\n5801\n4281\n7292\n\n3848\n13902\n7899\n10164\n12727\n8578\n\n1076\n6192\n3308\n2648\n1919\n6489\n6050\n1639\n6490\n2768\n1169\n4718\n5799\n2658\n\n12611\n18417\n13289\n16060\n\n1806\n6019\n1058\n13468\n8292\n9682\n\n13648\n24310\n6025\n\n10030\n7199\n5366\n6080\n8944\n3416\n3746\n3597\n\n8809\n10699\n5362\n8302\n3712\n2911\n2598\n5279\n\n23190\n15323\n2535\n\n2663\n10325\n9513\n2403\n6443\n6731\n8188\n9559\n\n15302\n\n4544\n6035\n4595\n5512\n7162\n1160\n2866\n5003\n6449\n3936\n2083\n1154\n\n16473\n\n4333\n2861\n2754\n5775\n5774\n3313\n1763\n3326\n3888\n2639\n3981\n1788\n6272\n2151\n\n3830\n11759\n9430\n7412\n5190\n5926\n9828\n\n19524\n15948\n5297\n16516\n\n8073\n9705\n7872\n5308\n10279\n3645\n7983\n3467\n\n12230\n22031\n6843\n\n15329\n6540\n\n4960\n5485\n1829\n5062\n4777\n4193\n4594\n5705\n1282\n4546\n6063\n4304\n2533\n\n51798\n\n11965\n12511\n2156\n13850\n10025\n12395\n\n3476\n1232\n7227\n2031\n4457\n5152\n3616\n5374\n4576\n2413\n\n1045\n24929\n\n13068\n14356\n9552\n3897\n4369\n\n3172\n3437\n2380\n5542\n4850\n4325\n1065\n1051\n3385\n5905\n1182\n6138\n6487\n2307\n\n11847\n9674\n1409\n16351\n3793\n\n1567\n6941\n2520\n6617\n4815\n4700\n2297\n2336\n3626\n8035\n1777\n\n7380\n6231\n1464\n5680\n4298\n8018\n5861\n5967\n2799\n6888\n1401\n\n1944\n3424\n4104\n5697\n2082\n1829\n4128\n3775\n3450\n5312\n3475\n4868\n4857\n1469\n4757\n\n22339\n15143\n\n4573\n5384\n2968\n6696\n2208\n3068\n3104\n2654\n5539\n7329\n6127\n3874\n\n6693\n6878\n3318\n5526\n2042\n4895\n3809\n3718\n5881\n2444\n2448\n\n6304\n5014\n1337\n5766\n9098\n4456\n6604\n1722\n4674\n\n2403\n5059\n2439\n2113\n3879\n2289\n6524\n3707\n5199\n2908\n4624\n3742\n6077\n\n2717\n3042\n1843\n2403\n5750\n2473\n3017\n3407\n4392\n2513\n6913\n6585\n\n1996\n1118\n5230\n6283\n2639\n3324\n1236\n3483\n5270\n3399\n3111\n6098\n\n6418\n3395\n3771\n5816\n2494\n1049\n5846\n4483\n3137\n4445\n2248\n1216\n2499\n3556\n\n20769\n22782\n15068\n\n2645\n3388\n2219\n6061\n6664\n4330\n5003\n4035\n6370\n2023\n6309\n5013\n\n1222\n6095\n7410\n7957\n4087\n5677\n6829\n7151\n8731\n8168\n\n11570\n27420\n\n14541\n3035\n10295\n14965\n\n4122\n5939\n8715\n1188\n4674\n4654\n7742\n4976\n\n5269\n3341\n7796\n8918\n\n9598\n2036\n10718\n9696\n8890\n2709\n4114\n1940\n\n5054\n3311\n2306\n2633\n1810\n4733\n2133\n2185\n2322\n2396\n2992\n2202\n2671\n1932\n3398\n\n4357\n1706\n3417\n2442\n5608\n5032\n6296\n5015\n1874\n5295\n3812\n4698\n\n18153\n16982\n6152\n\n16245\n\n3048\n3827\n3394\n2137\n2364\n5478\n5992\n2396\n6139\n2323\n4458\n2292\n4003\n\n1561\n1154\n1545\n1144\n2206\n4454\n5640\n4697\n1908\n3175\n5130\n2386\n6358\n4169\n\n5785\n6697\n5246\n3215\n9759\n10601\n5507\n\n4892\n7629\n4323\n3881\n4247\n2154\n1352\n3468\n3053\n\n6710\n2117\n4776\n3991\n4021\n7543\n4268\n3355\n4701\n4663\n1015\n\n13221\n14163\n11213\n\n9488\n7173\n3708\n3524\n9290\n3390\n1272\n3325\n4864\n\n3098\n6656\n1387\n4710\n1962\n7262\n7442\n2097\n4544\n1976\n6250\n1974\n\n5122\n1843\n2929\n4066\n2403\n1020\n2723\n5914\n3821\n2189\n1047\n3334\n5773\n4396\n2777\n\n2073\n2094\n4901\n1093\n5029\n5458\n5963\n4011\n3454\n3174\n2086\n1451\n5640\n2311\n2511\n\n4243\n7521\n5018\n1914\n6762\n8155\n\n19726\n11376\n6504\n4086\n\n4150\n7015\n3007\n5002\n5151\n8346\n8024\n6498\n1696\n\n5404\n5249\n1474\n2284\n1642\n3323\n4110\n1796\n5132\n1940\n1266\n2679\n4027\n2289\n\n10301\n7013\n1666\n7987\n10426\n6423\n10008\n10015\n\n6115\n6361\n1902\n8036\n5703\n2771\n7330\n8606\n6447\n\n8917\n1183\n8966\n1255\n5988\n5233\n7358\n3806\n9333\n';
 var $elm$core$List$maximum = function (list) {
 	if (list.b) {
@@ -5213,15 +5299,6 @@ var $author$project$Days$Day1$Empty = {$: 'Empty'};
 var $author$project$Days$Day1$Got = function (a) {
 	return {$: 'Got', a: a};
 };
-var $elm$core$Maybe$andThen = F2(
-	function (callback, maybeValue) {
-		if (maybeValue.$ === 'Just') {
-			var value = maybeValue.a;
-			return callback(value);
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -5526,21 +5603,415 @@ var $author$project$Days$Day2$solution = _Utils_Tuple2(
 	function (_v1) {
 		return A2($author$project$Days$Day2$solve, $author$project$Days$Day2$puzzleInput, $author$project$Days$Day2$play2);
 	});
-var $author$project$Main$days = _List_fromArray(
-	[
-		_Utils_Tuple2('Day 1', $author$project$Days$Day1$solution),
-		_Utils_Tuple2('Day 2', $author$project$Days$Day2$solution)
-	]);
-var $author$project$Main$defaultDay = $author$project$Days$Day1$solution;
-var $author$project$Main$dayFromIndex = function (index) {
-	var _v0 = A2($elm$core$List$drop, index, $author$project$Main$days);
-	if (_v0.b) {
-		var _v1 = _v0.a;
-		var day = _v1.b;
-		return day;
+var $author$project$Days$Day3$puzzleInput = '\nCjhshBJCSrTTsLwqwqwb\nGtmnFHlDfcpHbLZjtTTRLWwb\nfDfNHHjVFNvvrvVBJJdS\nPPWvWQjPhrPQwlMWJJdMDGbJTdCJ\nrsqsStgNNggBNBZHSrJGdJdCFRRZCFbGbTdJ\nqgBqqHzzggBpzSnBNqNSSSgcfhrVlVmwPljQVLVwVvQmmzVl\nbBBGBfmGvBTnGtGJBtGpcJbZrrddjqrZhDldwdcqrjrjDr\nHWPSQMsPHFsMWPVVMVSHCwDCDwwZZvwjwQZZwjdd\nvVHPgHHFRLfpfJTLLtJL\nLWLZhDBHhWWHjBwHwBjCTrBnnrQTQCJTJpTQBQ\nvvdcqbRmvwSFmRqPFSqwdvtQnrpCQJpNNVnrptVCtCCP\nwRSffqlFgvvdgdlzhLWWDzLljZhhGL\nLNbTbPdTNgnShgSjmHcqtQGCtrctCPcQqc\nvzWZDZZBlDwlzvDRZfFBRzVBtMMGHCcpjrqBGMtQQppqHtCq\nDfRvFZjZRsRjlVWsjFlWVWvdSdbhsSmnSngTdTSTsJdSLm\nnnZRbfZRTZfRsbZTFPRfpbRJdqqQNPwNqvvwvvvSwdQqdS\nWjDzjMWMHpQwcSQWcJSS\nhrHhHDgpphmjtMrGLDmGgmnbsflbfZCsnsClltsVsfRR\nQFngsFnGdLGFGVRgLLqWPQPWvBrMDppCPrDB\nNfcHZZzbHthSZtNtNfhHWhClDvCqlrqBvrCpWMWB\nfSMSHjbTMVgVVngVgT\nllnMffwbvCnffHvJJPJpPBNVVZDJDmmS\nQssGGHhRgcqjRRTWGWRGDZcVFZBpNBmPFBDSmZNP\nhzsRHWQshzgRjjsgQRTsbwzCtnrrlnrwzMCtvMff\nHdddHHmtDMDTqHHSftmqdmfdssGzrsjVGtrllWlGZGsnlnnp\nBQNPNPgPhBBhCJQhbCgCnrrnbZnlWznzpGssllVW\nLFNZRvCPCFZmHmTLcwdwcq\nzQRDChCnVhqRllpzQlzqCVVzPvNHTTFFHlNPsPNvTBPBHBFT\nwcfdfDmfPHjdsHPs\ncwGMwMMbwbmwJZfDSMmfwcpRVWzQqnnnzGVVnhqRVCph\nCScCSPcPszFJWSMjGZHMpGMjvG\nTTQfQvBTVBfrDVRDVqGMmjZqnpnGmMpnnpZZ\nNDdbrQdVQDNNfvTVNdBfrDBJFcsLWcCJzWFCcFLbFcFJsc\nWWdzhpHcHHrtzGBJMwmjJGmBtP\nCqsgqNrVnlCBCvPjCBmPJm\nLDDDLnVsqsgTQsgFcQzbQdprbWHzdb\nnFpNPGLGrntlrFLpflfBTcJwSgwQvGwbgSvbvJvT\nDHZWmMDZZDHPMHsDJQbbgSJcvbQgjwJM\nCRdzzdDDVRHWWNlPfPzllnFLlL\nZJVqGSVCJCSgdSvtjtvcjcjbNl\npmDWFnDFMnDdFLDHffjcbjjtBNctBjBMbMcl\ndLnfmdLLmrWsgZqCThgssgsq\nCLsvLLQvrlrrpLpw\ntmTHnNtgmzgWmpjlpjnwrrlRjw\nWHgTdmNJmJTDDrtFWsVGQqBQqcCCbhdvCB\njwCHwmWRTWRWJwfcgVgflvPqPBPH\nMpphdbZZpZMNZpsdpZLMgjBlBqDvLPjfLVPBgPfv\nZdrZsjQbnMCGwrRwzmTr\nCMDsWppsfhjNNzzzcBrbPgnrrnVBQHBNrV\nZmGdTdvtStFDtTvtBHgPHnPHgnrnHVmH\nZtLZdwdGqtZqLTLtwvfjDWcRscqMCDsCfWjf\nQQPPfPjLNLfSShfNRSRrrGHzvHrvlvnHRDJJ\nWCMJJVBwbGCbnbCl\ngBJmTBBMchsSjgfS\nNvCQGNRQQrWRpWhhvQrNLgrJqTVzzLFZsJqJZFcJTqFMJJ\nttdBllbCSdcsJVVVzVMb\nCnwfwwdlnPGQgpnPvv\nWQmnmBBmWRCgDpndbD\nSvjsqGGqTSTdbggS\nlZbFJqLjvHZrcZNHcc\ngcgQhclQlntnnvBMZlwffTBLwv\nJqzNpqbmpJCbbzCfNFFqfWpZvDVTqBMTrTLvrTMTrvrZTT\nNbJWCpRWSFWNWJCzmRNRdchcdHcchnfncnhntcdjng\nJvDwhPWPzvzPDggWlvCQgPtHgtGnHtNqLqTnHTHHnnVg\njBsfcbpdQsRcsSpRcjZjHNGtnnVncVtqTVVNVNNT\nprBbsjQdSbZdSFwMzrhPMWwzwlvC\nSStQfWQmJQjjhphQ\nsMVTwvLTswLwwqMPnnhglbHgglPh\nRDrRVrVCsrssBFWffFCZthfNFN\nZnpgzcqgmhHtfwSDwplwVV\nQCrBNLdLrrnSVSrl\nLQQLLLjTBjGWnNBBGLFZbGgMcsMsZzbgbZZgsZ\nZnbzbhqPbMrnDGjtQGSRVVMGpf\ngFdTlNJFGVGChJCt\nHgswWLNdhwTTwWsNNvzPmbvbcZbrsbrmzP\nSHpDqcJvBmJgJJHgDphHmvhTddWlLsZTTdFWMMsWtthZ\nGPrRCPfRfjjwffjrrnPVPsTLZFwLWMzLdTsTFzzFWT\nQPfZVNfbfQnRVjCRrPJBvSJgpDSDBHNgBJpB\nmjpcZcHcrqjrNmNpNmptHNHWwvCwgwCgMmQgRQsRMgwMvnCg\nDfSfFSVtDSTJVfdGJMwPnMRwnRCPQgMR\nDDfzDVdbTbzVDDtrtqlHptqbjbql\nlsBgqLqhqqgBBvGLBwQJJHRpJCJDHMwhwz\nNCVfntPnVnfrZtfdbTntnnWDDMDwwRRJmJDWRWJmHRzpJD\nZrZbtbSZfdNVfbtCrbPTndsFvFLFSqcGLBFgvgjsgcqj\ngwRCCDmlZtPDdtBBPM\nVLrjccJVcJTfTtLjscVBHjHPjPQQSPpBHMjBhP\nrfcJrzvvctrscvzRqGRCZvmqbmwqZw\nnffqBWfRfRnpBfznpWTpTlWNNbcrDcbGbPhrGVwGlllPGN\nMsJQsmQLjMMFsmjbPZNcNbrbmGVhZZ\nLCJsFSsJFMFpfrTBWSvqpB\nvSspfvprpTNTZNTj\nLlFQCtnwMqqSmCMPmMSwClCJhBDJZZJZZjBTjQNjJbdjTT\nPHtwMLPqCHsfVRGvSR\nHjLDQMjtRvTmfTfmtf\nBddChcvvhwhqgmqTfnSmdg\nNBVVZJhZVhZsJJzhJZNHrRMPbQvHrjPvPDRvRN\nGgwtwntLQmNjvRGJGv\nwwzWzrzrqWjRlhJrNlrj\nwBWSCMPMcdnHsTHPsn\nMggMDDJzdbvsjCJvWJnJ\nTHBGGScfHwHqHGTGTBqfSWCsnWBCbvsbshjRnZWZCn\nHwltftNGtmHHGqNlGmfPrVDDgzpVplpzDpVPbP\nshMdsCMpQMCZMQsZQVDJnvvPpPLSvLSLLV\nRmgzGTGRmClLNCvzVn\nrCrRftmftWjbTttjcdFZBcjdsFqZQFjZ\nqLwvNLtLvPGqSltLLqvNSpflMfQfMpMnBBggslMpfB\nVDcVzzDRRVTDgMPBBgdfQD\nVVWrcHbVzrzVjHPNqSmtqJJwjLGN\nnBswlBBhntTttbFVnt\nJNjTHZvLHDLVVLtCCFFPLz\nTHvNddgZWQNDNZgjZSfGwfsBrhmfGBhcWs\ncCSbPmJqwqJjgJtTzJZT\nBpBTFFTQZzQgNgZv\nsFRVpsfrfrLfslwTcTccwcnCcTRC\nDLjLwDPjVPnWWvVWVjcqzSCJTzSzMTtSrqRqJn\nbdNGgmbGHdZdHbSRqrTJzrMtTR\ndhGmFffGQsWjshcVpt\nTrGzZpzWhCHcPPpF\nsqsJqtlqDVDJVJttgNSbsQPfcjQcBQjhFFRSPQHFRc\nVgqbtllbdvNtDdLZrHWGmwdrLM\nDNrqBvvZZNDDHBFJmMNbLMRctztznRsbds\nhlSlPPWfQCChPtWWfjTwLzbdRcbMsbMjnRLsgzsz\nPCfWwlQpTTVmmtqmVGrvmt\nlLrlLRbgrjRbRjFlRrnRRdgPdWdCwdWqmWPwqScdPc\ntDZLNGHsNQZDNBGHTCVSddVCPwVqVtcdWV\nBhGLBNvhHDTZDjfRvbfjljbbJf\nMcRctHfDctZGlZZWgpcW\nTTQLQqLSLqTqhdLqPzLqLwrpsGpWVGFZGrlgWZGhFllV\nQNdzbQgzSvqPzqNqvnnbtfbRfDntCfMRjn\nbHQvFvffjpVvPSTvVm\nRDLRRDLBnVbsDsqDSb\nMtGGtJJnwnLltblMFCHfQcthjNfjHCQN\nFQfFldFCSRRFQSQmLVfRGwGDDGZDhDGwmmhZtthZ\ncTpscpCcNzNNvCBgbPPwvZGZggbghb\nTNzznnccTjTspHWNzCTpNlRRQnlfdVFVfLLJFrFJQQ\nLsMMLCQQQMTJnJMnsJlGlZJNvbNVGNNSDJ\nfhcBqmfvmtRftcmfVVNNVbZSSDVGZmgG\nBztFRjFjBchWzhvWTHWTMCdwTdTQnH\ncpddMRdHTSNRtRztbG\nmWvrQnQFhFNtsSNV\nvrBnlLvWvlPCCnrrmBrnQQLmTMHwHHccMgggTNjdcDwjNgCw\nhlRhqRnQQHcbBHGVVgRLVmrRgrLR\nsCFMTMwtzFMzTwCsswWjCsdQJmJLGfrrgLfgPmPVVVmtLP\nTMDjCFMTHShBQSDB\nfcpssfGWpRDnvDRWvD\nLMvQlPLtLQZbQjBqZBFnCRFZRFzR\njlQrvjlbjbLffpdpdrmGwr\nhbRTjRRZthvSDvDn\nLGrwPfrGfLjqvBsHzBrvstBv\nmpCLCqqqLcwcwCLmLmwwdWgWgVVMTbbWbRdQVNjC\nQLCqzhzQDqhHsCJjTcVdScccSVgs\nNMPBBfwbmwmmGnfpTJJJcTrRjRJJddpr\nmflmdfBBlnPBvBNGnwlGzhDqzHZzZtCLZqqltHtL\nGGsFmSmFHHGZsqhSTQjlNQNzpptD\nJfVJvvJfWMPPnVVJvhlNlltDldzpjpTzQn\nLgLcwJffMMLcwPVvPMvsmRqTmbGGssgGssRRqG\nScnbPhwPHPTbwCGJBDtNZZPZDsttNB\nFjfQlVVWrQgfQrrWfddnWfQlqJqJMNJBZJqsZtsJjJsvDjJq\nlrVngVQpmmmrlnLGLLmTzchcwhHh\nQZtDJqWZtWGmhJJjvVBP\ncrNMSpcdNNFcrdzlrsVGVnvhmnvHbjVjjrhV\nNTszNMSpwTNFzcsTlsLRQLtWwZDDfQgZhggQ\nmfmdLLLqsvZzjfPgPT\nhppLhBNpHGrhHnQQhGMDhPbPbWzvZzbMzZFPbvbvgz\nBNGGNLGcQpCcSstSRmct\nmnjsJBjBRsmFsSRqqrGfrqqtrfrN\nLZDHZZzdcdQzLbcgLwGtNVrlGrMVNfrllHrH\nDPcZZzdQpZPzQQDpDdcpbcPgmBBBsnWfTBmnJmCsjjsPSTjJ\njwwHjCPvLVmhmRdJvr\ngTBnbFGTTQMgnTbdbhHhrplhJdlV\nDTScZTgSSnGTBFzjDwtLtDDHqwwL\nRZWhWWRSgBRrdMRdCmtcdtLncHndqF\nbssspTjbVDQGTVGTQsJpbvLtVmFLqqHgnLmCcFnmHC\nDpfQJJQpDsGzzfDNhPBlPlMBNhghPZlW\nVzJrJMBntJpMnBBJMDDGDQLLQwwDpQLGLG\nWSFCWNWWWhQRzvNqLTRD\nCbSlSlWHghChhWlcclgcWdHgfrmbmznnffMZMztrMbrJBBBJ\ngtjBNTvDQNBPlBFlPFZPdP\nmCmpfJCVmMzmfsHpCWdGPWCCWZGtSFtF\nzJnhJnJzbbMMpnspmmfsJpLNgqtrjQvrTbTgLgtqgqLj\nCLJnZZCJLJZJgZZZJMLSTgnRdFWpFdfFWBffpqDBfjFWQdRD\nslNzNzzwwPQrfWmDmqBFWlDm\nzwHhsVHwQcHJCgnngMZn\nwLRLLddJLdZZZjHdRwgJsjqDVsDVSVGSscsVVmDq\ntvMWfnhMvnvztzzVSVqqmcSSVsDGmW\nTmhhpnnFlfMzMMRZRPTJRHwdPJZB\nsLsQSLvcSrbQbFGlWlCD\nBhgPBqBhPwmmpPlGhZMVCFFlbZGF\nnCBBTPBHdHwmfCvTLStLJSctrJtt\nvwNjwvBSSNndtdBJMJsLvZsJhZpPLM\nTmCQDHGTVTLhPQhpZprq\nCbCmmTzfVGfFGGCNbctwNPtcSnbjww\nNWQQdHdTddhGrnJjqCRggvRmhzmm\nwLLVHcFFFfwtFfJzqRvmRqzRVgVz\nMlwFfflbLFfbwctDplwcwFMMNNWdWNTNSWDQQnsQNWWHsrQH\nQlfbQrBjBQvfDBjhlpwpqbMzwWppGWqGwG\nVJNcVCJgcntgRcsZWpPDPDqzPTqqnTpL\nZCRNRNmcJZCcNNVRmVdmHfjdrlfhSrvBDSfH\nMzzPjGpjpGPPjdtHBfBNBQBrbtlclV\nFqCnZcgcnFsWqmVHVHlgfBrbQVVb\nSTmCLFZWnTsWvdvSSdvPpGcP\nlNjczlDNCSRMSmlR\nVbhwhgwGQgwpvQpVDpSCbmfnCPfnMnmPmmBn\nVhvGTdhwQwVVVsQQshjcDZdHdqzcDdJrjjzH\nDhPffCSLCPCwfPPqqwqVjHFjzljppl\nTBWBRWTMRBTTBTBdbQqztzQtWqzQFqbV\nsgGTBGTGmNvrGfrz\nhJgqGzqQmGQMQzgGmJGhJQSvZPfppjjPnZNTTTTpjWJvWp\nlbwbRsRdbdmLdrllbbDcrHwwnjvjNfPWWZwWPjPjjZnTZZpf\ndDDrdlDBHbDtVFSqmBShMMVF\nddvtMZJdJTtDvgtfZJfvtWZlHpGljLRcBcjplLwGRnnLGlGc\nSNbFbrCNhQbrVQCQSCVzbLjBGRGRGwTBVwpnRGcHcw\nbbhrTzrbrPrSQFrTTCmFQPCJmJqvJfZZWftZmZJqDvgfJv\nvWLsTNNscttvNTLTLHRgcdqBnVSZVZVWVZqdSdJwwd\njDrFMhGPbGGFFPChDGpGBdngZMzVSSwZgJSqgMSV\nbjjPQjphCPprhFrCCjFPDCTmcLgLtsTlmsNsQTtscQHt\nPdhqLdNccGsrNLpScBnDznjnBnzppQwpHz\nftFtMbtfRMMWTvfRgRWbWMTjjzngzCzjzmDPjjwQDCDQmm\nMRWVVfWfbFWWTbFWlvvRWPJGSLSLNJcPVsqJPcLSGr\nfdRbPbHmnqvrvHDz\npsTdcMgjjNpllVVgjJslMdpMhrttthznDttBWttBvWcnzBvh\ngJjgVNFppjgCCVNsTTCsZbFwmmmmQGZSZLfwSZZd\ncsDFpcpJFbccqpFqpfggJJsljhvlTvQQtjwPTmjPPjRTtNvh\nZBGLddVCSVwNThhCQjPj\nZHLLLrSHGSBzWWzHWpgwcFbJsfcgJbsrgg\nQJljRQLGJSNjMjQBLLJllFznzVCFpBnnzgwngpDCnD\nmHWrTmWrdZHWvdrdWrdZttsFspFVcpzcwcggzpwzwVwDVp\nvfzWvqTWWtPffWHqrWTZvTNSjRjQGGPPRbJbllQbMlJS\nDFnFprBLpHcSlJHRBl\ndbdMMCdsVWmMPlHSSVPVJfcf\nsllvhgsdLThDnhQF\nBSFTWCJWFJmBJdbcgDHgfDzHbncC\nMjMPNjhlslPPLjPqPqVcDttzLBHcgDggDggDbB\nMZhjMsBNNMhPrNjBrMhMPZWRmFmQFRRFFFQmWFQGFQ\nNFgqSSrtlNbNffffffmFFZCf\nWPvTBPPnBWmdJjCsPmVd\nzBwhwwTRWwhvvzTvnhCTnCnSbbqlNStNbLltDRDHRHqtDR\nNgggqJTHTJscdjggNVDVRcNHGLQWqpffZQGQGqpQWpWwQZfW\nvvBPBhBFrzvnzSSrrSzPMtWZZcWGwmLnWQWpQlwGwpnl\nrzbSCtrSttMctvvFMvrvPvgNJDRNHDsHNJsjTjsJJsVb\nHbGVfpJbmbpHLBfHbdChRDDwDRhFlMlFVDFr\nQzNQqcNgtqcNMjgqtntsgswRDDRQlFDSFQPDFRDwhCFR\nngscZtsqsznnnszqTnnqHfLWLWLWZmJpWMJGLBZb\ncTNmqSbTBFhBQZjq\nvswHWHWzHMMttvGGwgppttRfZFZjfBnQnfQZBhwQfhRB\nlglsvMHHWHsWjHMtsvHvjWvTmJbCmcCcbCTcJlTmSmPSPT\nJjSBbBLppbrvZGhhhvGwZNRtNMPCqCPqRgCFRNMgjP\nlWlmDsdDnszRRwdCcNcdwd\nTsDwwVTWsHTmTWVzQflQJbSGhZrZZQBhvBSrJZSr\nJcrncrnrcZcGtJzfrrrzqbTWTlvW\nSCRSDRPSLgRDCHdjjgmdDSHqQTzlmTNNVWbqfbvQzQlbfb\ngpvpHHPPLdLRCSgjpLPtpZZMtnBMZJZBZBtMZs\nlQSvJllvHBPPHPHWSPQQJtDtnhbwDDwwtwfhrrVw\nMgLLdsMsgpRpTLLMgFrbFnfhNbbrhtwDwDDr\nMqpTpqGRLpMgBzGPSvlhSBhW\nNqpNNNPzhwzzshPwRPHWRmRFQWHDQPHD\nVcbcnbjbbrrbbcnbZQDHmlRSVlvZWRFm\nMttmjTtMrhqwhLhtdN\ndMggwDwvMdqgqqtqwHnzVnmGmGtGRrFmsJrN\nSlBClclffBPfZlssrGnJnZZzzznF\nljfTPplCpLcpBBPfTBfcCTbvbDMMFhqdvqWpMWHMDMpd\nllTNZlhSvqMGlZMGhGgGlttrbVVwNjDbNFJbtjjDtN\nfQWCBWQBBpBCsmzPmnmddQccwJtjdVbJDtDcrrjwjbFr\nQzpQCRspPPPmzfppmmBBWLhgTZZTMRwSTgLlqvMqGG\nHSfnNllsHThcchcJBjJhRL\nFQQdzFCrFMbdFbrJBcqprcBrcBDqcB\nmtmMFJJmnTfnsHvm\nnddbfrBHdvbdBBhhhnWmtLsBGQCCtpmmMGPMQP\ncwVVqVNggDgjZDFspptttQrsPgpttp\nwDjczVZqSFDZVlSvrfhHlJHThh\nCttLqSPLqLHhhCdGGTgdlZfclNlsfglbTg\nnzFJpQJWVQjFmnmpjFWzVvBbMBTBNNTfTgZlTgFMNNZb\nnjDDWpVWQjQnzZzjJjnRRwCqPtLLrSqhSwCPCHqG\nBFmNvfFNJRrdpMLLLVldWm\njPjGGwqsndHZqJqM\nGtTSbjbtJjGQsQSSbPSGbzNgCRcCTCFhvfFgFFTBhfRc\nrwBvGlDrBMSzMvGVSBwMSZgnJmmJqmcTTTmVCFJRcTgF\nbbjpzLhHnFTLngLJ\nzdHQdQQftWfNfNtsSvrsGBPGlswrlvDw\nhdnMhghHZzFnZhDCCVTTTbtVmHmWbT\nPQscSNcllJwzwbGmTmWVGm\nsjprJpJjJNPpJBlpdFdgMzDDDhhvhd\nSMwBWSBMPSfzqzPf\ngJDlrFFQlgbFgvjDjTgrQQTGlhNNLdlqLGhNPqwPNPNfGf\njvwHQQjrjrJrppjvJpDFgDgHcsZZnnsVHsmMWCnsBsVVWZ\ncblRJczlcBtBRCqNfGgHfpHCVHGp\nWZWsLWmSPjMdWFGHTVNgLfvHqGDT\nZdmsFmZPmnZMsWWNsNjdmmmcQlrBQnBtQJtclBrtJwBzJz\nwtMNCNwNqwtMMRnVcTlFtlcnFlsl\nvrvrjzjZDDDwmwwVFT\njzrHjrrHjjLBPfQPjZBZzvpSMwCNRpRwSdRCNLqSShSR\nBDgnhMDCDDpjDhBDJDfMSsLSZzCFTTLzTFLzTFZS\nlrqrlmqbvtvWwVRtwlmrrqNvZlZSsLTTFTFZSPzZFzzTBFzz\nHRRRbVmmwqhHHHhGJBcD\nMvnmMvNjvvvmNnRcvzHgzMGtzhffHwHtwt\nZBBsFPPrTgCpSSBwHrLtwbHbLLtzLf\nZBZZssBdWRJgmgJdNn\nTTLChzhDnjQLTDhTQJrzSbbJHsGrGrGFGb\nBfvvpflfWVlVsFFvJHcFJFrJrt\nZwMBwwZPWMMpffflqlZMRnRNQLCNhPhDDNssnRQD\n';
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$Set$Set_elm_builtin = function (a) {
+	return {$: 'Set_elm_builtin', a: a};
+};
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$Set$empty = $elm$core$Set$Set_elm_builtin($elm$core$Dict$empty);
+var $elm$core$Dict$Black = {$: 'Black'};
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = {$: 'Red'};
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					$elm$core$Dict$Red,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1.$) {
+				case 'LT':
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 'EQ':
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Set$insert = F2(
+	function (key, _v0) {
+		var dict = _v0.a;
+		return $elm$core$Set$Set_elm_builtin(
+			A3($elm$core$Dict$insert, key, _Utils_Tuple0, dict));
+	});
+var $elm$core$Set$fromList = function (list) {
+	return A3($elm$core$List$foldl, $elm$core$Set$insert, $elm$core$Set$empty, list);
+};
+var $elm$core$Dict$foldl = F3(
+	function (func, acc, dict) {
+		foldl:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3($elm$core$Dict$foldl, func, acc, left)),
+					$temp$dict = right;
+				func = $temp$func;
+				acc = $temp$acc;
+				dict = $temp$dict;
+				continue foldl;
+			}
+		}
+	});
+var $elm$core$Dict$filter = F2(
+	function (isGood, dict) {
+		return A3(
+			$elm$core$Dict$foldl,
+			F3(
+				function (k, v, d) {
+					return A2(isGood, k, v) ? A3($elm$core$Dict$insert, k, v, d) : d;
+				}),
+			$elm$core$Dict$empty,
+			dict);
+	});
+var $elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
+				switch (_v1.$) {
+					case 'LT':
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 'EQ':
+						return $elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
+		}
+	});
+var $elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _v0 = A2($elm$core$Dict$get, key, dict);
+		if (_v0.$ === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var $elm$core$Dict$intersect = F2(
+	function (t1, t2) {
+		return A2(
+			$elm$core$Dict$filter,
+			F2(
+				function (k, _v0) {
+					return A2($elm$core$Dict$member, k, t2);
+				}),
+			t1);
+	});
+var $elm$core$Set$intersect = F2(
+	function (_v0, _v1) {
+		var dict1 = _v0.a;
+		var dict2 = _v1.a;
+		return $elm$core$Set$Set_elm_builtin(
+			A2($elm$core$Dict$intersect, dict1, dict2));
+	});
+var $elm$core$String$foldr = _String_foldr;
+var $elm$core$String$toList = function (string) {
+	return A3($elm$core$String$foldr, $elm$core$List$cons, _List_Nil, string);
+};
+var $author$project$Days$Day3$findEqual = function (_v0) {
+	var first = _v0.a;
+	var second = _v0.b;
+	var stringToSet = function (s) {
+		return $elm$core$Set$fromList(
+			$elm$core$String$toList(s));
+	};
+	return A2(
+		$elm$core$Maybe$withDefault,
+		_Utils_chr('a'),
+		$elm$core$List$head(
+			$elm$core$Set$toList(
+				A2(
+					$elm$core$Set$intersect,
+					stringToSet(first),
+					stringToSet(second)))));
+};
+var $elm$core$String$lines = _String_lines;
+var $elm$core$Basics$not = _Basics_not;
+var $author$project$Days$Day3$splitLine = function (input) {
+	var half = ($elm$core$String$length(input) / 2) | 0;
+	return _Utils_Tuple2(
+		A2($elm$core$String$left, half, input),
+		A2($elm$core$String$dropLeft, half, input));
+};
+var $author$project$Days$Day3$toPoint = function (c) {
+	var cCode = $elm$core$Char$toCode(c);
+	return $elm$core$Char$isUpper(c) ? ((cCode - $elm$core$Char$toCode(
+		_Utils_chr('A'))) + 27) : ((cCode - $elm$core$Char$toCode(
+		_Utils_chr('a'))) + 1);
+};
+var $author$project$Days$Day3$solution1 = A2(
+	$elm$core$Basics$composeR,
+	$elm$core$String$lines,
+	A2(
+		$elm$core$Basics$composeR,
+		$elm$core$List$filter(
+			A2($elm$core$Basics$composeR, $elm$core$String$isEmpty, $elm$core$Basics$not)),
+		A2(
+			$elm$core$Basics$composeR,
+			$elm$core$List$map($author$project$Days$Day3$splitLine),
+			A2(
+				$elm$core$Basics$composeR,
+				$elm$core$List$map($author$project$Days$Day3$findEqual),
+				A2(
+					$elm$core$Basics$composeR,
+					$elm$core$List$map($author$project$Days$Day3$toPoint),
+					A2($elm$core$Basics$composeR, $elm$core$List$sum, $elm$core$String$fromInt))))));
+var $author$project$Days$Day3$findEqual3 = function (_v0) {
+	var first = _v0.a;
+	var second = _v0.b;
+	var third = _v0.c;
+	var stringToSet = function (s) {
+		return $elm$core$Set$fromList(
+			$elm$core$String$toList(s));
+	};
+	return A2(
+		$elm$core$Maybe$withDefault,
+		_Utils_chr('a'),
+		$elm$core$List$head(
+			$elm$core$Set$toList(
+				A2(
+					$elm$core$Set$intersect,
+					stringToSet(third),
+					A2(
+						$elm$core$Set$intersect,
+						stringToSet(first),
+						stringToSet(second))))));
+};
+var $author$project$Days$Day3$threeLines = function (list) {
+	if ((list.b && list.b.b) && list.b.b.b) {
+		var first = list.a;
+		var _v1 = list.b;
+		var second = _v1.a;
+		var _v2 = _v1.b;
+		var third = _v2.a;
+		var rest = _v2.b;
+		return A2(
+			$elm$core$List$cons,
+			_Utils_Tuple3(first, second, third),
+			$author$project$Days$Day3$threeLines(rest));
 	} else {
-		return $author$project$Main$defaultDay;
+		return _List_Nil;
 	}
+};
+var $author$project$Days$Day3$solution2 = A2(
+	$elm$core$Basics$composeR,
+	$elm$core$String$lines,
+	A2(
+		$elm$core$Basics$composeR,
+		$elm$core$List$filter(
+			A2($elm$core$Basics$composeR, $elm$core$String$isEmpty, $elm$core$Basics$not)),
+		A2(
+			$elm$core$Basics$composeR,
+			$author$project$Days$Day3$threeLines,
+			A2(
+				$elm$core$Basics$composeR,
+				$elm$core$List$map($author$project$Days$Day3$findEqual3),
+				A2(
+					$elm$core$Basics$composeR,
+					$elm$core$List$map($author$project$Days$Day3$toPoint),
+					A2($elm$core$Basics$composeR, $elm$core$List$sum, $elm$core$String$fromInt))))));
+var $author$project$Days$Day3$solution = _Utils_Tuple2(
+	function (_v0) {
+		return $author$project$Days$Day3$solution1($author$project$Days$Day3$puzzleInput);
+	},
+	function (_v1) {
+		return $author$project$Days$Day3$solution2($author$project$Days$Day3$puzzleInput);
+	});
+var $author$project$Main$days = $elm$core$Array$fromList(
+	_List_fromArray(
+		[
+			_Utils_Tuple2('Day 1', $author$project$Days$Day1$solution),
+			_Utils_Tuple2('Day 2', $author$project$Days$Day2$solution),
+			_Utils_Tuple2('Day 3', $author$project$Days$Day3$solution)
+		]));
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var $elm$core$Array$getHelp = F3(
+	function (shift, index, tree) {
+		getHelp:
+		while (true) {
+			var pos = $elm$core$Array$bitMask & (index >>> shift);
+			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (_v0.$ === 'SubTree') {
+				var subTree = _v0.a;
+				var $temp$shift = shift - $elm$core$Array$shiftStep,
+					$temp$index = index,
+					$temp$tree = subTree;
+				shift = $temp$shift;
+				index = $temp$index;
+				tree = $temp$tree;
+				continue getHelp;
+			} else {
+				var values = _v0.a;
+				return A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, values);
+			}
+		}
+	});
+var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var $elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
+};
+var $elm$core$Array$get = F2(
+	function (index, _v0) {
+		var len = _v0.a;
+		var startShift = _v0.b;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? $elm$core$Maybe$Nothing : ((_Utils_cmp(
+			index,
+			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
+			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
+			A3($elm$core$Array$getHelp, startShift, index, tree)));
+	});
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $author$project$Main$dayFromIndex = function (index) {
+	return A2(
+		$elm$core$Maybe$withDefault,
+		_Utils_Tuple2(
+			function (_v0) {
+				return 'Unknown';
+			},
+			function (_v1) {
+				return 'day';
+			}),
+		A2(
+			$elm$core$Maybe$andThen,
+			A2($elm$core$Basics$composeR, $elm$core$Tuple$second, $elm$core$Maybe$Just),
+			A2($elm$core$Array$get, index, $author$project$Main$days)));
 };
 var $author$project$Main$update = F2(
 	function (msg, _v0) {
@@ -5592,35 +6063,55 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $elm$core$Array$toIndexedList = function (array) {
+	var len = array.a;
+	var helper = F2(
+		function (entry, _v0) {
+			var index = _v0.a;
+			var list = _v0.b;
+			return _Utils_Tuple2(
+				index - 1,
+				A2(
+					$elm$core$List$cons,
+					_Utils_Tuple2(index, entry),
+					list));
+		});
+	return A3(
+		$elm$core$Array$foldr,
+		helper,
+		_Utils_Tuple2(len - 1, _List_Nil),
+		array).b;
+};
 var $elm$html$Html$ul = _VirtualDom_node('ul');
-var $author$project$Main$viewShowList = function () {
-	var lis = A2(
-		$elm$core$List$indexedMap,
-		F2(
-			function (index, _v0) {
-				var name = _v0.a;
-				return A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$a,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$href('#'),
-									$elm$html$Html$Events$onClick(
-									$author$project$Main$ClickedDay(index))
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text(name)
-								]))
-						]));
-			}),
-		$author$project$Main$days);
-	return A2($elm$html$Html$ul, _List_Nil, lis);
-}();
+var $author$project$Main$viewShowList = A2(
+	$elm$html$Html$ul,
+	_List_Nil,
+	A2(
+		$elm$core$List$map,
+		function (_v0) {
+			var index = _v0.a;
+			var _v1 = _v0.b;
+			var name = _v1.a;
+			return A2(
+				$elm$html$Html$li,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$a,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$href('#'),
+								$elm$html$Html$Events$onClick(
+								$author$project$Main$ClickedDay(index))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(name)
+							]))
+					]));
+		},
+		$elm$core$Array$toIndexedList($author$project$Main$days)));
 var $author$project$Main$viewBody = function (model) {
 	if (model.$ === 'ShowList') {
 		return $author$project$Main$viewShowList;
