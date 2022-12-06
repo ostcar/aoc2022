@@ -5,3 +5,10 @@
 This time in elm
 
 Run `task build` or `elm make src/Main.elm` to generate the index.html file.
+
+Or, in `elm repl` run
+
+```elm
+import Days.Day6 exposing (solution)
+Tuple.mapBoth (\a -> a ()) (\a -> a()) solution
+```
