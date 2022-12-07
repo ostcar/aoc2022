@@ -8,6 +8,7 @@ import Days.Day3
 import Days.Day4
 import Days.Day5
 import Days.Day6
+import Days.Day7
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -45,6 +46,7 @@ days =
         , ( "Day 4", Days.Day4.solution )
         , ( "Day 5", Days.Day5.solution )
         , ( "Day 6", Days.Day6.solution )
+        , ( "Day 7", Days.Day7.solution )
         ]
 
 
