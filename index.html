@@ -7289,6 +7289,7 @@ var $author$project$Days$Day7$resultToString = function (r) {
 		return s;
 	}
 };
+var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Dict$values = function (dict) {
 	return A3(
 		$elm$core$Dict$foldr,
@@ -7302,9 +7303,13 @@ var $elm$core$Dict$values = function (dict) {
 var $author$project$Days$Day7$fileTreeSize = function (fileTree) {
 	return $elm$core$List$sum(
 		A2(
-			$elm$core$List$map,
-			$author$project$Days$Day7$nodeSize,
-			$elm$core$Dict$values(fileTree)));
+			$elm$core$Debug$log,
+			'fileTreeSize',
+			A2(
+				$elm$core$List$map,
+				$author$project$Days$Day7$nodeSize,
+				$elm$core$Dict$values(
+					A2($elm$core$Debug$log, 'fileTree', fileTree)))));
 };
 var $author$project$Days$Day7$nodeSize = function (node) {
 	if (node.$ === 'File') {
@@ -7315,19 +7320,20 @@ var $author$project$Days$Day7$nodeSize = function (node) {
 		return $author$project$Days$Day7$fileTreeSize(fileTree);
 	}
 };
-var $author$project$Days$Day7$Dir = function (a) {
-	return {$: 'Dir', a: a};
-};
 var $author$project$Days$Day7$File = function (a) {
 	return {$: 'File', a: a};
 };
+var $author$project$Days$Day7$Dir = function (a) {
+	return {$: 'Dir', a: a};
+};
 var $author$project$Days$Day7$addNodeAtPath = F4(
 	function (path, node, filename, fileTree) {
-		if (!path.b) {
+		var _v0 = $elm$core$List$reverse(path);
+		if (!_v0.b) {
 			return A3($elm$core$Dict$insert, filename, node, fileTree);
 		} else {
-			var first = path.a;
-			var rest = path.b;
+			var first = _v0.a;
+			var rest = _v0.b;
 			var subFileTree = function () {
 				var _v1 = A2($elm$core$Dict$get, first, fileTree);
 				if (_v1.$ === 'Just') {
@@ -7350,7 +7356,6 @@ var $author$project$Days$Day7$addNodeAtPath = F4(
 		}
 	});
 var $author$project$Days$Day7$emptyFileTree = $elm$core$Dict$empty;
-var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Tuple$second = function (_v0) {
 	var y = _v0.b;
 	return y;
@@ -7389,14 +7394,7 @@ var $author$project$Days$Day7$terminalLineToFileTree = function (list) {
 						var output = terminalLine.a;
 						if (output.$ === 'OutputDir') {
 							var name = output.a;
-							return _Utils_Tuple2(
-								pwd,
-								A4(
-									$author$project$Days$Day7$addNodeAtPath,
-									pwd,
-									$author$project$Days$Day7$Dir($author$project$Days$Day7$emptyFileTree),
-									name,
-									fileTree));
+							return _Utils_Tuple2(pwd, fileTree);
 						} else {
 							var size = output.a;
 							var name = output.b;
@@ -7446,17 +7444,20 @@ var $author$project$Days$Day7$solution1Inner = function (lines) {
 		$elm$core$String$fromInt(
 			$elm$core$List$sum(
 				A2(
-					$author$project$Days$Day7$walkFileTree,
-					F2(
-						function (node, _v0) {
-							if (node.$ === 'Dir') {
-								var ns = $author$project$Days$Day7$nodeSize(node);
-								return (ns <= 100000) ? ns : 0;
-							} else {
-								return 0;
-							}
-						}),
-					$author$project$Days$Day7$terminalLineToFileTree(lines)))));
+					$elm$core$Debug$log,
+					'liste',
+					A2(
+						$author$project$Days$Day7$walkFileTree,
+						F2(
+							function (node, _v0) {
+								if (node.$ === 'Dir') {
+									var ns = $author$project$Days$Day7$nodeSize(node);
+									return (ns < 100000) ? ns : 0;
+								} else {
+									return 0;
+								}
+							}),
+						$author$project$Days$Day7$terminalLineToFileTree(lines))))));
 };
 var $author$project$Days$Day7$solution1 = function (input) {
 	return $author$project$Days$Day7$resultToString(

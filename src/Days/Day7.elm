@@ -197,7 +197,8 @@ terminalLineToFileTree list =
                 TerminalLineOutput output ->
                     case output of
                         OutputDir name ->
-                            ( pwd, addNodeAtPath pwd (Dir emptyFileTree) name fileTree )
+                            -- ( pwd, addNodeAtPath pwd (Dir emptyFileTree) name fileTree )
+                            ( pwd, fileTree )
 
                         OutputFile size name ->
                             ( pwd, addNodeAtPath pwd (File size) name fileTree )
@@ -210,7 +211,7 @@ terminalLineToFileTree list =
 
 addNodeAtPath : List String -> Node -> String -> FileTree -> FileTree
 addNodeAtPath path node filename fileTree =
-    case path of
+    case List.reverse path of
         [] ->
             Dict.insert filename node fileTree
 
@@ -261,6 +262,7 @@ solution1Inner lines =
                     _ ->
                         0
             )
+        |> Debug.log "liste"
         |> List.sum
         |> String.fromInt
         |> Ok
@@ -295,8 +297,9 @@ walkFileTree fn tree =
 
 fileTreeSize : FileTree -> Int
 fileTreeSize fileTree =
-    Dict.values fileTree
+    Dict.values (Debug.log "fileTree" fileTree)
         |> List.map nodeSize
+        |> Debug.log "fileTreeSize"
         |> List.sum
 
 
