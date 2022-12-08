@@ -16,3 +16,15 @@ tasks:
       - index.html
 
     ignore_error: true
+
+  build-prod:
+    cmds:
+      - elm make --optimize src/Main.elm
+    sources:
+      - elm.json
+      - src/*.elm
+      - src/**/*.elm
+    generates:
+      - index.html
+
+    ignore_error: true

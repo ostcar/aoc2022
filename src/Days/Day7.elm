@@ -1,4 +1,4 @@
-module Days.Day7 exposing (solution, testParseInput, testSolution1)
+module Days.Day7 exposing (solution, testParseInput, testSolution1, testSolution2)
 
 import Dict exposing (Dict)
 import Expect
@@ -10,7 +10,7 @@ solution : ( () -> String, () -> String )
 solution =
     ( \_ ->
         solution1 puzzleInput
-    , \_ -> "TODO"
+    , \_ -> solution2 puzzleInput
     )
 
 
@@ -196,22 +196,20 @@ terminalLineToFileTree list =
 
                 TerminalLineOutput output ->
                     case output of
-                        OutputDir name ->
-                            -- ( pwd, addNodeAtPath pwd (Dir emptyFileTree) name fileTree )
+                        OutputDir _ ->
                             ( pwd, fileTree )
 
                         OutputFile size name ->
-                            ( pwd, addNodeAtPath pwd (File size) name fileTree )
+                            ( pwd, addNodeAtPath (List.reverse pwd) (File size) name fileTree )
         )
         ( [], emptyFileTree )
         list
         |> Tuple.second
-        |> Debug.log "tree"
 
 
 addNodeAtPath : List String -> Node -> String -> FileTree -> FileTree
 addNodeAtPath path node filename fileTree =
-    case List.reverse path of
+    case path of
         [] ->
             Dict.insert filename node fileTree
 
@@ -242,6 +240,13 @@ solution1 input =
         |> resultToString
 
 
+solution2 : String -> String
+solution2 input =
+    parseInput input
+        |> Result.andThen solution2Inner
+        |> resultToString
+
+
 solution1Inner : List TerminalLine -> Result String String
 solution1Inner lines =
     terminalLineToFileTree lines
@@ -262,8 +267,49 @@ solution1Inner lines =
                     _ ->
                         0
             )
-        |> Debug.log "liste"
         |> List.sum
+        |> String.fromInt
+        |> Ok
+
+
+solution2Inner : List TerminalLine -> Result String String
+solution2Inner lines =
+    let
+        tree =
+            terminalLineToFileTree lines
+
+        allDirs =
+            tree
+                |> walkFileTree
+                    (\node _ ->
+                        case node of
+                            Dir _ ->
+                                nodeSize node
+
+                            File _ ->
+                                0
+                    )
+
+        allSum =
+            tree
+                |> walkFileTree
+                    (\node _ ->
+                        case node of
+                            Dir _ ->
+                                0
+
+                            File size ->
+                                size
+                    )
+                |> List.sum
+
+        needFreed =
+            allSum - (70000000 - 30000000)
+    in
+    List.filter (\size -> size > needFreed) allDirs
+        |> List.sort
+        |> List.head
+        |> Maybe.withDefault 0
         |> String.fromInt
         |> Ok
 
@@ -273,6 +319,14 @@ testSolution1 =
     Test.test "test solution1"
         (\_ ->
             solution1 testInput |> Expect.equal "95437"
+        )
+
+
+testSolution2 : Test.Test
+testSolution2 =
+    Test.test "test solution2"
+        (\_ ->
+            solution2 testInput |> Expect.equal "24933642"
         )
 
 
@@ -297,9 +351,8 @@ walkFileTree fn tree =
 
 fileTreeSize : FileTree -> Int
 fileTreeSize fileTree =
-    Dict.values (Debug.log "fileTree" fileTree)
+    Dict.values fileTree
         |> List.map nodeSize
-        |> Debug.log "fileTreeSize"
         |> List.sum
 
 
