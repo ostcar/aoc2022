@@ -25,14 +25,12 @@ testSolution =
 
 
 type alias Rope =
-    { head : Position
-    , tail : List Position
-    }
+    List Position
 
 
 ropeLast : Rope -> Position
 ropeLast rope =
-    rope.tail
+    rope
         |> List.reverse
         |> List.head
         |> Maybe.withDefault ( 0, 0 )
@@ -40,9 +38,15 @@ ropeLast rope =
 
 startRope : Int -> Rope
 startRope n =
-    { head = ( 0, 0 )
-    , tail = List.repeat (n - 1) ( 0, 0 )
-    }
+    List.repeat n ( 0, 0 )
+
+
+
+-- printRope : Rope -> String
+-- printRope rope =
+--     let
+--         minXY = Dict.values rope |> (::) rope.head |>
+--     in
 
 
 type alias Position =
@@ -133,25 +137,19 @@ tailPositions rope directions =
 
 moveRope : Direction -> Rope -> Rope
 moveRope direction rope =
-    let
-        newHead =
-            direction rope.head
+    rope
+        |> List.foldl
+            (\e before ->
+                case before of
+                    [] ->
+                        direction (List.head rope |> Maybe.withDefault ( 0, 0 ))
+                            |> List.singleton
 
-        newTail =
-            List.foldl
-                (\e before ->
-                    let
-                        tailHead =
-                            List.head before |> Maybe.withDefault newHead
-                    in
-                    moveTail tailHead e :: before
-                )
-                []
-                rope.tail
-    in
-    { head = newHead
-    , tail = newTail |> List.reverse
-    }
+                    head :: _ ->
+                        moveTail head e :: before
+            )
+            []
+        |> List.reverse 
 
 
 moveTail : Position -> Position -> Position
