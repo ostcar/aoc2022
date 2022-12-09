@@ -1,5 +1,6 @@
-module Days.Day9 exposing (puzzleInput, solution, testSolution)
+module Days.Day9 exposing (frameCount, puzzleInput, run, solution, testSolution)
 
+import Dict exposing (Dict)
 import Expect
 import Set exposing (Set)
 import Test
@@ -16,6 +17,16 @@ solution input =
         |> Set.size
         |> String.fromInt
     )
+
+
+run : String -> Int -> Int -> String
+run input length frame =
+    let
+        directions =
+            parseInput input
+                |> List.take frame
+    in
+    ropeWay directions (startRope length)
 
 
 testSolution : Test.Test
@@ -41,16 +52,75 @@ startRope n =
     List.repeat n ( 0, 0 )
 
 
+ropeToDict : Rope -> Dict Position Char
+ropeToDict rope =
+    rope
+        |> List.indexedMap (\idx pos -> ( pos, (idx + Char.toCode '0') |> Char.fromCode ))
+        |> dictFromListIfNothing
 
--- printRope : Rope -> String
--- printRope rope =
---     let
---         minXY = Dict.values rope |> (::) rope.head |>
---     in
+
+dictFromListIfNothing : List ( comparable, v ) -> Dict comparable v
+dictFromListIfNothing =
+    List.foldl
+        (\( key, value ) ->
+            Dict.update key
+                (\maybeOldValue ->
+                    case maybeOldValue of
+                        Nothing ->
+                            Just value
+
+                        Just v ->
+                            Just v
+                )
+        )
+        Dict.empty
+
+
+printRope : Rope -> String
+printRope rope =
+    let
+        addSize = 5
+        grid =
+            ropeToDict rope
+
+        minXY =
+            List.foldl (comPos min) ( 0, 0 ) rope
+
+        maxXY =
+            List.foldl (comPos max) ( 0, 0 ) rope
+    in
+    List.range (Tuple.second minXY - addSize) (Tuple.second maxXY + addSize)
+        |> List.map
+            (\lineNr ->
+                List.range (Tuple.first minXY - addSize) (Tuple.first maxXY + addSize)
+                    |> List.map
+                        (\columnNr ->
+                            Dict.get ( columnNr, lineNr ) grid |> Maybe.withDefault '.'
+                        )
+                    |> String.fromList
+            )
+        |> String.join "\n"
+
+
+ropeWay : List Direction -> Rope -> String
+ropeWay directions rope =
+    let
+        fn newRope _ =
+            newRope
+    in
+    moveRopeMany rope directions fn rope
+        |> printRope
 
 
 type alias Position =
     ( Int, Int )
+
+
+comPos : (Int -> Int -> Int) -> Position -> Position -> Position
+comPos fn ( p1X, p1Y ) ( p2X, p2Y ) =
+    ( fn p1X p2X
+    , fn p1Y p2Y
+    )
 
 
 type alias Direction =
@@ -120,18 +190,33 @@ parseInput input =
             []
 
 
+frameCount : String -> Int
+frameCount input =
+    parseInput input
+        |> List.length
+
+
 tailPositions : Rope -> List Direction -> Set Position
 tailPositions rope directions =
+    let
+        fn newRope set =
+            Set.insert (ropeLast newRope) set
+    in
+    moveRopeMany rope directions fn Set.empty
+
+
+moveRopeMany : Rope -> List Direction -> (Rope -> a -> a) -> a -> a
+moveRopeMany rope directions fn start =
     directions
         |> List.foldl
-            (\d ( lastRope, set ) ->
+            (\d ( lastRope, lastA ) ->
                 let
                     newRope =
                         moveRope d lastRope
                 in
-                ( newRope, Set.insert (ropeLast newRope) set )
+                ( newRope, fn newRope lastA )
             )
-            ( rope, Set.singleton ( 0, 0 ) )
+            ( rope, fn rope start )
         |> Tuple.second
 
 
@@ -149,7 +234,7 @@ moveRope direction rope =
                         moveTail head e :: before
             )
             []
-        |> List.reverse 
+        |> List.reverse
 
 
 moveTail : Position -> Position -> Position

@@ -28,6 +28,7 @@ main =
 type Model
     = ShowList
     | ShowDay Day
+    | ShowRope String Int Int
 
 
 type alias Day =
@@ -37,6 +38,10 @@ type alias Day =
 type Msg
     = ClickedDay Int
     | ClickedBack
+    | InputedRopeInput String
+    | InputedRopeLength String
+    | ClickedRopeAddFrame
+    | ClickedRopeRemoveFrame
 
 
 days : Array ( String, Day )
@@ -62,13 +67,54 @@ dayFromIndex index =
 
 
 update : Msg -> Model -> Model
-update msg _ =
+update msg model =
     case msg of
         ClickedDay index ->
             dayFromIndex index |> ShowDay
 
         ClickedBack ->
             ShowList
+
+        InputedRopeInput input ->
+            case model of
+                ShowRope _ length frame ->
+                    ShowRope input length frame
+
+                _ ->
+                    ShowRope input 2 0
+
+        InputedRopeLength length ->
+            let
+                maybeIntLength =
+                    String.toInt length
+            in
+            case maybeIntLength of
+                Nothing ->
+                    model
+
+                Just intLength ->
+                    case model of
+                        ShowRope input _ frame ->
+                            ShowRope input intLength frame
+
+                        _ ->
+                            ShowRope "" intLength 0
+
+        ClickedRopeAddFrame ->
+            case model of
+                ShowRope input length oldFrame ->
+                   ShowRope input length (oldFrame +1)
+
+                _ ->
+                    ShowRope "" 2 1
+
+        ClickedRopeRemoveFrame ->
+            case model of
+                ShowRope input length oldFrame ->
+                    Basics.max (oldFrame - 1) 0 |> ShowRope input length
+
+                _ ->
+                    ShowRope "" 2 1
 
 
 view : Model -> Html Msg
@@ -106,6 +152,30 @@ viewBody model =
                 , p [] [ text s2 ]
                 ]
 
+        ShowRope input length frame ->
+            viewRope input length frame
+
+
+viewRope : String -> Int -> Int -> Html Msg
+viewRope input length frame =
+    div []
+        [ p [] [ Html.textarea [ onInput InputedRopeInput, placeholder "input" ] [] ]
+        --, p [] [ text <| (Days.Day9.frameCount input |> String.fromInt) ++ " Frames" ]
+        , p [] [ Html.input [ onInput InputedRopeLength, placeholder "rope length" ] [] ]
+        , p []
+            [ button [ onClick ClickedRopeAddFrame ] [ text "+" ]
+            , button [ onClick ClickedRopeRemoveFrame ] [ text "-" ]
+            , text <| String.fromInt frame
+            ]
+        , p [] [ multilineText <| Days.Day9.run input length frame ]
+        ]
+
+
+multilineText : String -> Html msg
+multilineText input =
+    pre []
+        [ text input ]
+
 
 viewShowList : Html Msg
 viewShowList =
@@ -121,9 +191,12 @@ viewShowList =
 
 viewFooter : Model -> Html Msg
 viewFooter model =
-    case model of
-        ShowList ->
-            text ""
+    div []
+        [ case model of
+            ShowList ->
+                text ""
 
-        ShowDay _ ->
-            div [] [ a [ href "#", onClick ClickedBack ] [ text "back" ] ]
+            _ ->
+                div [] [ a [ href "#", onClick ClickedBack ] [ text "back" ] ]
+        , div [] [ a [ href "#", onClick (InputedRopeInput "") ] [ text "robe" ] ]
+        ]
