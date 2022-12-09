@@ -1,14 +1,14 @@
-module Days.Day6 exposing (solution, testSolution1, testSolution2)
+module Days.Day6 exposing (puzzleInput, solution, testSolution1, testSolution2)
 
 import Expect
 import Set
 import Test
 
 
-solution : ( () -> String, () -> String )
-solution =
-    ( \_ -> firstNUniquePosition 4 puzzleInput |> String.fromInt
-    , \_ -> firstNUniquePosition 14 puzzleInput |> String.fromInt
+solution : String -> ( String, String )
+solution input =
+    ( firstNUniquePosition 4 input |> String.fromInt
+    , firstNUniquePosition 14 input |> String.fromInt
     )
 
 

@@ -1,4 +1,4 @@
-module Days.Day5 exposing (solution, testApplyInstructions, testParseInput, testSolution1, testSolution2)
+module Days.Day5 exposing (puzzleInput, solution, testApplyInstructions, testParseInput, testSolution1, testSolution2)
 
 import Array exposing (Array)
 import Expect
@@ -7,10 +7,10 @@ import String
 import Test
 
 
-solution : ( () -> String, () -> String )
-solution =
-    ( \_ -> run False puzzleInput
-    , \_ -> run True puzzleInput
+solution : String -> ( String, String )
+solution input =
+    ( run False input
+    , run True input
     )
 
 

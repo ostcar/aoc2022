@@ -1,10 +1,10 @@
-module Days.Day1 exposing (solution)
+module Days.Day1 exposing (solution, puzzleInput)
 
 
-solution : ( () -> String, () -> String )
-solution =
-    ( \_ -> (solution1 puzzleInput)
-    , \_ -> (solution2 puzzleInput)
+solution : String -> (String,String)
+solution input =
+    ( (solution1 input)
+    , (solution2 input)
     )
 
 

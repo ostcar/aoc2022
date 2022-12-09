@@ -1,4 +1,4 @@
-module Days.Day7 exposing (solution, testParseInput, testSolution1, testSolution2)
+module Days.Day7 exposing (puzzleInput, solution, testParseInput, testSolution1, testSolution2)
 
 import Dict exposing (Dict)
 import Expect
@@ -6,11 +6,10 @@ import Parser exposing ((|.), (|=), Parser)
 import Test
 
 
-solution : ( () -> String, () -> String )
-solution =
-    ( \_ ->
-        solution1 puzzleInput
-    , \_ -> solution2 puzzleInput
+solution : String -> ( String, String )
+solution input =
+    ( solution1 input
+    , solution2 input
     )
 
 

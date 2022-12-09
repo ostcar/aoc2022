@@ -30,7 +30,7 @@ type Model
 
 
 type alias Day =
-    ( () -> String, () -> String )
+    ( String, String -> ( String, String ) )
 
 
 type Msg
@@ -41,14 +41,14 @@ type Msg
 days : Array ( String, Day )
 days =
     Array.fromList
-        [ ( "Day 1", Days.Day1.solution )
-        , ( "Day 2", Days.Day2.solution )
-        , ( "Day 3", Days.Day3.solution )
-        , ( "Day 4", Days.Day4.solution )
-        , ( "Day 5", Days.Day5.solution )
-        , ( "Day 6", Days.Day6.solution )
-        , ( "Day 7", Days.Day7.solution )
-        , ( "Day 8", Days.Day8.solution )
+        [ ( "Day 1", ( Days.Day1.puzzleInput, Days.Day1.solution ) )
+        , ( "Day 2", ( Days.Day2.puzzleInput, Days.Day2.solution ))
+        , ( "Day 3", ( Days.Day3.puzzleInput, Days.Day3.solution ))
+        , ( "Day 4", ( Days.Day4.puzzleInput, Days.Day4.solution ))
+        , ( "Day 5", ( Days.Day5.puzzleInput, Days.Day5.solution ))
+        , ( "Day 6", ( Days.Day6.puzzleInput, Days.Day6.solution ))
+        , ( "Day 7", ( Days.Day7.puzzleInput, Days.Day7.solution ))
+        , ( "Day 8", ( Days.Day8.puzzleInput, Days.Day8.solution ))
         ]
 
 
@@ -56,7 +56,7 @@ dayFromIndex : Int -> Day
 dayFromIndex index =
     Array.get index days
         |> Maybe.andThen (Tuple.second >> Just)
-        |> Maybe.withDefault ( \() -> "Unknown", \() -> "day" )
+        |> Maybe.withDefault ( "Unknown", \_ -> ( "Unknown", "Day" ) )
 
 
 update : Msg -> Model -> Model
@@ -94,10 +94,14 @@ viewBody model =
         ShowList ->
             viewShowList
 
-        ShowDay ( soltuon1, solution2 ) ->
+        ShowDay ( input, solver ) ->
+            let
+                ( s1, s2 ) =
+                    solver input
+            in
             div []
-                [ p [] [ text <| soltuon1 () ]
-                , p [] [ text <| solution2 () ]
+                [ p [] [ text s1 ]
+                , p [] [ text s2 ]
                 ]
 
 
