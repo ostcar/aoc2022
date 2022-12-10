@@ -11,6 +11,7 @@ import Days.Day6
 import Days.Day7
 import Days.Day8
 import Days.Day9
+import Days.Day10
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -47,15 +48,16 @@ type Msg
 days : Array ( String, Day )
 days =
     Array.fromList
-        [ ( "Day 1", ( Days.Day1.puzzleInput, Days.Day1.solution ) )
-        , ( "Day 2", ( Days.Day2.puzzleInput, Days.Day2.solution ) )
-        , ( "Day 3", ( Days.Day3.puzzleInput, Days.Day3.solution ) )
-        , ( "Day 4", ( Days.Day4.puzzleInput, Days.Day4.solution ) )
-        , ( "Day 5", ( Days.Day5.puzzleInput, Days.Day5.solution ) )
-        , ( "Day 6", ( Days.Day6.puzzleInput, Days.Day6.solution ) )
-        , ( "Day 7", ( Days.Day7.puzzleInput, Days.Day7.solution ) )
-        , ( "Day 8", ( Days.Day8.puzzleInput, Days.Day8.solution ) )
-        , ( "Day 9", ( Days.Day9.puzzleInput, Days.Day9.solution ) )
+        [ ( "Day 01", ( Days.Day1.puzzleInput, Days.Day1.solution ) )
+        , ( "Day 02", ( Days.Day2.puzzleInput, Days.Day2.solution ) )
+        , ( "Day 03", ( Days.Day3.puzzleInput, Days.Day3.solution ) )
+        , ( "Day 04", ( Days.Day4.puzzleInput, Days.Day4.solution ) )
+        , ( "Day 05", ( Days.Day5.puzzleInput, Days.Day5.solution ) )
+        , ( "Day 06", ( Days.Day6.puzzleInput, Days.Day6.solution ) )
+        , ( "Day 07", ( Days.Day7.puzzleInput, Days.Day7.solution ) )
+        , ( "Day 08", ( Days.Day8.puzzleInput, Days.Day8.solution ) )
+        , ( "Day 09", ( Days.Day9.puzzleInput, Days.Day9.solution ) )
+        , ( "Day 10", ( Days.Day10.puzzleInput, Days.Day10.solution ) )
         ]
 
 
@@ -103,7 +105,7 @@ update msg model =
         ClickedRopeAddFrame ->
             case model of
                 ShowRope input length oldFrame ->
-                   ShowRope input length (oldFrame +1)
+                    ShowRope input length (oldFrame + 1)
 
                 _ ->
                     ShowRope "" 2 1
@@ -160,6 +162,7 @@ viewRope : String -> Int -> Int -> Html Msg
 viewRope input length frame =
     div []
         [ p [] [ Html.textarea [ onInput InputedRopeInput, placeholder "input" ] [] ]
+
         --, p [] [ text <| (Days.Day9.frameCount input |> String.fromInt) ++ " Frames" ]
         , p [] [ Html.input [ onInput InputedRopeLength, placeholder "rope length" ] [] ]
         , p []
