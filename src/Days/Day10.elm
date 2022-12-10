@@ -1,4 +1,4 @@
-module Days.Day10 exposing (puzzleInput, solution, testSolution)
+module Days.Day10 exposing (puzzleInput, solution, testInput, testSolution)
 
 import Expect
 import Parser exposing ((|.), (|=))
@@ -8,31 +8,67 @@ import Test
 solution : String -> ( String, String )
 solution input =
     ( run1 input
-    , "TODO"
+    , run2 input
     )
 
 
 testSolution : Test.Test
 testSolution =
+    let
+        s2Expect =
+            """##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######....."""
+    in
     Test.test "test input" <|
-        \_ -> ( "13140", "TODO" ) |> Expect.equal (solution testInput)
+        \_ -> ( "13140", s2Expect ) |> Expect.equal (solution testInput)
 
 
 run1 : String -> String
-run1 input =
-    parseInput input
-        |> combine20AndThen40
-        |> List.foldl
+run1 =
+    parseInput
+        >> combine20AndThen40
+        >> List.foldl
             (\instr { reg, multiplier, sum } ->
                 let
                     newReg =
-                        instr reg
+                        callInstruction instr reg
                 in
                 { reg = newReg, multiplier = multiplier + 40, sum = sum + multiplier * newReg }
             )
             { reg = 1, multiplier = 20, sum = 0 }
-        |> .sum
-        |> String.fromInt
+        >> .sum
+        >> String.fromInt
+
+
+run2 : String -> String
+run2 input =
+    parseInput input
+        |> List.indexedMap Tuple.pair
+        |> List.foldl
+            (\( idx, instr ) ( reg, output ) ->
+                let
+                    add40 = if idx > 0 && modBy 40 (idx+1)  == 0 then 40 else 0
+                    newReg =
+                        (callInstruction instr reg) + add40
+                in
+                if idx == reg || idx == reg + 1 || idx == reg - 1 then
+                    ( newReg, output ++ "#" )
+
+                else
+                    ( newReg, output ++ "." )
+            )
+            ( 1, "" )
+        |> Tuple.second
+        |> String.toList
+        |> listWithNElements 40
+        |> List.map String.fromList
+        |> String.join "\n"
+
+
 
 
 combine20AndThen40 : List Instruction -> List Instruction
@@ -62,9 +98,29 @@ combineN : Int -> List Instruction -> ( Instruction, List Instruction )
 combineN n list =
     let
         ( take, rest ) =
-            listSplitAfter n  list
+            listSplitAfter n list
     in
     ( combineInstruction take, rest )
+
+
+listWithNElements : Int -> List a -> List (List a)
+listWithNElements n list =
+    let
+        firstToSecond ( first, second ) =
+            List.reverse first :: second
+    in
+    List.foldl
+        (\e ( tmp, full ) ->
+            if List.length tmp < n then
+                ( e :: tmp, full )
+
+            else
+                ( [ e ], firstToSecond ( tmp, full ) )
+        )
+        ( [], [] )
+        list
+        |> firstToSecond
+        |> List.reverse
 
 
 listSplitAfter : Int -> List a -> ( List a, List a )
@@ -77,24 +133,35 @@ listSplitAfter n list =
 combineInstruction : List Instruction -> Instruction
 combineInstruction =
     List.foldl
-        (\i combined ->
-            combined >> i
+        (\a b ->
+            case a of
+                Noop ->
+                    b
+
+                Add x ->
+                    case b of
+                        Noop ->
+                            Add x
+
+                        Add y ->
+                            Add (x + y)
         )
-        instructionNoop
+        Noop
 
 
-type alias Instruction =
-    Int -> Int
+type Instruction
+    = Add Int
+    | Noop
 
 
-instructionAddX : Int -> Int -> Int
-instructionAddX =
-    (+)
+callInstruction : Instruction -> Int -> Int
+callInstruction instr a =
+    case instr of
+        Add x ->
+            a + x
 
-
-instructionNoop : Int -> Int
-instructionNoop =
-    identity
+        Noop ->
+            a
 
 
 parseInput : String -> List Instruction
@@ -104,17 +171,17 @@ parseInput =
             (\line instructions ->
                 case parseAddX line of
                     Nothing ->
-                        instructionNoop :: instructions
+                        Noop :: instructions
 
                     Just x ->
-                        instructionAddX x :: instructionNoop :: instructions
+                        Add x :: Noop :: instructions
             )
             []
         >> List.reverse
 
 
 parseAddX : String -> Maybe Int
-parseAddX input =
+parseAddX =
     let
         parser =
             Parser.succeed identity
@@ -127,8 +194,8 @@ parseAddX input =
                     , Parser.int
                     ]
     in
-    Parser.run parser input
-        |> Result.toMaybe
+    Parser.run parser
+        >> Result.toMaybe
 
 
 testInput : String

@@ -150,8 +150,8 @@ viewBody model =
                     solver input
             in
             div []
-                [ p [] [ text s1 ]
-                , p [] [ text s2 ]
+                [ p [] [ multilineText s1 ]
+                , p [] [ multilineText s2 ]
                 ]
 
         ShowRope input length frame ->
