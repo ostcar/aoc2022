@@ -2,15 +2,15 @@ module Main exposing (main)
 
 import Array exposing (Array)
 import Browser
-import Days.Day1
-import Days.Day2
-import Days.Day3
-import Days.Day4
-import Days.Day5
-import Days.Day6
-import Days.Day7
-import Days.Day8
-import Days.Day9
+import Days.Day01
+import Days.Day02
+import Days.Day03
+import Days.Day04
+import Days.Day05
+import Days.Day06
+import Days.Day07
+import Days.Day08
+import Days.Day09
 import Days.Day10
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -48,15 +48,15 @@ type Msg
 days : Array ( String, Day )
 days =
     Array.fromList
-        [ ( "Day 01", ( Days.Day1.puzzleInput, Days.Day1.solution ) )
-        , ( "Day 02", ( Days.Day2.puzzleInput, Days.Day2.solution ) )
-        , ( "Day 03", ( Days.Day3.puzzleInput, Days.Day3.solution ) )
-        , ( "Day 04", ( Days.Day4.puzzleInput, Days.Day4.solution ) )
-        , ( "Day 05", ( Days.Day5.puzzleInput, Days.Day5.solution ) )
-        , ( "Day 06", ( Days.Day6.puzzleInput, Days.Day6.solution ) )
-        , ( "Day 07", ( Days.Day7.puzzleInput, Days.Day7.solution ) )
-        , ( "Day 08", ( Days.Day8.puzzleInput, Days.Day8.solution ) )
-        , ( "Day 09", ( Days.Day9.puzzleInput, Days.Day9.solution ) )
+        [ ( "Day 01", ( Days.Day01.puzzleInput, Days.Day01.solution ) )
+        , ( "Day 02", ( Days.Day02.puzzleInput, Days.Day02.solution ) )
+        , ( "Day 03", ( Days.Day03.puzzleInput, Days.Day03.solution ) )
+        , ( "Day 04", ( Days.Day04.puzzleInput, Days.Day04.solution ) )
+        , ( "Day 05", ( Days.Day05.puzzleInput, Days.Day05.solution ) )
+        , ( "Day 06", ( Days.Day06.puzzleInput, Days.Day06.solution ) )
+        , ( "Day 07", ( Days.Day07.puzzleInput, Days.Day07.solution ) )
+        , ( "Day 08", ( Days.Day08.puzzleInput, Days.Day08.solution ) )
+        , ( "Day 09", ( Days.Day09.puzzleInput, Days.Day09.solution ) )
         , ( "Day 10", ( Days.Day10.puzzleInput, Days.Day10.solution ) )
         ]
 
@@ -170,7 +170,7 @@ viewRope input length frame =
             , button [ onClick ClickedRopeRemoveFrame ] [ text "-" ]
             , text <| String.fromInt frame
             ]
-        , p [] [ multilineText <| Days.Day9.run input length frame ]
+        , p [] [ multilineText <| Days.Day09.run input length frame ]
         ]
 
 

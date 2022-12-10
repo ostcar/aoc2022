@@ -1,4 +1,4 @@
-module Days.Day1 exposing (solution, puzzleInput)
+module Days.Day01 exposing (solution, puzzleInput)
 
 
 solution : String -> (String,String)

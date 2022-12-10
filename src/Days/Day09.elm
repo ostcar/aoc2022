@@ -1,4 +1,4 @@
-module Days.Day9 exposing (frameCount, puzzleInput, run, solution, testSolution)
+module Days.Day09 exposing (frameCount, puzzleInput, run, solution, testSolution)
 
 import Dict exposing (Dict)
 import Expect

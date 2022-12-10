@@ -1,4 +1,4 @@
-module Days.Day6 exposing (puzzleInput, solution, testSolution1, testSolution2)
+module Days.Day06 exposing (puzzleInput, solution, testSolution1, testSolution2)
 
 import Expect
 import Set
