@@ -25,23 +25,6 @@ testSolution =
         \_ -> solution testInput |> Expect.equal ( "31", "29" )
 
 
-run : Part -> String -> String
-run part input =
-    let
-        grid =
-            parseInput input
-
-        startPositions =
-            findStartPosition part grid
-    in
-    if Set.size startPositions == 0 then
-        "Could not find a place to start"
-
-    else
-        breathFirstSeach grid startPositions 0
-            |> String.fromInt
-
-
 type alias Grid =
     Dict Position Location
 
@@ -56,14 +39,31 @@ type Location
     | Stop
 
 
+run : Part -> String -> String
+run part input =
+    let
+        grid =
+            parseInput input
+
+        startPositions =
+            findStart part grid
+    in
+    if Set.size startPositions == 0 then
+        "Could not find a place to start"
+
+    else
+        breathFirstSearch grid (findStop grid) startPositions 0
+            |> String.fromInt
+
+
 locationToInt : Location -> Int
 locationToInt location =
     case location of
         Start ->
-            0
+            locationToInt <|Hight 'a'
 
         Stop ->
-            25
+            locationToInt <|Hight 'z'
 
         Hight a ->
             Char.toCode a - Char.toCode 'a'
@@ -102,8 +102,8 @@ charToLocation c =
             Hight c
 
 
-findStartPosition : Part -> Grid -> Set Position
-findStartPosition part grid =
+findStart : Part -> Grid -> Set Position
+findStart part grid =
     grid
         |> Dict.toList
         |> List.filter
@@ -124,24 +124,28 @@ findStartPosition part grid =
         |> Set.fromList
 
 
-isGoal : Grid -> Position -> Bool
-isGoal grid position =
-    case Dict.get position grid of
-        Just Stop ->
-            True
+findStop : Grid -> Position
+findStop grid =
+    grid
+        |> Dict.toList
+        |> List.filter
+            (\( _, loc ) ->
+                case loc of
+                    Stop ->
+                        True
 
-        _ ->
-            False
+                    _ ->
+                        False
+            )
+        |> List.head
+        |> Maybe.andThen (Tuple.first >> Just)
+        |> Maybe.withDefault ( 0, 0 )
 
 
-breathFirstSeach : Grid -> Set Position -> Int -> Int
-breathFirstSeach grid positions depth =
-    let
-        hasStop =
-            -- TODO: Put stop position in arguments, so it does not have to be calculated every time
-            Set.toList positions |> List.any (isGoal grid)
-    in
-    if hasStop then
+breathFirstSearch : Grid -> Position -> Set Position -> Int -> Int
+breathFirstSearch grid stop positions depth =
+    -- Thank you @normanjaeckel for the hint to use a breath first search.
+    if Set.member stop positions then
         depth
 
     else
@@ -152,13 +156,13 @@ breathFirstSeach grid positions depth =
             nextPositions : Set Position
             nextPositions =
                 Set.foldl
-                    (\p set ->
-                        Set.union (possiblePositions grid p) set
+                    (\p before ->
+                        Set.union (possiblePositions grid p) before
                     )
                     Set.empty
                     positions
         in
-        breathFirstSeach gridWithoutPositions nextPositions (depth + 1)
+        breathFirstSearch gridWithoutPositions stop nextPositions (depth + 1)
 
 
 possiblePositions : Grid -> Position -> Set Position
@@ -172,14 +176,14 @@ possiblePositions grid (( x, y ) as myPos) =
                 myHight =
                     locationToInt myLocation
 
-                around =
+                positionsAroundMe =
                     [ ( x - 1, y )
                     , ( x + 1, y )
                     , ( x, y - 1 )
                     , ( x, y + 1 )
                     ]
             in
-            around
+            positionsAroundMe
                 |> List.filterMap
                     (\possiblePosition ->
                         Dict.get possiblePosition grid
