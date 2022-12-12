@@ -47,11 +47,12 @@ type alias Monkey =
 
 
 parseInput : String -> Array Monkey
-parseInput =
-    String.split "\n\n"
-        >> List.map parseMonkey
-        >> filterJust
-        >> Array.fromList
+parseInput input =
+    input
+        |> String.split "\n\n"
+        |> List.map parseMonkey
+        |> filterJust
+        |> Array.fromList
 
 
 parseMonkey : String -> Maybe Monkey
@@ -104,29 +105,31 @@ parsePperationLine input =
 
 
 parseToMonkeyLine : String -> Int
-parseToMonkeyLine =
-    String.split " "
-        >> List.reverse
-        >> List.head
-        >> Maybe.withDefault ""
-        >> String.toInt
-        >> Maybe.withDefault 0
+parseToMonkeyLine line =
+    line
+        |> String.split " "
+        |> List.reverse
+        |> List.head
+        |> Maybe.withDefault ""
+        |> String.toInt
+        |> Maybe.withDefault 0
 
 
 playRound : WorryReduction -> Int -> Array Monkey -> Array Monkey
 playRound wr _ monkeys =
-    callNTimes
-        (Array.length monkeys)
-        (\idx ms ->
-            processMonkey wr idx ms
-        )
-        monkeys
+    monkeys
+        |> callNTimes
+            (Array.length monkeys)
+            (\idx ms ->
+                processMonkey wr idx ms
+            )
 
 
 processMonkey : WorryReduction -> Int -> Array Monkey -> Array Monkey
-processMonkey wr idx =
-    arrayUpdate idx processMonkeyBusiness
-        >> processMonkeyItems wr idx
+processMonkey wr idx monkeys =
+    monkeys
+        |> arrayUpdate idx processMonkeyBusiness
+        |> processMonkeyItems wr idx
 
 
 processMonkeyBusiness : Monkey -> Monkey
@@ -166,6 +169,7 @@ processMonkeyItems worryReduction idx monkeys =
                         |> arrayUpdate
                             idx
                             (\m -> { m | items = rest })
+                        |> processMonkeyItems worryReduction idx
 
 
 reduceWorry : WorryReduction -> Array Monkey -> Int -> Int
@@ -189,7 +193,7 @@ filterJust =
 
 callNTimes : Int -> (Int -> a -> a) -> a -> a
 callNTimes n fn list =
-    List.range 1 n
+    List.range 0 (n - 1)
         |> List.foldl (\idx e -> fn idx e) list
 
 
