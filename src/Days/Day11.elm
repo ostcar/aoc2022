@@ -2,7 +2,6 @@ module Days.Day11 exposing (puzzleInput, solution, testSolution)
 
 import Array exposing (Array)
 import Expect
-import Fuzz exposing (array)
 import Test
 
 
