@@ -60,10 +60,10 @@ locationToInt : Location -> Int
 locationToInt location =
     case location of
         Start ->
-            locationToInt <|Hight 'a'
+            locationToInt <| Hight 'a'
 
         Stop ->
-            locationToInt <|Hight 'z'
+            locationToInt <| Hight 'z'
 
         Hight a ->
             Char.toCode a - Char.toCode 'a'

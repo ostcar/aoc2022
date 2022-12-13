@@ -798,11 +798,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.aI.ai === region.aY.ai)
+	if (region.cu.ai === region.bW.ai)
 	{
-		return 'on line ' + region.aI.ai;
+		return 'on line ' + region.cu.ai;
 	}
-	return 'on lines ' + region.aI.ai + ' through ' + region.aY.ai;
+	return 'on lines ' + region.cu.ai + ' through ' + region.bW.ai;
 }
 
 
@@ -1871,9 +1871,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b8,
+		impl.b3,
 		impl.cB,
-		impl.cw,
+		impl.cv,
 		function() { return function() {} }
 	);
 });
@@ -2734,7 +2734,7 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		J: func(record.J),
-		aJ: record.aJ,
+		aI: record.aI,
 		aF: record.aF
 	}
 });
@@ -3004,7 +3004,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.J;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aJ;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aI;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
 			(tag == 2 ? value.b : tag == 3 && value.aF) && event.preventDefault(),
@@ -3957,9 +3957,9 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b8,
+		impl.b3,
 		impl.cB,
-		impl.cw,
+		impl.cv,
 		function(sendToApp, initialModel) {
 			var view = impl.cC;
 			/**/
@@ -3993,9 +3993,9 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b8,
+		impl.b3,
 		impl.cB,
-		impl.cw,
+		impl.cv,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.aH && impl.aH(sendToApp)
 			var view = impl.cC;
@@ -4006,12 +4006,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bS);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bM);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.cz) && (_VirtualDom_doc.title = title = doc.cz);
+				(title !== doc.cy) && (_VirtualDom_doc.title = title = doc.cy);
 			});
 		}
 	);
@@ -4067,8 +4067,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.cn;
-	var onUrlRequest = impl.co;
+	var onUrlChange = impl.cj;
+	var onUrlRequest = impl.ck;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4088,9 +4088,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.bq === next.bq
-							&& curr.a6 === next.a6
-							&& curr.bm.a === next.bm.a
+							&& curr.bn === next.bn
+							&& curr.a4 === next.a4
+							&& curr.bj.a === next.bj.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4098,13 +4098,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		b8: function(flags)
+		b3: function(flags)
 		{
-			return A3(impl.b8, flags, _Browser_getUrl(), key);
+			return A3(impl.b3, flags, _Browser_getUrl(), key);
 		},
 		cC: impl.cC,
 		cB: impl.cB,
-		cw: impl.cw
+		cv: impl.cv
 	});
 }
 
@@ -4170,17 +4170,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { b5: 'hidden', bV: 'visibilitychange' }
+		? { b0: 'hidden', bP: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { b5: 'mozHidden', bV: 'mozvisibilitychange' }
+		? { b0: 'mozHidden', bP: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { b5: 'msHidden', bV: 'msvisibilitychange' }
+		? { b0: 'msHidden', bP: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { b5: 'webkitHidden', bV: 'webkitvisibilitychange' }
-		: { b5: 'hidden', bV: 'visibilitychange' };
+		? { b0: 'webkitHidden', bP: 'webkitvisibilitychange' }
+		: { b0: 'hidden', bP: 'visibilitychange' };
 }
 
 
@@ -4261,12 +4261,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		bx: _Browser_getScene(),
-		bI: {
-			bL: _Browser_window.pageXOffset,
-			bM: _Browser_window.pageYOffset,
-			bK: _Browser_doc.documentElement.clientWidth,
-			a4: _Browser_doc.documentElement.clientHeight
+		bu: _Browser_getScene(),
+		bC: {
+			bF: _Browser_window.pageXOffset,
+			bG: _Browser_window.pageYOffset,
+			bE: _Browser_doc.documentElement.clientWidth,
+			a2: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4276,8 +4276,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		bK: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		a4: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		bE: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		a2: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4300,15 +4300,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			bx: {
-				bK: node.scrollWidth,
-				a4: node.scrollHeight
+			bu: {
+				bE: node.scrollWidth,
+				a2: node.scrollHeight
 			},
-			bI: {
-				bL: node.scrollLeft,
-				bM: node.scrollTop,
-				bK: node.clientWidth,
-				a4: node.clientHeight
+			bC: {
+				bF: node.scrollLeft,
+				bG: node.scrollTop,
+				bE: node.clientWidth,
+				a2: node.clientHeight
 			}
 		};
 	});
@@ -4338,18 +4338,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			bx: _Browser_getScene(),
-			bI: {
-				bL: x,
-				bM: y,
-				bK: _Browser_doc.documentElement.clientWidth,
-				a4: _Browser_doc.documentElement.clientHeight
+			bu: _Browser_getScene(),
+			bC: {
+				bF: x,
+				bG: y,
+				bE: _Browser_doc.documentElement.clientWidth,
+				a2: _Browser_doc.documentElement.clientHeight
 			},
-			b$: {
-				bL: x + rect.left,
-				bM: y + rect.top,
-				bK: rect.width,
-				a4: rect.height
+			bV: {
+				bF: x + rect.left,
+				bG: y + rect.top,
+				bE: rect.width,
+				a2: rect.height
 			}
 		};
 	});
@@ -5056,7 +5056,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {a0: fragment, a6: host, bk: path, bm: port_, bq: protocol, br: query};
+		return {a_: fragment, a4: host, bh: path, bj: port_, bn: protocol, bo: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5341,10 +5341,10 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $elm$browser$Browser$sandbox = function (impl) {
 	return _Browser_element(
 		{
-			b8: function (_v0) {
-				return _Utils_Tuple2(impl.b8, $elm$core$Platform$Cmd$none);
+			b3: function (_v0) {
+				return _Utils_Tuple2(impl.b3, $elm$core$Platform$Cmd$none);
 			},
-			cw: function (_v1) {
+			cv: function (_v1) {
 				return $elm$core$Platform$Sub$none;
 			},
 			cB: F2(
@@ -5424,6 +5424,7 @@ var $author$project$Days$Day09$puzzleInput = 'R 1\nL 1\nU 1\nL 2\nU 2\nD 2\nU 1\
 var $author$project$Days$Day10$puzzleInput = 'addx 1\naddx 4\naddx 21\naddx -20\naddx 4\nnoop\nnoop\naddx 5\naddx 3\nnoop\naddx 2\naddx 1\nnoop\nnoop\naddx 4\nnoop\nnoop\nnoop\naddx 3\naddx 5\naddx 2\naddx 1\nnoop\naddx -37\naddx 22\naddx -4\naddx -14\naddx 2\naddx 5\naddx 3\naddx -2\naddx 2\naddx 5\naddx 2\naddx -15\naddx 32\naddx -14\naddx 5\naddx 2\naddx 3\nnoop\naddx -13\naddx -2\naddx 18\naddx -36\nnoop\naddx 11\naddx -7\nnoop\nnoop\naddx 6\naddx 22\naddx -21\naddx 3\naddx 2\naddx 4\nnoop\nnoop\nnoop\naddx 5\naddx -16\naddx 17\naddx 2\naddx 5\naddx -11\naddx 15\naddx -15\naddx -24\nnoop\nnoop\naddx 7\naddx 2\naddx -6\naddx 9\nnoop\naddx 5\nnoop\naddx -3\naddx 4\naddx 2\nnoop\nnoop\naddx 7\nnoop\nnoop\nnoop\naddx 5\naddx -28\naddx 29\nnoop\naddx 3\naddx -7\naddx -29\nnoop\naddx 7\naddx -2\naddx 2\naddx 5\naddx 2\naddx -3\naddx 4\naddx 5\naddx 2\naddx 8\naddx -30\naddx 25\naddx 7\nnoop\nnoop\naddx 3\naddx -2\naddx 2\naddx -10\naddx -24\naddx 2\nnoop\nnoop\naddx 2\nnoop\naddx 3\naddx 2\nnoop\naddx 3\naddx 2\naddx 5\naddx 2\nnoop\naddx 1\nnoop\naddx 2\naddx 8\nnoop\nnoop\naddx -1\naddx -9\naddx 14\nnoop\naddx 1\nnoop\nnoop\n';
 var $author$project$Days$Day11$puzzleInput = 'Monkey 0:\n  Starting items: 56, 52, 58, 96, 70, 75, 72\n  Operation: new = old * 17\n  Test: divisible by 11\n    If true: throw to monkey 2\n    If false: throw to monkey 3\n\nMonkey 1:\n  Starting items: 75, 58, 86, 80, 55, 81\n  Operation: new = old + 7\n  Test: divisible by 3\n    If true: throw to monkey 6\n    If false: throw to monkey 5\n\nMonkey 2:\n  Starting items: 73, 68, 73, 90\n  Operation: new = old * old\n  Test: divisible by 5\n    If true: throw to monkey 1\n    If false: throw to monkey 7\n\nMonkey 3:\n  Starting items: 72, 89, 55, 51, 59\n  Operation: new = old + 1\n  Test: divisible by 7\n    If true: throw to monkey 2\n    If false: throw to monkey 7\n\nMonkey 4:\n  Starting items: 76, 76, 91\n  Operation: new = old * 3\n  Test: divisible by 19\n    If true: throw to monkey 0\n    If false: throw to monkey 3\n\nMonkey 5:\n  Starting items: 88\n  Operation: new = old + 4\n  Test: divisible by 2\n    If true: throw to monkey 6\n    If false: throw to monkey 4\n\nMonkey 6:\n  Starting items: 64, 63, 56, 50, 77, 55, 55, 86\n  Operation: new = old + 8\n  Test: divisible by 13\n    If true: throw to monkey 4\n    If false: throw to monkey 0\n\nMonkey 7:\n  Starting items: 79, 58\n  Operation: new = old + 6\n  Test: divisible by 17\n    If true: throw to monkey 1\n    If false: throw to monkey 5';
 var $author$project$Days$Day12$puzzleInput = '\nabcccaaaaaaccccccccaaaaaccccccaaaaaaccccccaaaaaaaacccaaaaaaaccaaaacccccccccccccccccccccccccaaaaaacccccccccccccccccccccccccccccaaaaaa\nabcccaaaaaacccccccaaaaaaccccaaaaaaaacccccccaaaaaaaaaaaaaaaaccaaaaacccccccccccccccccccccccccaaaaaacccccccccccccccccccccccccccccaaaaaa\nabccccaaaaacaaaccaaaaaaaacccaaaaaaaaacccccccaaaaaaaaaaaaaaaacaaaaaacccccccccaaacccccccccccaaaaaaaaccccccccccaaccccccccccccccccaaaaaa\nabccccaaaaccaaaaaaaaaaaaacccaaaaaaaaaacccccaaaaaaaaaaaaaaaaaaacaaaacccccccccaaaacccccccccaaaaaaaaaacccccccccaaaccccccccccccccccccaaa\nabcccccccccaaaaaacccaacccccccccaaacaaaccccccaacccccccaaaaaaaaacaacccccccccccaaaacccccccccaaaaaaaaaacccccccccaaaccacaaccccccccccccaaa\nabcccccccccaaaaaacccaacccccccccaaacccccccccccccccccccaaaacaaaacccccccaacaaccaaaccccccccccaccaaaaacacccccccccaaaacaaaaccccccccccccaac\nabccccccccccaaaaacccccccccccccccacccaaaacccccccccccccaaaacccccccccccccaaaacccccccccccaacccccaaaaccccccccjjjjaaaaaaaaaccccccccccccccc\nabccccccccccaaaacccccccccccccccccccaaaaacccccccccccccaaaccccccccccccccaaaaacccccccccaaaaaacccaaccccccccjjjjjjkkaaaacccccccccaacccccc\nabcccccaaccccccccccccccccccccccccccaaaaaacccccccccccccaacccccccccccccaaaaaaccccccccccaaaaaccccccccccccjjjjjjjkkkkaacccccaacaaacccccc\nabccaaaacccccccccccccccccccccccccccaaaaaaccccccccccccccccccccccccccccaaaacaccccccccaaaaaaaccccaacccccjjjjoooookkkkkkkklllaaaaaaacccc\nabccaaaaaacccccccccccccccccccccccccaaaaacccccccccccccccccccccccccccccccaaccccccccccaaaaaaaaccaaaaccccjjjoooooookkkkkkkllllaaaaaacccc\nabcccaaaaacccccccccccccccccccccccccccaaaccccccccaaaacccccccccccccccccccccccccccccccaaaaaaaaccaaaaccccjjooooooooppkkppplllllaccaacccc\nabccaaaaaccccccccccccaccccccccccccccccccccccccccaaaacccccccccccccccccccccccccccccccccaaacacccaaaacccijjooouuuuoppppppppplllccccccccc\nabcccccaacccccccccccaaaaaaaaccccccccccccccccccccaaaaccccaaccccccccaaacccccccccccccaacaaccccccccccccciijoouuuuuuppppppppplllcccaccccc\nabcccccccccccccccccccaaaaaaccccccccccccccccccccccaaccccaaaacccccccaaaaccccccccccaaaaaaccccccccccccciiiiootuuuuuupuuuvvpppllccccccccc\nabcccccccccccccccccccaaaaaaccaaaaacccccccccccccccccccccaaaacccccccaaaaccccccccccaaaaaaccccccccccccciiinnotuuxxxuuuuvvvpppllccccccccc\nabccccccccccccccacccaaaaaaaacaaaaaaacccccccccccccccccccaaaacccccccaaacccccaaaaccaaaaaccccaaccccccciiiinnnttxxxxuuyyyvvqqqllccccccccc\nabcccccccccccaaaaccaaaaaaaaaaaaaaaaaaccaacccccccccccccccccccccccccccccccccaaaacccaaaaaccaaacccccciiinnnnnttxxxxxyyyyvvqqqllccccccccc\nabaaaacccccccaaaaaaaaaaaaaaaaaaaaaaaaaaaacccccccccccccccccccccccccccccccccaaaacccaaaaaacaaaccccciiinnnnttttxxxxxyyyyvvqqmmmccccccccc\nabaaaaccccccccaaaaacccaaaaacaaaaaacaaaaaaccccccccccccccccaaccccccccccccccccaacccccccaaaaaaaaaaciiinnnnttttxxxxxyyyyvvqqqmmmccccccccc\nSbaaaacccccccaaaaaccccaaaaaccaaaaaaaaaaaccccccccccccccccaaacaacccccccccccccccccccccccaaaaaaaaachhhnnntttxxxEzzzzyyvvvqqqmmmccccccccc\nabaaaacccccccaacaacccccaaaaaaaacaaaaaaaaaccccccccccccccccaaaaaccccccccccccccccccccccccaaaaaaacchhhnnntttxxxxxyyyyyyvvvqqmmmdddcccccc\nabaaaacccccccccccccccccccaaaaaacaaaaaaaaaacccccccccccccaaaaaaccccccccaaaccccccccccccccaaaaaaccchhhnnntttxxxxywyyyyyyvvvqqmmmdddccccc\nabaacccccccccccccccccccaaaaaaacccccaaaaaaacccccccccccccaaaaaaaacccccaaaacccccccccccccaaaaaaacaahhhmmmttttxxwwyyyyyyyvvvqqmmmdddccccc\nabcccccccccccccccccccccaaaaaaacaaccaaacccccccccccccccccaacaaaaacccccaaaacccccccccccccaaacaaaaaahhhmmmmtsssswwyywwwwvvvvqqqmmdddccccc\nabcccccccccccccccaaaccccaaaaaaaaaacaaccaaccccccccccccccccaaacaccccccaaaacccccccccccccccccaaaaacahhhmmmmmsssswwywwwwwvvrrqqmmdddccccc\nabcccccccccccccaaaaaaccccaaaaaaaaaccaaaacccccccccccccccccaacccccccccccccccccccccccaaaccccaaaaaaahhhhhmmmmssswwwwwrrrrrrrrmmmmddccccc\nabcccccccccccccaaaaaaccccaaaaaaaaaaaaaaaaaccccccccccccccccccccccccccccccccccccccaaaaaacccccaaaaachhhhhmmmmsswwwwrrrrrrrrrkkmdddccccc\nabccccccccccccccaaaaaccccccaaaaaaaaaaaaaaaccccccccccccccccccccccccccccccccccccccaaaaaaccccaaaaacccchhggmmmssswwrrrrrkkkkkkkkdddacccc\nabccaaaacccccccaaaaacccccccccaaaaaacaaaaacccccccccccccccccccccccccccccccccccccccaaaaaaccccaacaaaccccggggmmsssssrrlkkkkkkkkkdddaccccc\nabccaaaacccccccaaaaacccccccccaaaaaaccccaacccccccccccccccccccccccccccccccccccccccaaaaaccccccccaaccccccgggmllssssrllkkkkkkkeeeddaccccc\nabccaaaacccccccaaacccccccccccaaaaaacccccccccccccccccccaacccccccccccccccccccccccaaaaaacccccccccccccccccggllllssslllkkeeeeeeeeeaaacccc\nabcccaaccccccccaaacaaaccccccaaaaaaaaaaacccccccccccccaaaaaacccccccccccccccccccccaaacaaacccccaacccccccccggglllllllllfeeeeeeeeaaaaacccc\nabccccccccccaaaaaaaaaaccccccccccccaccaaaccacccccccccaaaaaaccccaaccaacccaaccccccaaaaaaacccccaaccccccccccggglllllllfffeeecccaaaaaacccc\nabccccccccccaaaaaaaaacccccccccccccccaaaaaaaccccccccccaaaaaccccaaaaaacccaaaaaaccaaaaaacccaaaaaaaacccccccggggllllfffffccccccaacccccccc\nabcccccccccccaaaaaaacccccccccccccccccaaaaaaccaacccccaaaaaccccccaaaaacccaaaaaacaaaaaaacccaaaaaaaaccccccccgggffffffffccccccccccccccccc\nabccccccccccccaaaaaaacccccccccccccaaaaaaaaacaaaaccccaaaaacaaaaaaaaaacaaaaaaacaaaaaaaaaccccaaaacccccccccccggffffffacccccccccccccccaaa\nabccccccccccccaaaaaaacaaccccccccccaaaaaaaaacaaaacccccaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaaacccaaaaacccccccccccaffffaaaaccccccccccccccaaa\nabccccccccccccaaacaaaaaacccccccccccaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaaacccaaacaaaccaaaaaacccccccccccccccccaaaccccccccccccccaaa\nabccccccccccccaaccaaaaaccccccccccccccaaaaaaaccccaaaaaaaaaaaaccccaacccccaaaaaacccaaaccccccaaccaacccccccccccccccccaaacccccccccccaaaaaa\nabcccccccccccccccaaaaaaaaccccccccccccaacccacccccccaaaaaaaaaaccccaacccccaaccccccccaccccccccccccccccccccccccccccccccccccccccccccaaaaaa\n';
+var $author$project$Days$Day13$puzzleInput = '[[[],10,[[6],[]],3,1]]\n[[6,8,[9,2],7,2],[[10,[4],[6,2,9,2],[8,8,9]],8,[4],[[0,2]]]]\n\n[[10,[[2,3,9,10],[8,4,3,8]],2,2,[8,8,2,[2,0,9]]],[[[2,0,7,4,2]],9,[[3,8,7,3]],3,9]]\n[[1],[[]],[1,[]]]\n\n[[[[10,4,9,5],[9,10,0,2],8,[],1],3,[4],1],[6]]\n[[[[10,5,2,0]],10],[[[8,6],8,[3],[4],0]],[2,10,[9,[]],9,2],[1,3,[1,[4,9,9],[7,2,1,0],[5,2,6,1]]],[[[4,9,1,7,2]]]]\n\n[[2],[],[],[3,10,6,0,[0,[7,2,8],4]]]\n[[],[0,[0,7],5,[7,[9],9],1],[[[],4,[],[7,1],[4,9]],[],[1,10],0,[]],[]]\n\n[[],[2],[[[10,8,5,6,1],7,3,[5]],[[2,9,7,7],1],[[0,1,0],[0],1,10,[8,10,4]],0],[[],7,[[10,9,5,6,3],3],[[1,1,6,9],6,3]],[6,[[5,4]],[]]]\n[[4,3],[[2,8,[8,5]],[3],[1,[10],7,[10,2,5,6]]],[6]]\n\n[[],[[],[3],[0,6,5,10],[]],[],[[]]]\n[[2,[],8,[3,2,8,3]]]\n\n[[3,7,10,6,[[6,2,3,10],[],[6],[2,10,9]]],[[[4,8,9],[10,0,1],0,0,[7,1,10,2,5]],4,9,9],[10],[[]]]\n[[[8,9,[3,8,3,2],2,7],4,[[4,3,2,0],1,[8,6],[]]],[]]\n\n[[],[[[],6,5],[[8,5],1,[6,2],8,6]],[[2,[],7,6,[7]],[6,10,[],10,[9,4,9,6]],[1,1,4,[5,8],0],7],[0,10,1],[7,[[3,3,9],8,[],[2]]]]\n[[3,9],[],[6,10,[[4,3,2,8],2],[1,[],[5,9,10],9,[7,6]],[2,[4,10],5]],[5]]\n\n[[10,6]]\n[[[[],[],3,[0,6],9]]]\n\n[[7,4],[[[]],8,[[],3,7,[0,10],[8,7]]],[[8,10,8],6,[],4,[7,8,[2]]],[[[10,9],2,7,[],4]],[]]\n[[[[7],4,5,5,[2,0,8]],0,[[10,5,8],[5,8,3,7],[5,10,6,3],2],7]]\n\n[[[],[[10,1,3,0,2],[]],2,[[2]]]]\n[[4,6,7,5],[[[10,10,8],10,[],10],1,10,[[],4,[],[7,6,8,4]],7],[5,9],[5,[[9,6],[10],2,[2,7,6,6,9]],2,8,[[8],7,2,8]],[]]\n\n[[8,[[10],[9],[8,10,10],[6,0,6,10,1]]],[[10,[10],[8,3,6,7,2]],[],[],0,10]]\n[[],[3,8],[[[2,4,1,10,0],0,2,[10,8]]],[[[8,10],10],[]]]\n\n[[[1,[7,3,10],8,10,[10]],[6,1]],[0],[[[9],2,[]],10,[],6,[[],2]]]\n[[[10,9,7]],[7,4,[[5,5,10,6,10]],[[10,3],4,[7]],8],[[2,[1,4,5]],2,[[],0,1]],[],[0,[[10,2,6,1,4],[6,4],6,3,6],[[8],2]]]\n\n[[],[[[8,8,6,6,10],[9,4,3,7],[5,2],[2,0,7,8]],[5,0,[5,4],3,2],2,9,[]],[6]]\n[[[4,9,1],[4,0,[1]],[[4,1,6,6],[6,8,10,5],8,10,3],[]],[3,4,7],[5,3,[6,[0,1,8,1],8,[6,10]],[],5],[],[1,[[3,7]],4,[[3]]]]\n\n[[],[10],[[7,[7],1],[[6,8],3]],[3,6,1,4,[1,[],10,3,0]],[[[9,2],[],[8,5,3],9],4,10,10,6]]\n[]\n\n[[[[],[10,2,0]],[3]],[[1,10,4,6],1,[]],[2,[8,[3,4,0,9],5],[4,2],[4,5,[8]],4],[[[0],0,9],9,3],[8,10,[[5,8,2,9],[6,9,3,5,2],[9,4]],9]]\n[[9,6,4,8,5],[[3,[7],8,1],5],[9,[[3,0,4,1,8],[2,5],[7,0,1],9]],[10,[[7,3,5,7,6]]]]\n\n[[8],[2,[],[4,4],7]]\n[[[[6,0,4,3],0,[],[2],5],[[8],[4,8]]],[8,[[2,9,10,9,2],0],[],[[2,6],4,[8,0,0,1]]],[[4,1,10,1,3],[[5,2,7,10],[0,3,2,0,8],[2],[4,8,6,2],2],[10,5,6,[],[10,6,1,3,4]],9],[2],[[[2,2,2,6,9],8],[[],[0]]]]\n\n[[5]]\n[[[[8],10,[4,8],[7,3,6]],6,3,8],[9,[]],[[[]],[],[[7,5,10,1]]],[0,[[0],[],4],[],[[6,10,5,1,10],[2,7],[2,5,3],7,[]]],[6,[3,2,[],[6,7]],[[]]]]\n\n[[],[9,9,[[5,7,9],[8,9,10],8,[3,8,2],[9,7,10,8]],1],[],[],[9,[[2,5,2,1,6]]]]\n[[0,4,[9]]]\n\n[[],[],[7,9,0,[],[2,3]],[10,4],[[],[4],[0,[1,0,7,4,8]]]]\n[[[[0,8,3,7,3],[2]],[[1,5]],5,8]]\n\n[[9,[[]],[2,[5,10]]],[[],6,[3],[[0,5],8,4,1,[2,10,10]]],[3,1],[1,2,[],[5,[0,10],[4,10,3,2,8]],10]]\n[[0,10,[[6,1,4,10],2,3,[6,1,1],[]],[[10,5,3]],3],[],[]]\n\n[[0,7,[1,[],4,2]],[5],[9],[[[6,1,0,6,10],[10,3,7,8,5],2]]]\n[[],[[],2]]\n\n[[[5,10,6,4,4],0,[6,10,[7]],[[3,9,3,10,5]]],[0],[[[3,7,2,2],[7,4,10,4,8]],[10,10,5,7,3],[[2,10],[5,3,0,2,0],[6,3,6],[9,0,4,6,6],5],3,[]],[[[5]],4,[1,9]]]\n[[],[[2,[1,1,5,4,9],[7],[3,9,3],6],[10,2,[],3]],[[],[],5]]\n\n[[[3,[1,1,1,0],[8,3,3]],[8,[0,5]],8]]\n[[[7,5,8,[9,0,10,10,0],[1,4,0,1]],2,3],[[5],[]],[4,[5,[]],[9,1,[5,6],[9,0,2,3,7],6],2,[[4,9,9,2,5],7]],[0,[5,8],[],0,[0,5]],[[[5],10],7,[8]]]\n\n[[[]],[[[5,10,3],7,7,9,[8,9,3,7,2]],4]]\n[[4,8,[5,[7,7,3,8]],[10,1,[8,7]],6],[[6,7,[1]],[[]],10],[[],6,[]],[[[10,1,10],[7,5,0,6,3],[5]],1,[[0,6,4,3],[10]],[3,3,6,[2,7,1,9]]]]\n\n[[5,7,[]],[4,[[1,4,1,5,8]]]]\n[[6,6],[3,4,8,8,[5,[6],10,9]],[[],4,[5,4,[7,6,9,10],9],9,[[4,3,1,6,2],[10,3],[]]],[[[7,1],8,[10,8],[9]],[[1],[1],[0,8,6,4]],[9,[8],8,1],[],[[4,2],[8,4,3,6],[0],10,[3,8,6]]],[7,[3,5],[1,[0],6],[7,8,[],1],[[9,10,6,4],[10,1],3,7,3]]]\n\n[[],[3,[8],[6],[]]]\n[[5,8,[9,[8,10,5,8],6,[3,6,1]],[2,2]],[],[9,[],[[],[8,4],[8,4,5,7,6],7,7]],[],[1,[10,6,[10],[1,7,5,10],[3]]]]\n\n[[2],[[5],4,[[],[0,6],4]]]\n[[[],10,[9],[[8]],[4,[0,6,10,6,6],1,3]],[[],[2,[5,9]],[[9]],8,[1,4,5,[],[]]],[[5,[2],7,[],9],[]],[],[10,[1,[],4,2,[]],[7,[],7,[6,6]],1]]\n\n[[],[0,[[6,7,7,8],7],[[7,9],0,3,10]],[],[],[10,[0],[]]]\n[[[1]],[],[[[0,1,6,3,9],[],3,6,[]],[7,7,0,[10,10,2]],[7,8,[6,3],10],[]],[[[],[],5,7,[2,0,2,2]]]]\n\n[[[[5,3,8,8]],8],[10,5,[]],[6,[],3,[[5,8,8],[1,10],[0]],5],[[[9,8,3]],[5,[9,7,9],4,[10,9,0,0,3]],5,[3],7],[[7,0,0],4]]\n[[],[[6,0],10],[],[],[[3,5,7,[0,10,7,9,10],6],[[1,3,3,10],[1,2],[]],1,6,9]]\n\n[[5,2],[3,8],[9,[1,[10],[10,7]],10,[4,[],10,1,3]],[[[6,9,6,10,7],0,[],[6,1,2]],[[9],8,3]],[[5,[8,10,4,9],3,[9,8,9,5],6],[7,10],[4],1]]\n[[10],[3]]\n\n[[7],[[],[[8,4,4],1],8,9],[],[0],[[3],[[2,7,0,5,6],[8,3,7],[9]],[[1,0,2,3]],7,3]]\n[[4,[6],[[2],9,8],[1,[5,9,1,10,10],9,[7,4,1],2],[8,[1],[10,7],0]],[[[],10]],[],[6,7,[10,10]],[10,5,4,5]]\n\n[[],[[6,9,[8,0],[10,8,0,8,4]],1]]\n[[[6],[[],[],[1,9],[]],8],[[6],6,5,[[8,7,1]]],[[4,[4,5],[3],[10,8,9,8,6]],1,8,[1],[9,9,[10,3,3],[8,0,7,2]]],[8,[7,9,[6,2,5,2,9],5],8,[[]],3],[5,[10,[1,0,3,2],8,[0]],2]]\n\n[[[3,[0,7,4,6,7],[],8,[8,5,6,10]],[],2,[7],[[]]],[],[[[3,9,2,2],[8,1,1,7,4],[10,1,0]],[8],5,8],[5,3],[5,2,[[],[3,2,1,4]]]]\n[[[1,[9,9,4],8,7,[3,3,9,2]],1,2]]\n\n[[[[10,0,0],[0,4,0,1],8,[3,4,1],[7,4,0,7]],[7,[3,5,6,3,10],7,[],9]],[],[2,[[9,8,1,0,4],1],[1]]]\n[[[],4,0],[],[[9,4,[9,3,6,1,5]],[3],[]]]\n\n[[7,[[9,3],2,[9,10,6]]],[7,0,10],[[5,[]],7],[5],[10,[2,2,[],5,4],5]]\n[[[9,3,10,4]],[],[],[[[5,4],[9,5]],[9,[]],8,10,5]]\n\n[[[7],3],[[[3,5,10,8,4],3,0,8],0,0],[9,[[6],[9,7,1],[9,6,2],[9,0]]],[]]\n[[0,[[5,9,4],7],9,[2,[3,1],9]],[],[[[6],2,[2],[6,5]],4,8,6],[[],[]],[4,[[],10,8,4]]]\n\n[[[3,[10,9,5,6],7]],[[1,7,[1,5,7,9]],[4,4]]]\n[[],[[],[1,[10]],[4,6,[8,8],[5,4,0,9]],0,[8,3]],[[[8,5,5,7,6],2,[4,10,5,9]],[[6,5,10,9,9],9,6],[]]]\n\n[[[[5,10,0,7]],5,3]]\n[[[[5,7,2],5,7],[[9,7,3]]],[[1,[8,3,3,4,10],[0,10,4]],1,0],[7,1,[[8,4,5],[5,4],5,[10,3,10,9],[3]],1,[7]]]\n\n[[[7,6,[],3,[0]],[[10],0,[],2],[],[5,3,4,[9]],[[],3]],[[[2,6,10],4],[[],[4,1,2],[10,3,6,8,9]],7,7],[]]\n[[1,0,[[7,7,6,2],10],[],[2,[],1,4]]]\n\n[[2,[8,[8,7,5],0,4],[7,2]],[[[10,2,2,0,8]],10,[[6],[7,9,3,0,10],9,[9,3]],[4,[2,5],[4,1,0,7],5]],[]]\n[[],[7,4,[[6,5],[5,5,7,6,3],[0,2,7,6,3],4]],[[[6,4,2,4,4],10,3]]]\n\n[[[1,2,6,[9,1,8,10],1],[],3,[],1],[9],[[[9],[],6],0,[]],[],[]]\n[[7,10],[5,[]],[[[7],5],[[3,9,9,5],[],8,[0,1]],[],[[0,5,6,4]]],[3,0,[9,[9,6,6],[0,5,3,5]],[[],4,2]],[10,1]]\n\n[[[[0],[5,5,0,3,6],10,4,7]],[0]]\n[[[[6,6,7,10,8],[4,8,3,5],[1,4]],[[9],7,10,8,[4]],6,[],[0]],[10,[]],[4,[4,[],[]],0,[9,[0,7],[9,4,2,5,2],[9]]],[[[9,7,4,6,0]],[1,2,[3],[8,4,1,10,0],2],2,[10,0],1]]\n\n[[[[6]],[[9,0,2,4,5]],3,[[6,5,3],9,2,[10,7,0],0]],[0],[3],[]]\n[[],[1,[]],[],[[],[[]],8,9,3],[10,[1,[],[5,6,10],[6,4]],[9]]]\n\n[[5],[2,2,[[5,6,3,10],[4,2,8,9,5],[10,6,9],[2,8],6],1,[[],[7,3,5,3],0]],[[[7,3],[4,0,5,8,2],5,2,[6,1,5,10,4]],[],1,4],[2]]\n[[8,[[0,6,8,4,0]],0,[0,3,[8,3,9,4,0],2],7],[1,7,4,5],[[[7,6,9,1,2],10],[[9],2,9,[7,1],10],7,[6,8]]]\n\n[[1,4,9,9],[[[10],[],4,3,3],2,8],[9,[],8],[[9,7,[1,5],[10,8,1,0]],[]]]\n[[5,2,2,[9,10,5,10,[2,6,10,10]],[2,2,0,[],8]],[[8,[4],6,9,[2]],6,[2],3],[10,[[8,0,0,5,9],[5,1,1,0,7],[9,10,0],6,[5]],3,2],[4,[8,[1],[4,0,3]],4,7,[[9,6,6,7],0]]]\n\n[[[[]],6,1,[[6,9,2,10],[]]],[6,[[4,6],9,[4],[0],[2,2,6,7,8]],[2,1]],[[[10,9,2],5,[6],5,10],[7,6,6,[],5],9,[]]]\n[[[1,6,[5,0,2,3],[2]],[]],[10,0,[[0,0,1]],[[6,1,8,6],6,[10,9]]],[4],[5,0]]\n\n[[],[[[2,2],[9],0,5],[[8,3,9],8,[],0]],[8,9,[[4,0,7],6,[],8],[3,[],0,[4,4]],4],[[9],1,[]]]\n[[[[7,0,4,3,4],[],0,[10,6,5]]],[[[9,4,8,7,9],[8,10],5,[7,0,4],[9,5,0,7,6]]],[],[[9,6,[8,0,7,2],[]],3,1],[[[3,0,10,1,0],[5,2,1,5,2]],[[7,3,2],[7,5,10,2],5,3]]]\n\n[[[[],[],[],4,10],[5,[],[7,2],[10,5,2]]]]\n[[7,[[7,6,3],7],[9,3,[2]]],[[[3,5],[9,5],8],10,3,10,[1,2,5]],[4]]\n\n[[[8,[],0,[2,4,9,0,10],[7,5,2,10]],[[],[],8,10,[5]],1],[],[5,[4,[],[4,10,10,7,6],7,1],[[3,9,2]]]]\n[[[[4,4,8,10,4],10,[9,9,6,2,10]],[7]],[10,[[0,2,2,1],[9,6,0]]],[[[0],[0,5]],1]]\n\n[[7,1],[],[[],[],[[5,0],[6,3,1,6],2],[[0,4,10,9]],[[],0]],[[[2],[4,7,3,0,5]],[[3,9,3,1],[1,8,10,7],[],3,[4,0,10,1,10]],[6,[4]],8,3],[6,[],[],10]]\n[[[]],[1,10],[[[6,7,8,10],[6,0,4],[4,9],0,[3,0,1,7]]],[1,0,[9,[8,2,9]]]]\n\n[[1,2],[6,5,[0,6,[],1],4]]\n[[],[[[10,3,8,1],[1,9,10,3,7],[9,7,1,7]],9,4,9,1]]\n\n[[],[[4,[10,10,7,9],[1]]],[[3,[],[10,5,3,1]],6],[[[],4,9,9],2,[2,[3],9]]]\n[[],[],[[[3,10,4,7,0]],3,[7]],[[3,10,[6,5,2]],2,4],[3,[],[[10,3,8,7]]]]\n\n[[],[[[3,10,9,8,10],5,[5,4,10],5],3,7]]\n[[[4],8,[9,[10,2,1],5],[5]],[5,9],[7,6,4],[]]\n\n[[8,9,2]]\n[[[0,3],9,2,10,[[9,0,3,4],0,7,[2,4,5],[8]]],[[[],[10,0,1],[4,4,7]],7,10],[],[[[0,3,5,3,10],0,[7,2,7]],[[8,9,7,9],7,[]],[1,[3,6,4,2,5],[3],[6],[8,0,3,1]]],[[7,6,[5,6],8,[5,10,5]],[[],7,10,10]]]\n\n[[7],[[1,10],[2,5],6,[[3]],9],[]]\n[[6],[[],6,4,[],[7,2,[8],[]]],[[6,3],8,8]]\n\n[[],[],[4,[[7,1,5,5,8],[0,10,3,6],[10,9,0]],[10]],[[[],[3,5,0,8],[9,1,6,9,4],[9,4]],8,2],[6,[7,3],2,[],0]]\n[[[[2,0,4,6,9],[10,1,3,7,10]],0,[],10],[]]\n\n[[[[3,0],7,[10,2]]],[],[0,[],6,[],[[8,3,7],8,[2],5]],[[0,3,[]],7,8,3,[6]]]\n[[[3],9,[[6],[],8,10,[]],1],[[]],[1,[8,0,[7,7,1,8],8],3],[0,[],[],[[],0,[2]]],[[9,[10,6],5],[[],7],[[9]]]]\n\n[[2,[8,3],[4,8,[6]]],[[[],3],[0,[9,6,2],5,10,0]],[[]]]\n[[[7,6,3],[[5,3,2,3,10],[10,10,1],[4,1],[7,8,1,1,4]]]]\n\n[[[]],[[0,[7,8,6,6,7],6,[1,10]]]]\n[[7,5,7],[8],[10,[0,5,7],3]]\n\n[[[[0,4],[3,1,0,0],[10,8,10]],[[]],[0,[7,8,2],[5,9,6]],7,[[1,8],[3,4,2],[10,8,7],7]]]\n[[[1],7,0]]\n\n[[5,4,[[],5],[5,1,[7,8,1,7,9],[0,4,5,3],3],[[9,8],[1,3,0,0],6]],[8],[],[[0,[0,5,10],[3,8,8]],7,2,[10,[],7]],[6,[],[3,10,[0,2,0],[2,2,4],[0,7,0]]]]\n[[[],8,7],[3,7],[]]\n\n[[[1,8,[4,6],7,9],[[4,0,10,6,3]],[[1,10,9,0,3],[1,3,0,0]],[1,0,8],4],[[[0],[8,6,6,2],3,4],[8,[2],9],[[2,10],[4,0,4],[8,1,2]]],[[[3,6,5,4,2],10,0,[9,9,0,1,8],[3,7,4]],9,[[6,9],[7,4,8,4],3],0],[0,[[3,6,7,9,7],[0],[],[2,7,10,1]],[[6,7,4,6,4],5,[6,10,0],[0,9,8,3,4]]],[[5,10]]]\n[[[[1,3,5],0,[4,2,9]],[0],9,[[],[3,10],[],[3],[7,4]]]]\n\n[[0,[2,[8,5],9],4],[[],2,[6]],[4],[]]\n[[1,[10,4,[],[2,6,3,10,6]],7,[[8,2,2]]],[[10,[],[8,4,6,10]],2],[1,[8,3,7,[2,0,1,3,10],5],[]]]\n\n[[[[2,8,4,8],9],5,[[],1,3,[2]],[8,4,[],5,[0]],0],[10,[],2,[1]],[[[10],1,[],[6,4,6,10]],[5,8,[4,4,5,7,8],[],[5,3,4]],5]]\n[[8,5,0,[[2,8,6],0,[7,5],[8],[5,3,7]]],[],[],[[1,[4,0,10,5],[3,1,6,7]],3,[]],[[[9]],10,5]]\n\n[[5,[[9],6],[1,[10,6,0],[],9,[4,4,8,8]],6,5],[[],10,1],[[],[0,2,8,3,5],0,[[],5,[6,8,7,3,0],[5,3,9,9,6]],7]]\n[[],[8,2,[2,[9,5]],[3,[],5,10]]]\n\n[[[[1,10,6],2,8,[1,9],3]],[[4,0,7,[2,6,4,10,8],[5,2,6,4,2]],4,[4,9],[2,[9,4],[],6],9],[],[]]\n[[[6],5],[],[0,[7],[[10,0]]]]\n\n[[[3],6,7,[[],[9,3,8],[10,1,0,0,8],[7],[]]],[]]\n[[0,4,10,[3,[7,6,5,0],[],4,[4,1,1]]],[[[4,8,6],[2],10,[9,3,4,8,5],6],[[7,5],6,3],3]]\n\n[[[[]],[[],5,[8],[6,8,4,6,3],[4,2,8,1]],[0,[3,4,9,5,3],1],[],7],[1,[9],[[0,1,5,5,9],[6,3,9,3],[7,4,10],9,3],7,5],[8,[[10,1,4],1,0],1,1,0],[]]\n[[[[7,7,6,6],1,[2,5,0,1]],[10,[0,5,7],[9,1,1,10,0]],10,1]]\n\n[[[0,7],[2],[[4,10,0,3],[3],[6,0,6],3]],[[9,6],4,5,[1,7,[10,2,8,10],[],2],6],[[],[3,1],[8,10,[3,2],3,1],8,9],[],[4,[[],[7,3,7,7,3],2,3,[7,9,6]]]]\n[[5,3],[[[],9,[7,2,0,6,4],7,2],[8],[[2,1,3,8],[],[4,0,8],1,[]],1],[],[3,7,[],[[],[1,10],9]],[[9,8],[6],[7,1,9,[],[]]]]\n\n[[2,7]]\n[[[6,1,9,[]],[[7],[],3],[1],4],[[3,0,6],1,6,[[5,5],1,[9,4,3],[],[3]],[6,[8,10,9,9],6]],[[[9,5,6,9,2]],[7,[10,7],[9,10],1,[1,7,7]],[8,[4,2,5],[0],[7,0,3],[0]],6,[[0],[4,1],[1],[7],5]]]\n\n[[],[],[7,[2,8,8,[]],3,7],[[4,8],[],[7,[10,6,9,5,6],2],[[3,5,9,10,6],0,[0,0],[9],[2,7,6,9,5]],[0,6]],[[6,3,[0],10],[],10,[[6,8],3,[2,3,2,1],[],[10,1]],[]]]\n[[[[5,8,2],5],[[10,9,9,4],[2],[],8,6],2],[[[4,4,8,4],[1,0,1,7,2],[3,7,3]]],[7],[0,1,[[10],[6],9,[4],5],4,[[5,10],[8,1,7,5,9],7,6]]]\n\n[6,10,0,0,5]\n[6,10,0,0]\n\n[[1,[]],[5,6,5]]\n[[2,10]]\n\n[[[1],[6,[2,4,5,2],[1],[7],[10,10,0]],[3,0,[3,1,3,0],[7,10,0,7,8],[9,1,7]],[5,[8,4,6,3,6],0,[4,4,5,10],10],[[6,8,3,2,5],7,3,[10,10,3,7,3],1]],[[[8,1],[4,9,3,0,0],4,10],[],2]]\n[[],[],[5]]\n\n[[6,[7,[3,6,9,0,6],[6],[6,5,8,9,0]],5,9],[8,5,7,5],[10,4,0,5,[[]]],[]]\n[[[8,2,8],6,[[1,6,1,6]]],[[8,7,[1,3,10],[6,5,5],[4,9,0,9]],[1,6,0,5]],[[5],2,8],[[5,4],[3,[7,2,8,10],9],[[3,7,8,2,1],3,2],[[3,3],5],3],[[[7,7],[9]],[[9,3,9,2,1]]]]\n\n[[8,[[7],[6,2,4,1,8],8,[0,1,0,7,5]],[[8,5],[4,9,2,6],[2]]],[],[0,[[8],[4,6,2,10],[4,10,8]],[[3,2,1]]],[2,10]]\n[[[[],[5,10,1,9]],[[5,1,10,7],[10,9]],[9,[],7,[]],0],[3,0,[[10,9,7,3],[],[0,3],10,1],10,[[2,4,10,4],[4]]],[[]]]\n\n[[[[7],[6,4],[5],[1,0]],[[2,3,1,3],[],5,6]]]\n[[[6,[],[8]],[0,[5,4,2,5],9,6],[[2,8,4,2],9]],[1,[1,[0,5,5,4,10],[9,4,7],8]]]\n\n[[[[8,2],2],9,5],[3,0,[],2,[2,7]],[],[[],0,[[]],[[4,0,9,2],9,[8,5],7,2]]]\n[[[[1],5],[[6,7],2,2,1,[3,8]],[1,10]],[]]\n\n[[4,[]],[6,[3,[4,4,7,6]]],[10,8,1],[[[3,1,1,0,7],[1,9,10,6,2],[10,6]],[2,[9,9],0,9,[]],[4,8,3,[]],[[5,4,8],2]]]\n[[[0],[8,9,0],5]]\n\n[[[0,8,[0,8,10,6,7]],[6],1,7,[8,6]],[0,[],[[6,6,3],[5],[2,8,10,6],[]],2,[[7,8,7],7,6,[],[0,4,1]]],[5,10],[]]\n[[2,[[9,8,4],9,4],[1,8],0]]\n\n[[1,5],[1,0,[4,3],2],[[[7],[6,5,2,2],8,[7,9]]]]\n[[],[1,[0,10],[[8],0,3,3],[[3],2,[],[8,4,6]]],[[[0],9,5]],[1],[7,1,[8,3,[1,2,7],[1,8]],2,[1,0]]]\n\n[[],[]]\n[[[[8,7,4,2,9]]],[7,5],[1,[[2],6,[7,4,10],[9]],[9,8,[1,8,6,8,7],1,1]],[[[10,4,4]],[[5,8,10],[1,7,4],1,7],10,2,[2,[5,0,8,1]]]]\n\n[[9]]\n[[7]]\n\n[[],[1,[[7,3,9,8,10],[7,8,4,2,7],9,[2,7,8],[10,7,2,9]],3,9]]\n[[[],[5,10,4],5],[[10,[8,10,2,10],[8,8,10,0],5,9],[[10,7,5,10,5],[10],7,[10,3,10,4],[5,0,0,4,7]]],[],[0,[[5],6,2,10,9],[[2],[1],[10,1,5,1],[8],5],[3,9,1]]]\n\n[[2,[2,[8],[7,1,9,1,8],4]],[[5,[2,8,3],9],4,3,[[3,2,0,10],3],3],[[8,4,2,[5],6],8,[],[[10,7,7,7],6,[7,4],[9,3,2,6],[10,4,10,5,8]],[9,1,6,5,[]]],[[[10,9,8,2],3],[1,10,[0,2,8],6]]]\n[[[[4,7,8],7,[],9,[0,6]],[],8]]\n\n[[[2],[[]],[[],[4,0,10,5],5,3,8],[8]],[[4,1],[2,[],4],[[1,9,10],0,[3]]]]\n[[[4,[7,6]],[5,1,[],[2,6,10]],[10,0,[],[9,3,10,8,5],[9,0]]],[10,9,3,[[9,8,2],4]],[[[6],10,9,3,2],[[10,9,2,10],7,4]],[[2,3,[9]],[[0],0,[5,8]],2,[]]]\n\n[[[[2,6,10],[4,8,1,10,6],1,[4,0,10,4,5]],[[5,8,10,1,0],[10,4,2,4],[5,8,0],5,1],[10,7,10],[[2,7,5,1],[9,0,5],[8,5,4,9]],[6,[2,8],[7]]],[[3,8],[[3,9,6],[5,4,2]],[]]]\n[[[],[],7],[]]\n\n[[2,9,10,6]]\n[[],[],[[7,1,8,[8],6],[9,[2,10,7,10],[],7,[6,8,4]]],[[7,6,8],[3,[3,0,4],[8,7,2],[4,0,0]],10,7],[]]\n\n[[],[4,[]],[[[0,2,4],9],[[0,10],9,9],6],[1],[7,2,2,9]]\n[[[],[[3,5]],2,[[7,1,5,7,8]]],[[0,[],[2,4,9],2],[7,4],[],3]]\n\n[[3,[],9,5,[7,[4,4],[4,5,4,4],9]],[[1],[]]]\n[[[4,9,[5,2,1,8,3],[],[8,5,7,5]]],[[[5]],[[]],4,4],[0,[1,[4,7,9]],7,[[0,3,8,5]]]]\n\n[[],[9,9,[3,10,8,[],[5,9]]]]\n[[[[6,7,1,8]]],[[[2,8],[2,9,5,1,4]],[[7],[1,10,3,4,2],9]],[[[8]],7]]\n\n[[1,[9,[],[10,4,4,4]]],[[2,[8,3,4]]],[[[5,5,1,3,10],8,8,10,7],[9,[2,10],[3,3,3,5,3]],[[4,0,8],10]],[9,[[9,8,3,7,8],9,[9,6,9,8],[6,7,6],[]],[]],[4,[[7,4,1,4]],[0]]]\n[[[[2,10,2,8,0],8,8,0,4]],[[],[[1,7]],[9,[8,6,0,2,9],[],2]],[],[[7,0],7]]\n\n[[9,9,7,10,[[6]]],[2,[[6,9,3,9],2,[7,3,2,2,3]],4,7,9],[[4,7],9,[2,[1,1,8,5,1]]]]\n[[[6,7,9,[]],[]],[],[5,6,5],[]]\n\n[[[[5,5,1],0,8,6,4]],[],[[[]]],[0,6]]\n[[[6,[],[2,2,10,0,8]],6,[1,2],[9,9,0,[2,8],[6,9,9,3]]],[8]]\n\n[2,7,5,7]\n[2,7,5,7,7]\n\n[[10,[[6,4],[],[1,4,0]],[]],[7,3,[1,6],5,[10,10,[],[5,5]]]]\n[[[[1],10,[7,10],[]],1,0,[[2,10,7,6],[1,9],3,9],5],[7,[[9,2,0,4,1],2,0,2,9]],[[7,[6,10,9,6,3],[],2,1]],[6,6,[8],4,4]]\n\n[[],[[7,1,[7,7,9,1],5,[5,2,3,10]],2,5,2,[[7,7],3,[]]],[],[[[10,5,3,9,5],2,2,5]],[[9,[7,6,3,7]],[[6],[9,1,10],[4,5],[10,4]],[2,[]],[]]]\n[[],[[7,1],[6,[]]]]\n\n[[0]]\n[[10,[],[[5,4,1]]],[],[0,[[3,0,8,9],8,[],[9,4],9],[5,[6],10,[2,8,8,2,10],[0,0,4,7]],6]]\n\n[[10,[4,3,[4],[9,2,1],[4,9,1,10]],3],[10,[7,[3,0,2,3],8,1],[8,7,[]],4],[4,2,5]]\n[[3,10,7,[[]],[[6],6,9,[10,4,9],6]],[[[6],[3]],[[8,2,6,5,4],[1,8,4],9]],[7,9,[3,10,[8,9,8],[10,8,1,4],6],[[3,6,3]]]]\n\n[[],[[[2,5]],5,1,[5,4,[9,8,4,6],4]],[]]\n[[[[6,10,5],[8,1,4,10],[2,5,9,9,4],[],[3]],4,[[1,1,1],[4,8,5,1,0]],3],[1]]\n\n[[7,9],[3,[8],6,7],[[7],6,[[8,4,10,2],[]],2]]\n[[[6,2],[],[],[],[1,[1,7,6,6,0],[3,9]]],[]]\n\n[[],[[[3,0,0],9,[6,3]],6,5,[7,3],6],[]]\n[[[9],[[],[6,3,1,1,3],[]],[[2,10,9,4],[1,4,9],5,[4]]],[7,6,[],8]]\n\n[[10,[3,10]],[5,[[2,5,5,1],[3],[6],[9,1],2],[2,[1,10,9],9,[9,5,2],2],5,[5,[10,2,4],[6],[10]]],[[9,[],[4],[8,6]],4,[3,4,[1,5,8,9],1,[7,2,8,3]],3]]\n[[9,4,6,6],[8,8,9],[]]\n\n[[6,[4,[6,10,1]]],[9],[5,[[2,9,4,3,0],[],[4,9,3],[8,8,6],[]],3]]\n[[6,6,[7,6,10,1,3],[[7,10,1]]],[[[9,1,5,0,5]],6,[[],[],[5,2],8,[10,1,1,8]],[5,[],3],1]]\n\n[[[[4,6,1],10,[],4]],[[0,9,[0,2,7],4],[10,[],[6,4,0]]]]\n[[6,4,[[0],[9,1,9],[8,8,4],[5,2]],6,7],[[[4],[2,0,6,0,2]],[[],[10,9]],[]]]\n\n[[],[[],3],[[4],10,[[8,5,1],[],4],[[2,9,10,0],2,[9,2],10]],[[3],[[2,2,9],3,[7],[2],3],[[],[7,9,4],[1,6,2,2,6],[7],[]]],[]]\n[[6,[9,[]],3]]\n\n[[[[9,3,6,4],0],3,1],[],[0,[[3,1],[5,6,2],[2,10],5,9],6],[[2,[2,8,10,2,8],3],2],[7,0,3]]\n[[[],[[10,1],2],5,5,7],[[[3],0,3,5,2],[[8,5,8,3],1],5],[4,[]]]\n\n[[],[[0,5,1,[8,3,4,0,4]],[[9,9,3,3,0],[7,7,3,6,0],[1,2,4,3],[7,8,8]],[4,[9,2,5],5],4]]\n[[[[7]],1,[8,1,[],1,[2,4]]]]\n\n[[[],3,4,2,4],[],[[[6,1,10,4],6,[3,9,8,9,5],[8,5]],2,[[6,9,9,1],9,1,9],10],[4,[6,[4,7,10,5]],[0,9],4,[]]]\n[[9,5,[[],[1,3],[7],4],[[],[0,2],8],10]]\n\n[[10,[[],[9,8],[5,10,2,3,8],[],[0]],8,8,[6,10,[5],4,1]],[4],[0,[]],[1],[[2],[10,0,1]]]\n[[0,[6,7,5],7,10,[[2,8,1,4,3]]],[[[6,0,4],2,[1,0,5,5,8]],7],[[[2,4,7]]],[]]\n\n[[6,[],[5,7],[[10,5,8,2,1],[5,10,2],10]],[[],[[6,4,4],[1,1,7,9,1],[9,9],[]],[],[0,2,4]],[[10,9],[2]]]\n[[1,[[9,3,1,2,7]],1,[],[[8],7,[6,4,6,2,7]]],[8,1,[6,[4,2,10,4],9]]]\n\n[[4,[10,10,[9,5],[0,8,1,8],[]],9]]\n[[[9,[0,4,5,2],1,6]],[0,10,[7,[],4,9,4]],[[5,9],8,5,4,1]]\n\n[[1,4],[[],[[],[7,1],2],8,5],[[[7,10,9,8],[],6,[10],1]],[[7,7,[]],[]]]\n[[10,7,[[9,9,3,2,7],[]],7,[]],[8,8],[[[9,0]],0,7,[]],[[9,9],[[9,1,8,7],[7]],[[4,5,0]]]]\n\n[[],[7],[1,1,6],[],[8,0,[],[[9,9],7,[],[10,9,2,8,6],3],[1,3,[5,3]]]]\n[[[],[6,[],10,7,0],3,9,[[2,3,6,1]]],[[[],7,0],8,[8],[[],6,2,2,3]]]\n\n[[],[4,10]]\n[[[[8,0,3,9]],5,[9,8,0],[[2,8],[9]],[]]]\n\n[[],[[2,4,0,2]]]\n[[[[6,2,8],[6,8]]],[1,9,10,8]]\n\n[[],[5,3,[[]],4],[0,10,[[10,4,4,3,8]]]]\n[[[6,[3,9,3],[8,0,8]],1,[[1,8,4],[4]],9,7],[[],[[10,6,9,7,0],[10,6,2],[4,2,3],6,[0,6,9]],[],3,8],[[1,0,[7,6,7,2,6],9],[],1,8],[[[3,7,7,10,3]]]]\n\n[[[4,[9],0,[10],5],[[6],[7],10],[[3,6,6,6,0],6,[7],2],8],[6,5,[8,2,3],[2,3,10,[4,3,3,0,10]]],[]]\n[[[]],[6,[[],10],[[3,0,8,2,2],[],[6,6,1],0,[9,10,5,9]]]]\n\n[[[9],[1,[2],1],1],[[[2,4,8,6,3],[2,6],[9,0,4],4],2],[10]]\n[[0],[],[[[1,3,0,2],[]],[[5,4,7,5],10,6,10]]]\n\n[[[3],10,3,[8,[7]],[10]],[[1,10],[[],[1,4,2],2,[6,8,0,1,4],[3,4,8,1]],[2,[7],4,2,10],[7,[],[3,6,6,9,3],[7,3]]],[5,[],[],10,6]]\n[[0,1,[8,2,3],4,[]],[[4,[7]]],[[10,2,[6,8,8,5],9,[]],[[],[],[7,0,0]],4,7,[9,[8,9,5,9,0],8,[4]]],[10,[[9,6,7,9,2]],[[2,8,3],6,9,10,[]]]]\n\n[[[9,7,0,[8,7]],2,5,10],[2,[6,10,9,1],[7,10],8],[8,6,7,[[0,5,4,4],[2,4],5,1,3]],[],[]]\n[[6,7,1],[[]],[7,[2,4,[]]],[[[],6,[3,6,0,3,9],5,[8,8]],[[7,4,6,5],[4]],10,0,4]]\n\n[[],[[[1,3,4],4,[0,2,4,1],1,1],3,[[],10,7,7,7]],[]]\n[[8,[1,[1,7]]],[[[5,7],7,[2,6,9,0],10,[4]],[[10,3,1,6],10,[7,4,2,10,9],2]],[0,[[8,3,6,8],2],[4,9,[1,9,2],6,[10]],9,4]]\n\n[[[[],[1,2],5,4],4,[8,9]],[5,2],[1,9,[6,[7,1,5,3],7,[0,1,2,5,0]]],[6,[2,10,4,[10,6,2,6]],[],[[]],1],[[[1,6,1],[9],7,[10,7,9]],[5,7,5,8,[4,6,3,7,4]],1,10,[]]]\n[[],[[[5],[6,0,2],2]],[9,[[9,3],1,2],[6,[1],0,[]],[[0,7]],[[5,1,6,9,10],10,[],1,7]],[[[],[8,8,1,3,2],2,8],10],[10,[4,5,[2,2,1,5,3],5],1,[[],9,7,9],[6,[],9,[],7]]]\n\n[[7],[[[4,6,1,5],1,[4,1,1,7,8]],[4,4]],[9,0,7,[3,10,[10,6,9],3,[2]]],[[8],[[],[8,4,9,1]],[6,[5,7,7,8],10],3],[[],8,8,0,10]]\n[[0,7]]\n\n[[[5,[2],[0,0,9,10]],7],[4,[[2,2,4,0]],[10,[10,5,6,0,1],8],4,3],[[[1,1,10,7,3],[1,3,0,1,8],[]],[],[[],[2],6,9],[[7,10],4,[0,3,6,7,6],[1,10,6,4,6],9],3],[6]]\n[[[7],[],[[]],[3]],[4,3,10,[]],[9],[],[[6,6,5],0,4,3]]\n\n[[8,[[1],5,[6,1,5,2],10,[0,1,7,4,9]],10,[[8,2,3,4]]],[[[],0,4,6,0],5,3],[],[],[]]\n[[4,[[1],[10,0,8,8,7],6,9],10,0],[[[8,3],7,[10,6,2,9,7],8],[[7,2,10,1],[7,0],[3,7,5],10]],[0,7]]\n\n[[[1]],[7,[[8,4],8,3],4,[6,6],1],[3,[1]],[]]\n[[1,[9]],[]]\n\n[[],[[]]]\n[[0],[[3,4,[9,7,0,10,3],8,1]]]\n\n[[[7,[6,7,10]],[0,3,4]]]\n[[3,10,4,[[6,5,4]]]]\n\n[[[[1]],[[2,3],9,[3,9,8]],9,3],[[10,[1,5,8,1]],3,[9,10,[5,1,9,1,7],0]],[4],[7,[4,10,[]]]]\n[[8]]\n\n[[1,2],[],[6,[9,[4,8,0,1]],[[9,7],8,7],[[6,5,1,5],[8,0,5]]]]\n[[[],[],3,0,[[1,1],0,[2,3,5],0]],[3,10,9,4,9],[],[[0,[7],[4],9],0,2,6]]\n\n[[],[],[[[0,2,2,1],10,[5,8]],[0,6,[3,0,3,7]],[4,[1,6,5,7]]],[[],[[]]]]\n[[9,9,8,3]]\n\n[[]]\n[[0,[[]],[[10,1,10]],[[0,10,1,10,9],8],3],[[[9,5,5],9,8,[3,4],[0,10,3,10,10]],[3,10]]]\n\n[[],[[[7,6],2]]]\n[[[5,8,2,8,9],[[4,9,2,6,5]],9],[[4,9,[6,4]],[[],3,[],[],[7,7]],[],1],[],[],[[[]]]]\n\n[[],[[6,[0,1,10,4],[7,8,5,7,4],[10],[7,3,5,10]],0],[[],[1],[[1,5,6],1,10,7],[[0,5,6,4,10],[3,10,10,4]]],[6],[]]\n[[[4,7,[0],[8,1,1],7],9,[[0,10],1,10,4,[]]],[3,[7],0]]\n\n[[8,[7,0,[6,6,0,4,2],[0,4,6,9],9]]]\n[[2,9,[[8,0,4],10,[9,0,9,7,3]]]]\n\n[[[[],[],[3]],9],[[8,0],9,[8]],[[3,10,5,[4,3,10,0],0],[[0],0,[4,1,9,0,6],9],9,[],[[]]],[]]\n[[0],[1,[1,5,[6]],[[5,4],1,2,[8,2,8,4],[7,6,5,3]],2],[6]]\n\n[[[[5,10,5,9,10],0],[[9],7,2,1,[]]],[[6,[8]],[[8,3,4],[8],[7,8,7,8]],6,9]]\n[[6,[[5,10,8]]],[[9,[],6],9,2,[[3,1,10],[4,5,0],[0],[2,1,8,6]]],[4],[[[10,10,5,0,0],5,8]],[4]]\n\n[[8,[]]]\n[[7,5],[6,[[]]],[5,7],[]]\n\n[[],[[9,[],1],[],10,6,[[1],6,[10,7,6],7]],[[7,10,8,7],0],[[[],3,[6,8,7]],[[7,5,6,1,2],[1,7,10,5,8]],10,0,[[9,1,1,7]]]]\n[[2,7,6,[[2,7,9],5,9]]]\n\n[[0,6,0,[],6],[]]\n[[[9],[8,10]]]\n\n[[3,9,[1,7,3],7],[]]\n[[1,[1,2,[2,2,5,3,4],[4,7,10]],[[3,0]],[2]]]\n\n[[[[9,2,4,1],2,[4]]],[[8,[3,3,6,10],[4,1,10,5,3],2],6,7,[8,[0,8,4,0]],8],[[5,7,[7,3,1,5,2]],[2,4,0,0]],[[10,[],[1,2,6],5],6]]\n[[7],[6]]\n\n[[4],[8,[[9,7],5,[2,7,4,1],10],[[6,6,9],5],[]],[4,[]],[[[6,6,2],[],[7,10,2,2,7]],[0],4]]\n[[[[6,5,2]],[[1,7,10,8],[],8,[4,2,6,5,5]],4,[[5,10,2,9,7],[5,8,2],0,[1,3]]]]\n\n[[],[[4,[1,4,4]],[6,9,8,9,2],6],[]]\n[[[5],[0,[9,4,5],[1,3,10,1]],3,2],[[[6,9],[1,4,0,10,10]],7,4,9],[],[[],4]]\n\n[[[[6,7,1,1],8,9,[0,8,3,1,3],1],[],5],[[[2,3],[0,3,9,7],[1,7],1,[8]],6,3,[8],6],[[[7,6,5,0,6],6,3,5],[[10,9,1,3],[7,3,9],8,8],[3],8,[[5,7,2,5,10]]],[2,2,[[2],[3],[1,0,2,5,3],[10,0],[3,7]],8],[8]]\n[[7,[9,7]],[2],[[],6],[[7,7],9,9,[[0,4,5,10,2],3]]]\n\n[[[7,[3,8,10]],[[9,8,0,8,1],4,7],10],[]]\n[[5,[[4,9,2,0,10],10,9,2,0],[[6,1]]],[8,[],[5],9]]\n\n[[[],0],[],[0],[4]]\n[[],[],[]]\n\n[[10,8],[1,[5,[9,9,5]],1,[[4,8,10],10,8]]]\n[[[2,3,9,3,[2,8]],6],[2,10],[[[2,10],9,1,5],[6,[],[1,0,2,10,8],5],10],[4]]';
 var $elm$core$List$maximum = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -6150,7 +6151,7 @@ var $elm$parser$Parser$Advanced$consumeBase = _Parser_consumeBase;
 var $elm$parser$Parser$Advanced$consumeBase16 = _Parser_consumeBase16;
 var $elm$parser$Parser$Advanced$bumpOffset = F2(
 	function (newOffset, s) {
-		return {aT: s.aT + (newOffset - s.c), e: s.e, f: s.f, c: newOffset, bv: s.bv, b: s.b};
+		return {aS: s.aS + (newOffset - s.c), e: s.e, f: s.f, c: newOffset, bs: s.bs, b: s.b};
 	});
 var $elm$parser$Parser$Advanced$chompBase10 = _Parser_chompBase10;
 var $elm$parser$Parser$Advanced$isAsciiCode = _Parser_isAsciiCode;
@@ -6181,7 +6182,7 @@ var $elm$parser$Parser$Advanced$AddRight = F2(
 	});
 var $elm$parser$Parser$Advanced$DeadEnd = F4(
 	function (row, col, problem, contextStack) {
-		return {aT: col, bX: contextStack, bn: problem, bv: row};
+		return {aS: col, bR: contextStack, bk: problem, bs: row};
 	});
 var $elm$parser$Parser$Advanced$Empty = {$: 0};
 var $elm$parser$Parser$Advanced$fromState = F2(
@@ -6189,7 +6190,7 @@ var $elm$parser$Parser$Advanced$fromState = F2(
 		return A2(
 			$elm$parser$Parser$Advanced$AddRight,
 			$elm$parser$Parser$Advanced$Empty,
-			A4($elm$parser$Parser$Advanced$DeadEnd, s.bv, s.aT, x, s.e));
+			A4($elm$parser$Parser$Advanced$DeadEnd, s.bs, s.aS, x, s.e));
 	});
 var $elm$parser$Parser$Advanced$finalizeInt = F5(
 	function (invalid, handler, startOffset, _v0, s) {
@@ -6229,7 +6230,7 @@ var $elm$parser$Parser$Advanced$finalizeFloat = F6(
 			return A2(
 				$elm$parser$Parser$Advanced$Bad,
 				true,
-				A4($elm$parser$Parser$Advanced$fromInfo, s.bv, s.aT - (floatOffset + s.c), invalid, s.e));
+				A4($elm$parser$Parser$Advanced$fromInfo, s.bs, s.aS - (floatOffset + s.c), invalid, s.e));
 		} else {
 			if (_Utils_eq(s.c, floatOffset)) {
 				return A2(
@@ -6275,37 +6276,37 @@ var $elm$parser$Parser$Advanced$number = function (c) {
 			var baseOffset = zeroOffset + 1;
 			return A3($elm$parser$Parser$Advanced$isAsciiCode, 120, zeroOffset, s.b) ? A5(
 				$elm$parser$Parser$Advanced$finalizeInt,
-				c.b9,
-				c.a5,
+				c.b4,
+				c.a3,
 				baseOffset,
 				A2($elm$parser$Parser$Advanced$consumeBase16, baseOffset, s.b),
 				s) : (A3($elm$parser$Parser$Advanced$isAsciiCode, 111, zeroOffset, s.b) ? A5(
 				$elm$parser$Parser$Advanced$finalizeInt,
-				c.b9,
-				c.bj,
+				c.b4,
+				c.bg,
 				baseOffset,
 				A3($elm$parser$Parser$Advanced$consumeBase, 8, baseOffset, s.b),
 				s) : (A3($elm$parser$Parser$Advanced$isAsciiCode, 98, zeroOffset, s.b) ? A5(
 				$elm$parser$Parser$Advanced$finalizeInt,
-				c.b9,
-				c.aQ,
+				c.b4,
+				c.aP,
 				baseOffset,
 				A3($elm$parser$Parser$Advanced$consumeBase, 2, baseOffset, s.b),
 				s) : A6(
 				$elm$parser$Parser$Advanced$finalizeFloat,
-				c.b9,
-				c.a_,
-				c.a9,
-				c.a$,
+				c.b4,
+				c.aY,
+				c.a7,
+				c.aZ,
 				_Utils_Tuple2(zeroOffset, 0),
 				s)));
 		} else {
 			return A6(
 				$elm$parser$Parser$Advanced$finalizeFloat,
-				c.b9,
-				c.a_,
-				c.a9,
-				c.a$,
+				c.b4,
+				c.aY,
+				c.a7,
+				c.aZ,
 				A3($elm$parser$Parser$Advanced$consumeBase, 10, s.c, s.b),
 				s);
 		}
@@ -6315,13 +6316,13 @@ var $elm$parser$Parser$Advanced$int = F2(
 	function (expecting, invalid) {
 		return $elm$parser$Parser$Advanced$number(
 			{
-				aQ: $elm$core$Result$Err(invalid),
-				a_: expecting,
-				a$: $elm$core$Result$Err(invalid),
-				a5: $elm$core$Result$Err(invalid),
-				a9: $elm$core$Result$Ok($elm$core$Basics$identity),
-				b9: invalid,
-				bj: $elm$core$Result$Err(invalid)
+				aP: $elm$core$Result$Err(invalid),
+				aY: expecting,
+				aZ: $elm$core$Result$Err(invalid),
+				a3: $elm$core$Result$Err(invalid),
+				a7: $elm$core$Result$Ok($elm$core$Basics$identity),
+				b4: invalid,
+				bg: $elm$core$Result$Err(invalid)
 			});
 	});
 var $elm$parser$Parser$int = A2($elm$parser$Parser$Advanced$int, $elm$parser$Parser$ExpectingInt, $elm$parser$Parser$ExpectingInt);
@@ -6332,10 +6333,10 @@ var $elm$parser$Parser$Advanced$keeper = F2(
 var $elm$parser$Parser$keeper = $elm$parser$Parser$Advanced$keeper;
 var $elm$parser$Parser$DeadEnd = F3(
 	function (row, col, problem) {
-		return {aT: col, bn: problem, bv: row};
+		return {aS: col, bk: problem, bs: row};
 	});
 var $elm$parser$Parser$problemToDeadEnd = function (p) {
-	return A3($elm$parser$Parser$DeadEnd, p.bv, p.aT, p.bn);
+	return A3($elm$parser$Parser$DeadEnd, p.bs, p.aS, p.bk);
 };
 var $elm$parser$Parser$Advanced$bagToList = F2(
 	function (bag, list) {
@@ -6367,7 +6368,7 @@ var $elm$parser$Parser$Advanced$run = F2(
 	function (_v0, src) {
 		var parse = _v0;
 		var _v1 = parse(
-			{aT: 1, e: _List_Nil, f: 1, c: 0, bv: 1, b: src});
+			{aS: 1, e: _List_Nil, f: 1, c: 0, bs: 1, b: src});
 		if (!_v1.$) {
 			var value = _v1.b;
 			return $elm$core$Result$Ok(value);
@@ -6408,7 +6409,7 @@ var $elm$parser$Parser$Advanced$token = function (_v0) {
 	var expecting = _v0.b;
 	var progress = !$elm$core$String$isEmpty(str);
 	return function (s) {
-		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.c, s.bv, s.aT, s.b);
+		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.c, s.bs, s.aS, s.b);
 		var newOffset = _v1.a;
 		var newRow = _v1.b;
 		var newCol = _v1.c;
@@ -6419,7 +6420,7 @@ var $elm$parser$Parser$Advanced$token = function (_v0) {
 			$elm$parser$Parser$Advanced$Good,
 			progress,
 			0,
-			{aT: newCol, e: s.e, f: s.f, c: newOffset, bv: newRow, b: s.b});
+			{aS: newCol, e: s.e, f: s.f, c: newOffset, bs: newRow, b: s.b});
 	};
 };
 var $elm$parser$Parser$Advanced$symbol = $elm$parser$Parser$Advanced$token;
@@ -6758,7 +6759,7 @@ var $elm$parser$Parser$Advanced$keyword = function (_v0) {
 	var expecting = _v0.b;
 	var progress = !$elm$core$String$isEmpty(kwd);
 	return function (s) {
-		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, kwd, s.c, s.bv, s.aT, s.b);
+		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, kwd, s.c, s.bs, s.aS, s.b);
 		var newOffset = _v1.a;
 		var newRow = _v1.b;
 		var newCol = _v1.c;
@@ -6775,7 +6776,7 @@ var $elm$parser$Parser$Advanced$keyword = function (_v0) {
 			$elm$parser$Parser$Advanced$Good,
 			progress,
 			0,
-			{aT: newCol, e: s.e, f: s.f, c: newOffset, bv: newRow, b: s.b});
+			{aS: newCol, e: s.e, f: s.f, c: newOffset, bs: newRow, b: s.b});
 	};
 };
 var $elm$parser$Parser$keyword = function (kwd) {
@@ -6795,7 +6796,7 @@ var $elm$parser$Parser$Advanced$chompWhileHelp = F5(
 					$elm$parser$Parser$Advanced$Good,
 					_Utils_cmp(s0.c, offset) < 0,
 					0,
-					{aT: col, e: s0.e, f: s0.f, c: offset, bv: row, b: s0.b});
+					{aS: col, e: s0.e, f: s0.f, c: offset, bs: row, b: s0.b});
 			} else {
 				if (_Utils_eq(newOffset, -2)) {
 					var $temp$isGood = isGood,
@@ -6827,7 +6828,7 @@ var $elm$parser$Parser$Advanced$chompWhileHelp = F5(
 	});
 var $elm$parser$Parser$Advanced$chompWhile = function (isGood) {
 	return function (s) {
-		return A5($elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.c, s.bv, s.aT, s);
+		return A5($elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.c, s.bs, s.aS, s);
 	};
 };
 var $elm$parser$Parser$Advanced$spaces = $elm$parser$Parser$Advanced$chompWhile(
@@ -7060,7 +7061,7 @@ var $author$project$Days$Day07$TerminalLineCommand = function (a) {
 };
 var $elm$parser$Parser$Advanced$chompUntilEndOr = function (str) {
 	return function (s) {
-		var _v0 = A5(_Parser_findSubString, str, s.c, s.bv, s.aT, s.b);
+		var _v0 = A5(_Parser_findSubString, str, s.c, s.bs, s.aS, s.b);
 		var newOffset = _v0.a;
 		var newRow = _v0.b;
 		var newCol = _v0.c;
@@ -7069,7 +7070,7 @@ var $elm$parser$Parser$Advanced$chompUntilEndOr = function (str) {
 			$elm$parser$Parser$Advanced$Good,
 			_Utils_cmp(s.c, adjustedOffset) < 0,
 			0,
-			{aT: newCol, e: s.e, f: s.f, c: adjustedOffset, bv: newRow, b: s.b});
+			{aS: newCol, e: s.e, f: s.f, c: adjustedOffset, bs: newRow, b: s.b});
 	};
 };
 var $elm$parser$Parser$chompUntilEndOr = $elm$parser$Parser$Advanced$chompUntilEndOr;
@@ -8136,7 +8137,7 @@ var $author$project$Days$Day11$parseMonkey = function (input) {
 				P: $author$project$Days$Day11$parseItemsLine(item),
 				aE: $author$project$Days$Day11$parsePperationLine(operation),
 				au: $author$project$Days$Day11$parseToMonkeyLine(divisible),
-				aM: $author$project$Days$Day11$parseToMonkeyLine(trueTo)
+				aL: $author$project$Days$Day11$parseToMonkeyLine(trueTo)
 			});
 	} else {
 		return $elm$core$Maybe$Nothing;
@@ -8213,7 +8214,7 @@ var $author$project$Days$Day11$processMonkeyItems = F3(
 					worryReduction,
 					monkeys,
 					monkey.aE(worryLevel));
-				var toMonkey = (!A2($elm$core$Basics$modBy, monkey.au, newWarryLevel)) ? monkey.aM : monkey.ay;
+				var toMonkey = (!A2($elm$core$Basics$modBy, monkey.au, newWarryLevel)) ? monkey.aL : monkey.ay;
 				return A3(
 					$author$project$Days$Day11$processMonkeyItems,
 					worryReduction,
@@ -8292,27 +8293,6 @@ var $author$project$Days$Day11$solution = function (input) {
 };
 var $author$project$Days$Day12$Part1 = 0;
 var $author$project$Days$Day12$Part2 = 1;
-var $elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
 var $elm$core$Dict$getMin = function (dict) {
 	getMin:
 	while (true) {
@@ -8691,22 +8671,22 @@ var $elm$core$Set$foldl = F3(
 			initialState,
 			dict);
 	});
-var $author$project$Days$Day12$isGoal = F2(
-	function (grid, position) {
-		var _v0 = A2($elm$core$Dict$get, position, grid);
-		if ((!_v0.$) && (_v0.a.$ === 2)) {
-			var _v1 = _v0.a;
-			return true;
-		} else {
-			return false;
-		}
+var $elm$core$Set$member = F2(
+	function (key, _v0) {
+		var dict = _v0;
+		return A2($elm$core$Dict$member, key, dict);
 	});
+var $author$project$Days$Day12$Hight = function (a) {
+	return {$: 0, a: a};
+};
 var $author$project$Days$Day12$locationToInt = function (location) {
 	switch (location.$) {
 		case 1:
-			return 0;
+			return $author$project$Days$Day12$locationToInt(
+				$author$project$Days$Day12$Hight('a'));
 		case 2:
-			return 25;
+			return $author$project$Days$Day12$locationToInt(
+				$author$project$Days$Day12$Hight('z'));
 		default:
 			var a = location.a;
 			return $elm$core$Char$toCode(a) - $elm$core$Char$toCode('a');
@@ -8721,14 +8701,14 @@ var $author$project$Days$Day12$possiblePositions = F2(
 			return $elm$core$Set$empty;
 		} else {
 			var myLocation = _v0.a;
-			var myHight = $author$project$Days$Day12$locationToInt(myLocation);
-			var around = _List_fromArray(
+			var positionsAroundMe = _List_fromArray(
 				[
 					_Utils_Tuple2(x - 1, y),
 					_Utils_Tuple2(x + 1, y),
 					_Utils_Tuple2(x, y - 1),
 					_Utils_Tuple2(x, y + 1)
 				]);
+			var myHight = $author$project$Days$Day12$locationToInt(myLocation);
 			return $elm$core$Set$fromList(
 				A2(
 					$elm$core$List$filterMap,
@@ -8741,7 +8721,7 @@ var $author$project$Days$Day12$possiblePositions = F2(
 							},
 							A2($elm$core$Dict$get, possiblePosition, grid));
 					},
-					around));
+					positionsAroundMe));
 		}
 	});
 var $elm$core$Dict$union = F2(
@@ -8754,25 +8734,21 @@ var $elm$core$Set$union = F2(
 		var dict2 = _v1;
 		return A2($elm$core$Dict$union, dict1, dict2);
 	});
-var $author$project$Days$Day12$breathFirstSeach = F3(
-	function (grid, positions, depth) {
-		breathFirstSeach:
+var $author$project$Days$Day12$breathFirstSearch = F4(
+	function (grid, stop, positions, depth) {
+		breathFirstSearch:
 		while (true) {
-			var hasStop = A2(
-				$elm$core$List$any,
-				$author$project$Days$Day12$isGoal(grid),
-				$elm$core$Set$toList(positions));
-			if (hasStop) {
+			if (A2($elm$core$Set$member, stop, positions)) {
 				return depth;
 			} else {
 				var nextPositions = A3(
 					$elm$core$Set$foldl,
 					F2(
-						function (p, set) {
+						function (p, before) {
 							return A2(
 								$elm$core$Set$union,
 								A2($author$project$Days$Day12$possiblePositions, grid, p),
-								set);
+								before);
 						}),
 					$elm$core$Set$empty,
 					positions);
@@ -8781,16 +8757,18 @@ var $author$project$Days$Day12$breathFirstSeach = F3(
 					$elm$core$Set$toList(positions),
 					grid);
 				var $temp$grid = gridWithoutPositions,
+					$temp$stop = stop,
 					$temp$positions = nextPositions,
 					$temp$depth = depth + 1;
 				grid = $temp$grid;
+				stop = $temp$stop;
 				positions = $temp$positions;
 				depth = $temp$depth;
-				continue breathFirstSeach;
+				continue breathFirstSearch;
 			}
 		}
 	});
-var $author$project$Days$Day12$findStartPosition = F2(
+var $author$project$Days$Day12$findStart = F2(
 	function (part, grid) {
 		return $elm$core$Set$fromList(
 			A2(
@@ -8812,8 +8790,25 @@ var $author$project$Days$Day12$findStartPosition = F2(
 					},
 					$elm$core$Dict$toList(grid))));
 	});
-var $author$project$Days$Day12$Hight = function (a) {
-	return {$: 0, a: a};
+var $author$project$Days$Day12$findStop = function (grid) {
+	return A2(
+		$elm$core$Maybe$withDefault,
+		_Utils_Tuple2(0, 0),
+		A2(
+			$elm$core$Maybe$andThen,
+			A2($elm$core$Basics$composeR, $elm$core$Tuple$first, $elm$core$Maybe$Just),
+			$elm$core$List$head(
+				A2(
+					$elm$core$List$filter,
+					function (_v0) {
+						var loc = _v0.b;
+						if (loc.$ === 2) {
+							return true;
+						} else {
+							return false;
+						}
+					},
+					$elm$core$Dict$toList(grid)))));
 };
 var $author$project$Days$Day12$Start = {$: 1};
 var $author$project$Days$Day12$Stop = {$: 2};
@@ -8862,14 +8857,621 @@ var $author$project$Days$Day12$parseInput = function (input) {
 var $author$project$Days$Day12$run = F2(
 	function (part, input) {
 		var grid = $author$project$Days$Day12$parseInput(input);
-		var startPositions = A2($author$project$Days$Day12$findStartPosition, part, grid);
+		var startPositions = A2($author$project$Days$Day12$findStart, part, grid);
 		return (!$elm$core$Set$size(startPositions)) ? 'Could not find a place to start' : $elm$core$String$fromInt(
-			A3($author$project$Days$Day12$breathFirstSeach, grid, startPositions, 0));
+			A4(
+				$author$project$Days$Day12$breathFirstSearch,
+				grid,
+				$author$project$Days$Day12$findStop(grid),
+				startPositions,
+				0));
 	});
 var $author$project$Days$Day12$solution = function (input) {
 	return _Utils_Tuple2(
 		A2($author$project$Days$Day12$run, 0, input),
 		A2($author$project$Days$Day12$run, 1, input));
+};
+var $author$project$Days$Day13$PackageList = function (a) {
+	return {$: 1, a: a};
+};
+var $author$project$Days$Day13$cmdPackage = F2(
+	function (pkg1, pkg2) {
+		cmdPackage:
+		while (true) {
+			var _v11 = _Utils_Tuple2(pkg1, pkg2);
+			if (_v11.a.$ === 1) {
+				if (_v11.b.$ === 1) {
+					var l1 = _v11.a.a;
+					var l2 = _v11.b.a;
+					return A2($author$project$Days$Day13$cmpLists, l1, l2);
+				} else {
+					var $temp$pkg1 = pkg1,
+						$temp$pkg2 = $author$project$Days$Day13$PackageList(
+						_List_fromArray(
+							[pkg2]));
+					pkg1 = $temp$pkg1;
+					pkg2 = $temp$pkg2;
+					continue cmdPackage;
+				}
+			} else {
+				if (!_v11.b.$) {
+					var i1 = _v11.a.a;
+					var i2 = _v11.b.a;
+					return A2($elm$core$Basics$compare, i1, i2);
+				} else {
+					var $temp$pkg1 = $author$project$Days$Day13$PackageList(
+						_List_fromArray(
+							[pkg1])),
+						$temp$pkg2 = pkg2;
+					pkg1 = $temp$pkg1;
+					pkg2 = $temp$pkg2;
+					continue cmdPackage;
+				}
+			}
+		}
+	});
+var $author$project$Days$Day13$cmpLists = F2(
+	function (l1, l2) {
+		var _v0 = _Utils_Tuple2(
+			$elm$core$List$head(l1),
+			$elm$core$List$head(l2));
+		if (_v0.a.$ === 1) {
+			if (_v0.b.$ === 1) {
+				var _v1 = _v0.a;
+				var _v2 = _v0.b;
+				return 1;
+			} else {
+				var _v3 = _v0.a;
+				return 0;
+			}
+		} else {
+			if (_v0.b.$ === 1) {
+				var _v4 = _v0.b;
+				return 2;
+			} else {
+				var h1 = _v0.a.a;
+				var h2 = _v0.b.a;
+				var _v5 = A2($author$project$Days$Day13$cmdPackage, h1, h2);
+				if (_v5 === 1) {
+					var _v6 = _Utils_Tuple2(
+						$elm$core$List$tail(l1),
+						$elm$core$List$tail(l2));
+					if (_v6.a.$ === 1) {
+						if (_v6.b.$ === 1) {
+							var _v7 = _v6.a;
+							var _v8 = _v6.b;
+							return 1;
+						} else {
+							var _v9 = _v6.a;
+							return 0;
+						}
+					} else {
+						if (_v6.b.$ === 1) {
+							var _v10 = _v6.b;
+							return 2;
+						} else {
+							var tail1 = _v6.a.a;
+							var tail2 = _v6.b.a;
+							return A2(
+								$author$project$Days$Day13$cmdPackage,
+								$author$project$Days$Day13$PackageList(tail1),
+								$author$project$Days$Day13$PackageList(tail2));
+						}
+					}
+				} else {
+					var cmp = _v5;
+					return cmp;
+				}
+			}
+		}
+	});
+var $elm$core$Result$map2 = F3(
+	function (func, ra, rb) {
+		if (ra.$ === 1) {
+			var x = ra.a;
+			return $elm$core$Result$Err(x);
+		} else {
+			var a = ra.a;
+			if (rb.$ === 1) {
+				var x = rb.a;
+				return $elm$core$Result$Err(x);
+			} else {
+				var b = rb.a;
+				return $elm$core$Result$Ok(
+					A2(func, a, b));
+			}
+		}
+	});
+var $elm$core$Result$mapError = F2(
+	function (f, result) {
+		if (!result.$) {
+			var v = result.a;
+			return $elm$core$Result$Ok(v);
+		} else {
+			var e = result.a;
+			return $elm$core$Result$Err(
+				f(e));
+		}
+	});
+var $elm$parser$Parser$Optional = 1;
+var $elm$parser$Parser$Advanced$lazy = function (thunk) {
+	return function (s) {
+		var _v0 = thunk(0);
+		var parse = _v0;
+		return parse(s);
+	};
+};
+var $elm$parser$Parser$lazy = $elm$parser$Parser$Advanced$lazy;
+var $author$project$Days$Day13$PackageNumber = function (a) {
+	return {$: 0, a: a};
+};
+var $author$project$Days$Day13$packageNumberParser = A2(
+	$elm$parser$Parser$keeper,
+	$elm$parser$Parser$succeed(
+		function (n) {
+			return $author$project$Days$Day13$PackageNumber(n);
+		}),
+	$elm$parser$Parser$int);
+var $elm$parser$Parser$Advanced$andThen = F2(
+	function (callback, _v0) {
+		var parseA = _v0;
+		return function (s0) {
+			var _v1 = parseA(s0);
+			if (_v1.$ === 1) {
+				var p = _v1.a;
+				var x = _v1.b;
+				return A2($elm$parser$Parser$Advanced$Bad, p, x);
+			} else {
+				var p1 = _v1.a;
+				var a = _v1.b;
+				var s1 = _v1.c;
+				var _v2 = callback(a);
+				var parseB = _v2;
+				var _v3 = parseB(s1);
+				if (_v3.$ === 1) {
+					var p2 = _v3.a;
+					var x = _v3.b;
+					return A2($elm$parser$Parser$Advanced$Bad, p1 || p2, x);
+				} else {
+					var p2 = _v3.a;
+					var b = _v3.b;
+					var s2 = _v3.c;
+					return A3($elm$parser$Parser$Advanced$Good, p1 || p2, b, s2);
+				}
+			}
+		};
+	});
+var $elm$parser$Parser$Advanced$loopHelp = F4(
+	function (p, state, callback, s0) {
+		loopHelp:
+		while (true) {
+			var _v0 = callback(state);
+			var parse = _v0;
+			var _v1 = parse(s0);
+			if (!_v1.$) {
+				var p1 = _v1.a;
+				var step = _v1.b;
+				var s1 = _v1.c;
+				if (!step.$) {
+					var newState = step.a;
+					var $temp$p = p || p1,
+						$temp$state = newState,
+						$temp$callback = callback,
+						$temp$s0 = s1;
+					p = $temp$p;
+					state = $temp$state;
+					callback = $temp$callback;
+					s0 = $temp$s0;
+					continue loopHelp;
+				} else {
+					var result = step.a;
+					return A3($elm$parser$Parser$Advanced$Good, p || p1, result, s1);
+				}
+			} else {
+				var p1 = _v1.a;
+				var x = _v1.b;
+				return A2($elm$parser$Parser$Advanced$Bad, p || p1, x);
+			}
+		}
+	});
+var $elm$parser$Parser$Advanced$loop = F2(
+	function (state, callback) {
+		return function (s) {
+			return A4($elm$parser$Parser$Advanced$loopHelp, false, state, callback, s);
+		};
+	});
+var $elm$parser$Parser$Advanced$map = F2(
+	function (func, _v0) {
+		var parse = _v0;
+		return function (s0) {
+			var _v1 = parse(s0);
+			if (!_v1.$) {
+				var p = _v1.a;
+				var a = _v1.b;
+				var s1 = _v1.c;
+				return A3(
+					$elm$parser$Parser$Advanced$Good,
+					p,
+					func(a),
+					s1);
+			} else {
+				var p = _v1.a;
+				var x = _v1.b;
+				return A2($elm$parser$Parser$Advanced$Bad, p, x);
+			}
+		};
+	});
+var $elm$parser$Parser$Advanced$Done = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$parser$Parser$Advanced$Loop = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$parser$Parser$Advanced$revAlways = F2(
+	function (_v0, b) {
+		return b;
+	});
+var $elm$parser$Parser$Advanced$skip = F2(
+	function (iParser, kParser) {
+		return A3($elm$parser$Parser$Advanced$map2, $elm$parser$Parser$Advanced$revAlways, iParser, kParser);
+	});
+var $elm$parser$Parser$Advanced$sequenceEndForbidden = F5(
+	function (ender, ws, parseItem, sep, revItems) {
+		var chompRest = function (item) {
+			return A5(
+				$elm$parser$Parser$Advanced$sequenceEndForbidden,
+				ender,
+				ws,
+				parseItem,
+				sep,
+				A2($elm$core$List$cons, item, revItems));
+		};
+		return A2(
+			$elm$parser$Parser$Advanced$skip,
+			ws,
+			$elm$parser$Parser$Advanced$oneOf(
+				_List_fromArray(
+					[
+						A2(
+						$elm$parser$Parser$Advanced$skip,
+						sep,
+						A2(
+							$elm$parser$Parser$Advanced$skip,
+							ws,
+							A2(
+								$elm$parser$Parser$Advanced$map,
+								function (item) {
+									return $elm$parser$Parser$Advanced$Loop(
+										A2($elm$core$List$cons, item, revItems));
+								},
+								parseItem))),
+						A2(
+						$elm$parser$Parser$Advanced$map,
+						function (_v0) {
+							return $elm$parser$Parser$Advanced$Done(
+								$elm$core$List$reverse(revItems));
+						},
+						ender)
+					])));
+	});
+var $elm$parser$Parser$Advanced$sequenceEndMandatory = F4(
+	function (ws, parseItem, sep, revItems) {
+		return $elm$parser$Parser$Advanced$oneOf(
+			_List_fromArray(
+				[
+					A2(
+					$elm$parser$Parser$Advanced$map,
+					function (item) {
+						return $elm$parser$Parser$Advanced$Loop(
+							A2($elm$core$List$cons, item, revItems));
+					},
+					A2(
+						$elm$parser$Parser$Advanced$ignorer,
+						parseItem,
+						A2(
+							$elm$parser$Parser$Advanced$ignorer,
+							ws,
+							A2($elm$parser$Parser$Advanced$ignorer, sep, ws)))),
+					A2(
+					$elm$parser$Parser$Advanced$map,
+					function (_v0) {
+						return $elm$parser$Parser$Advanced$Done(
+							$elm$core$List$reverse(revItems));
+					},
+					$elm$parser$Parser$Advanced$succeed(0))
+				]));
+	});
+var $elm$parser$Parser$Advanced$sequenceEndOptional = F5(
+	function (ender, ws, parseItem, sep, revItems) {
+		var parseEnd = A2(
+			$elm$parser$Parser$Advanced$map,
+			function (_v0) {
+				return $elm$parser$Parser$Advanced$Done(
+					$elm$core$List$reverse(revItems));
+			},
+			ender);
+		return A2(
+			$elm$parser$Parser$Advanced$skip,
+			ws,
+			$elm$parser$Parser$Advanced$oneOf(
+				_List_fromArray(
+					[
+						A2(
+						$elm$parser$Parser$Advanced$skip,
+						sep,
+						A2(
+							$elm$parser$Parser$Advanced$skip,
+							ws,
+							$elm$parser$Parser$Advanced$oneOf(
+								_List_fromArray(
+									[
+										A2(
+										$elm$parser$Parser$Advanced$map,
+										function (item) {
+											return $elm$parser$Parser$Advanced$Loop(
+												A2($elm$core$List$cons, item, revItems));
+										},
+										parseItem),
+										parseEnd
+									])))),
+						parseEnd
+					])));
+	});
+var $elm$parser$Parser$Advanced$sequenceEnd = F5(
+	function (ender, ws, parseItem, sep, trailing) {
+		var chompRest = function (item) {
+			switch (trailing) {
+				case 0:
+					return A2(
+						$elm$parser$Parser$Advanced$loop,
+						_List_fromArray(
+							[item]),
+						A4($elm$parser$Parser$Advanced$sequenceEndForbidden, ender, ws, parseItem, sep));
+				case 1:
+					return A2(
+						$elm$parser$Parser$Advanced$loop,
+						_List_fromArray(
+							[item]),
+						A4($elm$parser$Parser$Advanced$sequenceEndOptional, ender, ws, parseItem, sep));
+				default:
+					return A2(
+						$elm$parser$Parser$Advanced$ignorer,
+						A2(
+							$elm$parser$Parser$Advanced$skip,
+							ws,
+							A2(
+								$elm$parser$Parser$Advanced$skip,
+								sep,
+								A2(
+									$elm$parser$Parser$Advanced$skip,
+									ws,
+									A2(
+										$elm$parser$Parser$Advanced$loop,
+										_List_fromArray(
+											[item]),
+										A3($elm$parser$Parser$Advanced$sequenceEndMandatory, ws, parseItem, sep))))),
+						ender);
+			}
+		};
+		return $elm$parser$Parser$Advanced$oneOf(
+			_List_fromArray(
+				[
+					A2($elm$parser$Parser$Advanced$andThen, chompRest, parseItem),
+					A2(
+					$elm$parser$Parser$Advanced$map,
+					function (_v0) {
+						return _List_Nil;
+					},
+					ender)
+				]));
+	});
+var $elm$parser$Parser$Advanced$sequence = function (i) {
+	return A2(
+		$elm$parser$Parser$Advanced$skip,
+		$elm$parser$Parser$Advanced$token(i.cu),
+		A2(
+			$elm$parser$Parser$Advanced$skip,
+			i.ct,
+			A5(
+				$elm$parser$Parser$Advanced$sequenceEnd,
+				$elm$parser$Parser$Advanced$token(i.bW),
+				i.ct,
+				i.b5,
+				$elm$parser$Parser$Advanced$token(i.cs),
+				i.cz)));
+};
+var $elm$parser$Parser$Advanced$Forbidden = 0;
+var $elm$parser$Parser$Advanced$Mandatory = 2;
+var $elm$parser$Parser$Advanced$Optional = 1;
+var $elm$parser$Parser$toAdvancedTrailing = function (trailing) {
+	switch (trailing) {
+		case 0:
+			return 0;
+		case 1:
+			return 1;
+		default:
+			return 2;
+	}
+};
+var $elm$parser$Parser$Expecting = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$parser$Parser$toToken = function (str) {
+	return A2(
+		$elm$parser$Parser$Advanced$Token,
+		str,
+		$elm$parser$Parser$Expecting(str));
+};
+var $elm$parser$Parser$sequence = function (i) {
+	return $elm$parser$Parser$Advanced$sequence(
+		{
+			bW: $elm$parser$Parser$toToken(i.bW),
+			b5: i.b5,
+			cs: $elm$parser$Parser$toToken(i.cs),
+			ct: i.ct,
+			cu: $elm$parser$Parser$toToken(i.cu),
+			cz: $elm$parser$Parser$toAdvancedTrailing(i.cz)
+		});
+};
+function $author$project$Days$Day13$cyclic$packageParser() {
+	return $elm$parser$Parser$oneOf(
+		_List_fromArray(
+			[
+				$author$project$Days$Day13$packageNumberParser,
+				$author$project$Days$Day13$cyclic$packageListParser()
+			]));
+}
+function $author$project$Days$Day13$cyclic$packageListParser() {
+	return A2(
+		$elm$parser$Parser$keeper,
+		$elm$parser$Parser$succeed(
+			function (list) {
+				return $author$project$Days$Day13$PackageList(list);
+			}),
+		$elm$parser$Parser$sequence(
+			{
+				bW: ']',
+				b5: $elm$parser$Parser$lazy(
+					function (_v0) {
+						return $author$project$Days$Day13$cyclic$packageParser();
+					}),
+				cs: ',',
+				ct: $elm$parser$Parser$spaces,
+				cu: '[',
+				cz: 1
+			}));
+}
+var $author$project$Days$Day13$packageParser = $author$project$Days$Day13$cyclic$packageParser();
+$author$project$Days$Day13$cyclic$packageParser = function () {
+	return $author$project$Days$Day13$packageParser;
+};
+var $author$project$Days$Day13$packageListParser = $author$project$Days$Day13$cyclic$packageListParser();
+$author$project$Days$Day13$cyclic$packageListParser = function () {
+	return $author$project$Days$Day13$packageListParser;
+};
+var $author$project$Days$Day13$parsePackage = function (input) {
+	return A2(
+		$elm$core$Result$mapError,
+		function (_v0) {
+			return 'wrong line';
+		},
+		A2($elm$parser$Parser$run, $author$project$Days$Day13$packageParser, input));
+};
+var $author$project$Days$Day13$resultToString = function (r) {
+	if (!r.$) {
+		var s = r.a;
+		return s;
+	} else {
+		var s = r.a;
+		return s;
+	}
+};
+var $author$project$Days$Day13$runPart1 = function (input) {
+	return $author$project$Days$Day13$resultToString(
+		A2(
+			$elm$core$Result$andThen,
+			A2($elm$core$Basics$composeR, $elm$core$String$fromInt, $elm$core$Result$Ok),
+			A3(
+				$elm$core$List$foldl,
+				F2(
+					function (_v0, acc) {
+						var idx = _v0.a;
+						var packageLines = _v0.b;
+						var _v1 = $elm$core$String$lines(packageLines);
+						if ((_v1.b && _v1.b.b) && (!_v1.b.b.b)) {
+							var pkg1Line = _v1.a;
+							var _v2 = _v1.b;
+							var pkg2Line = _v2.a;
+							var _v3 = A3(
+								$elm$core$Tuple$mapBoth,
+								$author$project$Days$Day13$parsePackage,
+								$author$project$Days$Day13$parsePackage,
+								_Utils_Tuple2(pkg1Line, pkg2Line));
+							var pkg1 = _v3.a;
+							var pkg2 = _v3.b;
+							var _v4 = A3($elm$core$Result$map2, $author$project$Days$Day13$cmdPackage, pkg1, pkg2);
+							if ((!_v4.$) && (!_v4.a)) {
+								var _v5 = _v4.a;
+								return A2(
+									$elm$core$Result$andThen,
+									function (lastacc) {
+										return $elm$core$Result$Ok((lastacc + idx) + 1);
+									},
+									acc);
+							} else {
+								return acc;
+							}
+						} else {
+							return $elm$core$Result$Err('Package Pair has not two packages');
+						}
+					}),
+				$elm$core$Result$Ok(0),
+				A2(
+					$elm$core$List$indexedMap,
+					$elm$core$Tuple$pair,
+					A2($elm$core$String$split, '\n\n', input)))));
+};
+var $author$project$Days$Day13$divider1 = $author$project$Days$Day13$PackageList(
+	_List_fromArray(
+		[
+			$author$project$Days$Day13$PackageList(
+			_List_fromArray(
+				[
+					$author$project$Days$Day13$PackageNumber(2)
+				]))
+		]));
+var $author$project$Days$Day13$divider2 = $author$project$Days$Day13$PackageList(
+	_List_fromArray(
+		[
+			$author$project$Days$Day13$PackageList(
+			_List_fromArray(
+				[
+					$author$project$Days$Day13$PackageNumber(6)
+				]))
+		]));
+var $author$project$Days$Day13$addDividerPackages = function (list) {
+	return A2(
+		$elm$core$List$cons,
+		$author$project$Days$Day13$divider1,
+		A2($elm$core$List$cons, $author$project$Days$Day13$divider2, list));
+};
+var $author$project$Days$Day13$multiply = function (list) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$mul, 1, list);
+};
+var $author$project$Days$Day13$findAndMultiplyDividerPackages = function (list) {
+	return $author$project$Days$Day13$multiply(
+		A2(
+			$elm$core$List$filterMap,
+			function (_v0) {
+				var idx = _v0.a;
+				var pkg = _v0.b;
+				return (_Utils_eq(pkg, $author$project$Days$Day13$divider1) || _Utils_eq(pkg, $author$project$Days$Day13$divider2)) ? $elm$core$Maybe$Just(idx + 1) : $elm$core$Maybe$Nothing;
+			},
+			A2($elm$core$List$indexedMap, $elm$core$Tuple$pair, list)));
+};
+var $elm$core$List$sortWith = _List_sortWith;
+var $author$project$Days$Day13$runPart2 = function (input) {
+	return $elm$core$String$fromInt(
+		$author$project$Days$Day13$findAndMultiplyDividerPackages(
+			A2(
+				$elm$core$List$sortWith,
+				$author$project$Days$Day13$cmdPackage,
+				$author$project$Days$Day13$addDividerPackages(
+					A2(
+						$elm$core$List$filterMap,
+						$elm$core$Result$toMaybe,
+						A2(
+							$elm$core$List$map,
+							$author$project$Days$Day13$parsePackage,
+							A2(
+								$elm$core$List$filter,
+								A2($elm$core$Basics$composeR, $elm$core$String$isEmpty, $elm$core$Basics$not),
+								$elm$core$String$lines(input))))))));
+};
+var $author$project$Days$Day13$solution = function (input) {
+	return _Utils_Tuple2(
+		$author$project$Days$Day13$runPart1(input),
+		$author$project$Days$Day13$runPart2(input));
 };
 var $author$project$Main$days = $elm$core$Array$fromList(
 	_List_fromArray(
@@ -8909,7 +9511,10 @@ var $author$project$Main$days = $elm$core$Array$fromList(
 			_Utils_Tuple2($author$project$Days$Day11$puzzleInput, $author$project$Days$Day11$solution)),
 			_Utils_Tuple2(
 			'Day 12',
-			_Utils_Tuple2($author$project$Days$Day12$puzzleInput, $author$project$Days$Day12$solution))
+			_Utils_Tuple2($author$project$Days$Day12$puzzleInput, $author$project$Days$Day12$solution)),
+			_Utils_Tuple2(
+			'Day 13',
+			_Utils_Tuple2($author$project$Days$Day13$puzzleInput, $author$project$Days$Day13$solution))
 		]));
 var $author$project$Main$dayFromIndex = function (index) {
 	return A2(
@@ -9434,7 +10039,7 @@ var $author$project$Main$view = function (model) {
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
-	{b8: $author$project$Main$ShowList, cB: $author$project$Main$update, cC: $author$project$Main$view});
+	{b3: $author$project$Main$ShowList, cB: $author$project$Main$update, cC: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
 
