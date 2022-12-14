@@ -15,6 +15,7 @@ import Days.Day10
 import Days.Day11
 import Days.Day12
 import Days.Day13
+import Days.Day14
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -64,6 +65,7 @@ days =
         , ( "Day 11", ( Days.Day11.puzzleInput, Days.Day11.solution ) )
         , ( "Day 12", ( Days.Day12.puzzleInput, Days.Day12.solution ) )
         , ( "Day 13", ( Days.Day13.puzzleInput, Days.Day13.solution ) )
+        , ( "Day 14", ( Days.Day14.puzzleInput, Days.Day14.solution ) )
         ]
 
 

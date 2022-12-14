@@ -1,4 +1,4 @@
-module Days.Day13 exposing (parsePackage, puzzleInput, solution, testSolution)
+module Days.Day13 exposing (puzzleInput, solution, testSolution)
 
 import Expect
 import Parser exposing ((|.), (|=), Parser)
