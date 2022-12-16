@@ -1,9 +1,8 @@
 module Days.Day16 exposing (puzzleInput, solution, testSolution)
 
-import Char exposing (isAlpha)
 import Dict exposing (Dict)
 import Expect
-import Parser exposing ((|.), (|=), Parser, succeed)
+import Parser exposing ((|.), (|=), Parser)
 import Set exposing (Set)
 import Test
 
@@ -18,7 +17,7 @@ solution input =
 testSolution : Test.Test
 testSolution =
     Test.test "test input" <|
-        \_ -> solution testInput |> Expect.equal ( "1651", "TODO" )
+        \_ -> solution testInput |> Expect.equal ( "1651", "1707" )
 
 
 type alias Context =
@@ -35,13 +34,6 @@ valveRate context str =
     Dict.get str context.valves
         |> Maybe.map (\(Valve rate _) -> rate)
         |> Maybe.withDefault 0
-
-
-nextValves : Context -> String -> List String
-nextValves context str =
-    Dict.get str context.valves
-        |> Maybe.map (\(Valve _ next) -> next)
-        |> Maybe.withDefault []
 
 
 
@@ -75,8 +67,8 @@ valueParser =
 valveNameParser : Parser String
 valveNameParser =
     Parser.getChompedString <|
-        succeed ()
-            |. Parser.chompWhile isAlpha
+        Parser.succeed ()
+            |. Parser.chompWhile Char.isAlpha
 
 
 listValveNameParser : Parser (List String)
@@ -114,69 +106,137 @@ run1 : String -> String
 run1 input =
     case Parser.run contextParser input of
         Ok context ->
-            walk context
+            Dict.filter (\_ (Valve v _) -> v /= 0) context.valves
+                |> Dict.keys
+                |> sortValves context "AA"
+                |> maxRoutePart context
                 |> String.fromInt
 
         Err _ ->
             "Parsing Error"
 
 
-type alias Step =
-    ( Set String, String )
+maxRoutePart : Context -> List String -> Int
+maxRoutePart context list =
+    case list of
+        _ :: rest ->
+            max
+                (walkRoute context list)
+                (maxRoutePart context rest)
+
+        [] ->
+            0
 
 
-walk : Context -> Int
-walk context =
-    walkHelper context 30 ( Set.empty, "AA" ) ( Set.empty, "AA" )
+walkRoute : Context -> List String -> Int
+walkRoute context route =
+    route
+        |> List.foldl
+            (\key ( acc, ( from, atRound ) ) ->
+                let
+                    rate =
+                        valveRate context key
+
+                    rounds =
+                        shortestDistance context from key + 1
+
+                    roundsLeft =
+                        max 0 (atRound - rounds)
+                in
+                ( (rate * roundsLeft) :: acc, ( key, roundsLeft ) )
+            )
+            ( [], ( "AA", 30 ) )
+        |> Tuple.first
+        |> List.sum
 
 
-walkHelper : Context -> Int -> Step -> Step -> Int
-walkHelper context depth lastStep (( openValves, _ ) as currentStep) =
+sortValves : Context -> String -> List String -> List String
+sortValves context start valves =
     let
-        next =
-            nextSteps context lastStep currentStep
+        sorted =
+            List.sortWith (cmpValves context start) valves
+                |> List.reverse
     in
-    if depth == 0 || List.length next == 0 then
-        0
+    case sorted of
+        first :: rest ->
+            first :: sortValves context first rest
+
+        a ->
+            a
+
+
+cmpValves : Context -> String -> String -> String -> Order
+cmpValves context start a b =
+    let
+        va =
+            valveRate context a
+
+        vb =
+            valveRate context b
+
+        distanceAB =
+            shortestDistance context a b + 1
+
+        distanceToA =
+            shortestDistance context start a + 1
+
+        distanceToB =
+            shortestDistance context start b + 1
+    in
+    compare
+        (va * (distanceAB + distanceToB - distanceToA))
+        (vb * (distanceAB + distanceToA - distanceToB))
+
+
+shortestDistance : Context -> String -> String -> Int
+shortestDistance context a b =
+    breathFirstSearch context.valves b (Set.singleton a) 0
+
+
+breathFirstSearch : Dict String Valve -> String -> Set String -> Int -> Int
+breathFirstSearch valves stopKey queue depth =
+    if Set.member stopKey queue then
+        depth
 
     else
-        List.foldl
-            (\(( nextOpenValves, _ ) as nextStep) acc ->
-                let
-                    value =
-                        Set.diff nextOpenValves openValves
-                            |> Set.map (valveRate context)
-                            |> Set.foldl (+) 0
-                            |> (*) (depth - 1)
-                in
-                walkHelper context (depth - 1) currentStep nextStep
-                    |> (+) value
-                    |> max acc
-            )
-            0
-            next
+        let
+            valvesWithoutPositions =
+                dictRemoveMany queue valves
+
+            possibleNext : String -> Set String
+            possibleNext key =
+                case Dict.get key valves of
+                    Nothing ->
+                        Set.empty
+
+                    Just (Valve _ list) ->
+                        let
+                            next =
+                                Set.fromList list
+
+                            unvisited =
+                                Dict.keys valves |> Set.fromList
+                        in
+                        Set.intersect next unvisited
+
+            nextPositions : Set String
+            nextPositions =
+                Set.foldl
+                    (\key acc ->
+                        possibleNext key |> Set.union acc
+                    )
+                    Set.empty
+                    queue
+        in
+        breathFirstSearch valvesWithoutPositions stopKey nextPositions (depth + 1)
 
 
-nextSteps : Context -> Step -> Step -> List Step
-nextSteps context lastStep ( openValves, currentPos ) =
-    let
-        openSelf =
-            if valveRate context currentPos > 0 && (not <| Set.member currentPos openValves) then
-                [ ( Set.insert currentPos openValves, currentPos ) ]
-
-            else
-                []
-    in
-    nextValves context currentPos
-        |> List.filterMap
-            (\next ->
-                if lastStep == ( openValves, next ) then
-                    Nothing
-
-                else
-                    Just ( openValves, next )
-            )
-        |> (++) openSelf
+dictRemoveMany : Set comparable -> Dict comparable a -> Dict comparable a
+dictRemoveMany indexes dict =
+    Set.foldl
+        Dict.remove
+        dict
+        indexes
 
 
 testInput : String
