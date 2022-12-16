@@ -143,24 +143,24 @@ scorePos grid pos =
             0
 
         Just value ->
-            walkUntilHigherOrEqual grid value (toLeft pos) toLeft
-                * walkUntilHigherOrEqual grid value (toRight pos) toRight
-                * walkUntilHigherOrEqual grid value (toTop pos) toTop
-                * walkUntilHigherOrEqual grid value (toBottom pos) toBottom
+            walkUntilHigherOrEqual grid value (toLeft pos) toLeft 0
+                * walkUntilHigherOrEqual grid value (toRight pos) toRight 0
+                * walkUntilHigherOrEqual grid value (toTop pos) toTop 0
+                * walkUntilHigherOrEqual grid value (toBottom pos) toBottom 0
 
 
-walkUntilHigherOrEqual : Grid -> Char -> Position -> Direction -> Int
-walkUntilHigherOrEqual grid value pos nextPos =
+walkUntilHigherOrEqual : Grid -> Char -> Position -> Direction -> Int -> Int
+walkUntilHigherOrEqual grid value pos nextPos depth =
     case Dict.get pos grid of
         Nothing ->
-            0
+            depth
 
         Just otherValue ->
             if otherValue >= value then
-                1
+                depth +1
 
             else
-                1 + walkUntilHigherOrEqual grid value (nextPos pos) nextPos
+                 walkUntilHigherOrEqual grid value (nextPos pos) nextPos (depth+1)
 
 
 testInput : String

@@ -79,7 +79,7 @@ solution2 =
 isPartlyIntersect : ( ( Int, Int ), ( Int, Int ) ) -> Bool
 isPartlyIntersect ( first, second ) =
     let
-        firstInSecond ( a, b ) ( c, d ) =
+        firstInSecond ( a, b ) ( c, _ ) =
             a <= c && b >= c
     in
     firstInSecond first second || firstInSecond second first

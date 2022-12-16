@@ -160,15 +160,17 @@ processMonkeyItems worryReduction idx monkeys =
 
                             else
                                 monkey.falseTo
+
+                        newMonkeys =
+                            monkeys
+                                |> arrayUpdate
+                                    toMonkey
+                                    (\m -> { m | items = newWarryLevel :: m.items })
+                                |> arrayUpdate
+                                    idx
+                                    (\m -> { m | items = rest })
                     in
-                    monkeys
-                        |> arrayUpdate
-                            toMonkey
-                            (\m -> { m | items = newWarryLevel :: m.items })
-                        |> arrayUpdate
-                            idx
-                            (\m -> { m | items = rest })
-                        |> processMonkeyItems worryReduction idx
+                    processMonkeyItems worryReduction idx newMonkeys
 
 
 reduceWorry : WorryReduction -> Array Monkey -> Int -> Int

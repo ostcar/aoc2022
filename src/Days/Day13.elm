@@ -1,7 +1,7 @@
 module Days.Day13 exposing (puzzleInput, solution, testSolution)
 
 import Expect
-import Parser exposing ((|.), (|=), Parser)
+import Parser exposing ((|=), Parser)
 import Test
 
 
@@ -32,7 +32,7 @@ runPart1 input =
                         in
                         case Result.map2 cmdPackage pkg1 pkg2 of
                             Ok LT ->
-                                acc |> Result.andThen (\lastacc -> lastacc + idx + 1 |> Ok)
+                                acc |> Result.map (\lastacc -> lastacc + idx + 1 )
 
                             _ ->
                                 acc

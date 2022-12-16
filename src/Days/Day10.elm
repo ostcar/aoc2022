@@ -1,4 +1,4 @@
-module Days.Day10 exposing (puzzleInput, solution, testInput, testSolution)
+module Days.Day10 exposing (puzzleInput, solution, testSolution)
 
 import Expect
 import Parser exposing ((|.), (|=))
@@ -51,9 +51,15 @@ run2 input =
         |> List.foldl
             (\( idx, instr ) ( reg, output ) ->
                 let
-                    add40 = if idx > 0 && modBy 40 (idx+1)  == 0 then 40 else 0
+                    add40 =
+                        if idx > 0 && modBy 40 (idx + 1) == 0 then
+                            40
+
+                        else
+                            0
+
                     newReg =
-                        (callInstruction instr reg) + add40
+                        callInstruction instr reg + add40
                 in
                 if idx == reg || idx == reg + 1 || idx == reg - 1 then
                     ( newReg, output ++ "#" )
@@ -67,8 +73,6 @@ run2 input =
         |> listWithNElements 40
         |> List.map String.fromList
         |> String.join "\n"
-
-
 
 
 combine20AndThen40 : List Instruction -> List Instruction

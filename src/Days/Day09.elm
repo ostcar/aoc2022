@@ -1,4 +1,4 @@
-module Days.Day09 exposing (frameCount, puzzleInput, run, solution, testSolution)
+module Days.Day09 exposing (puzzleInput, run, solution, testSolution)
 
 import Dict exposing (Dict)
 import Expect
@@ -79,7 +79,9 @@ dictFromListIfNothing =
 printRope : Rope -> String
 printRope rope =
     let
-        addSize = 5
+        addSize =
+            5
+
         grid =
             ropeToDict rope
 
@@ -190,12 +192,6 @@ parseInput input =
             []
 
 
-frameCount : String -> Int
-frameCount input =
-    parseInput input
-        |> List.length
-
-
 tailPositions : Rope -> List Direction -> Set Position
 tailPositions rope directions =
     let
@@ -245,14 +241,15 @@ moveTail ( headX, headY ) (( tailX, tailY ) as tail) =
 
         diffY =
             headY - tailY
-
-        vecX =
-            diffX // abs diffX
-
-        vecY =
-            diffY // abs diffY
     in
     if abs diffX > 1 || abs diffY > 1 then
+        let
+            vecX =
+                diffX // abs diffX
+
+            vecY =
+                diffY // abs diffY
+        in
         ( tailX + vecX, tailY + vecY )
 
     else

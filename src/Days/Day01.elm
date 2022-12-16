@@ -1,10 +1,10 @@
-module Days.Day01 exposing (solution, puzzleInput)
+module Days.Day01 exposing (puzzleInput, solution)
 
 
-solution : String -> (String,String)
+solution : String -> ( String, String )
 solution input =
-    ( (solution1 input)
-    , (solution2 input)
+    ( solution1 input
+    , solution2 input
     )
 
 
@@ -61,7 +61,7 @@ parseInput input =
 stringToIntOrEmtpy : String -> IntOrEmpty
 stringToIntOrEmtpy input =
     String.toInt input
-        |> Maybe.andThen (\i -> Just (Got i))
+        |> Maybe.map (\i -> Got i)
         |> Maybe.withDefault Empty
 
 

@@ -1,6 +1,4 @@
-module Days.Day16 exposing (Context, Valve(..), contextParser, listParser, listValveNameParser, puzzleInput, run1, solution, testInput, testSolution, valueParser, valveNameParser)
-
--- (puzzleInput, solution, testSolution)
+module Days.Day16 exposing (puzzleInput, solution, testSolution)
 
 import Char exposing (isAlpha)
 import Dict exposing (Dict)
@@ -35,14 +33,14 @@ type Valve
 valveRate : Context -> String -> Int
 valveRate context str =
     Dict.get str context.valves
-        |> Maybe.andThen (\(Valve rate _) -> Just rate)
+        |> Maybe.map (\(Valve rate _) -> rate)
         |> Maybe.withDefault 0
 
 
 nextValves : Context -> String -> List String
 nextValves context str =
     Dict.get str context.valves
-        |> Maybe.andThen (\(Valve _ next) -> Just next)
+        |> Maybe.map (\(Valve _ next) -> next)
         |> Maybe.withDefault []
 
 
@@ -129,11 +127,11 @@ type alias Step =
 
 walk : Context -> Int
 walk context =
-    walkHelper context 30 ( Set.empty, "AA" ) ( Set.empty, "AA" ) [ ( Set.empty, "AA" ) ]
+    walkHelper context 30 ( Set.empty, "AA" ) ( Set.empty, "AA" )
 
 
-walkHelper : Context -> Int -> Step -> Step -> List Step -> Int
-walkHelper context depth lastStep (( openValves, _ ) as currentStep) path =
+walkHelper : Context -> Int -> Step -> Step -> Int
+walkHelper context depth lastStep (( openValves, _ ) as currentStep) =
     let
         next =
             nextSteps context lastStep currentStep
@@ -151,7 +149,7 @@ walkHelper context depth lastStep (( openValves, _ ) as currentStep) path =
                             |> Set.foldl (+) 0
                             |> (*) (depth - 1)
                 in
-                walkHelper context (depth - 1) currentStep nextStep (nextStep :: path)
+                walkHelper context (depth - 1) currentStep nextStep
                     |> (+) value
                     |> max acc
             )

@@ -40,7 +40,7 @@ type CDArgument
 
 
 type Output
-    = OutputDir String
+    = OutputDir
     | OutputFile Int String
 
 
@@ -86,10 +86,10 @@ parserOutput : Parser TerminalLine
 parserOutput =
     Parser.succeed (\output -> TerminalLineOutput output)
         |= Parser.oneOf
-            [ Parser.succeed (\name -> OutputDir name)
+            [ Parser.succeed OutputDir
                 |. Parser.keyword "dir"
                 |. Parser.spaces
-                |= parseUntilNewline
+                |. parseUntilNewline
             , Parser.succeed (\size name -> OutputFile size name)
                 |= Parser.int
                 |. Parser.spaces
@@ -131,13 +131,13 @@ testParseInput =
                     Ok
                         [ TerminalLineCommand (CommandCD CDArgumentRoot)
                         , TerminalLineCommand CommandLS
-                        , TerminalLineOutput (OutputDir "a")
+                        , TerminalLineOutput OutputDir
                         , TerminalLineOutput (OutputFile 14848514 "b.txt")
                         , TerminalLineOutput (OutputFile 8504156 "c.dat")
-                        , TerminalLineOutput (OutputDir "d")
+                        , TerminalLineOutput OutputDir
                         , TerminalLineCommand (CommandCD (CDArgumentPath "a"))
                         , TerminalLineCommand CommandLS
-                        , TerminalLineOutput (OutputDir "e")
+                        , TerminalLineOutput OutputDir
                         , TerminalLineOutput (OutputFile 29116 "f")
                         , TerminalLineOutput (OutputFile 2557 "g")
                         , TerminalLineOutput (OutputFile 62596 "h.lst")
@@ -195,7 +195,7 @@ terminalLineToFileTree list =
 
                 TerminalLineOutput output ->
                     case output of
-                        OutputDir _ ->
+                        OutputDir ->
                             ( pwd, fileTree )
 
                         OutputFile size name ->

@@ -1,2 +1,6 @@
 /.task
 /elm-stuff
+/node_modules
+/review
+/package-lock.json
+/package.json

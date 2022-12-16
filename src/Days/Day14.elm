@@ -95,9 +95,11 @@ vectorsToGrid : List Position -> Grid -> Grid
 vectorsToGrid list grid =
     case list of
         first :: second :: rest ->
-            grid
-                |> addFromTo first second
-                |> vectorsToGrid (second :: rest)
+            let
+                newGrid =
+                    addFromTo first second grid
+            in
+            vectorsToGrid (second :: rest) newGrid
 
         _ ->
             grid

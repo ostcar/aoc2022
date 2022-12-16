@@ -69,8 +69,7 @@ findFirstNUnique n input =
         input
 
     else
-        String.dropLeft 1 input
-            |> findFirstNUnique n
+        findFirstNUnique n (String.dropLeft 1 input)
 
 
 firstNUnique : Int -> String -> Bool
