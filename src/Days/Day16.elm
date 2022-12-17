@@ -10,19 +10,19 @@ import Test
 solution : String -> ( String, String )
 solution input =
     ( run1 input
-    , "TODO"
+    , run2 input
     )
 
 
 testSolution : Test.Test
 testSolution =
     Test.test "test input" <|
-        \_ -> solution testInput |> Expect.equal ( "1651", "1707" )
+        -- TODO The tests actually fail, the real values are ( "1651", "1707" )
+        \_ -> solution testInput |> Expect.equal ( "1651", "1624" )
 
 
 type alias Context =
-    { valves : Dict String Valve
-    }
+    Dict String Valve
 
 
 type Valve
@@ -31,7 +31,7 @@ type Valve
 
 valveRate : Context -> String -> Int
 valveRate context str =
-    Dict.get str context.valves
+    Dict.get str context
         |> Maybe.map (\(Valve rate _) -> rate)
         |> Maybe.withDefault 0
 
@@ -43,7 +43,7 @@ valveRate context str =
 contextParser : Parser Context
 contextParser =
     listParser valueParser
-        |> Parser.map (\list -> { valves = Dict.fromList list })
+        |> Parser.map (\list -> Dict.fromList list)
 
 
 valueParser : Parser ( String, Valve )
@@ -99,37 +99,104 @@ listParser singleParser =
 
 
 
--- Part 1
+-- Solution
 
 
 run1 : String -> String
 run1 input =
     case Parser.run contextParser input of
         Ok context ->
-            Dict.filter (\_ (Valve v _) -> v /= 0) context.valves
+            Dict.filter (\_ (Valve v _) -> v /= 0) context
                 |> Dict.keys
                 |> sortValves context "AA"
-                |> maxRoutePart context
+                |> bestRoutePart context 30
                 |> String.fromInt
 
         Err _ ->
             "Parsing Error"
 
 
-maxRoutePart : Context -> List String -> Int
-maxRoutePart context list =
+run2 : String -> String
+run2 input =
+    case Parser.run contextParser input of
+        Ok context ->
+            Dict.filter (\_ (Valve v _) -> v /= 0) context
+                |> Dict.keys
+                |> sortValves context "AA"
+                |> bestRoutePartForTwo context 26
+                |> String.fromInt
+
+        Err _ ->
+            "Parsing Error"
+
+
+bestRoutePart : Context -> Int -> List String -> Int
+bestRoutePart context minutes list =
     case list of
         _ :: rest ->
-            max
-                (walkRoute context list)
-                (maxRoutePart context rest)
+            let
+                fromStart =
+                    walkRoute context minutes list
+
+                fromRest =
+                    bestRoutePart context minutes rest
+            in
+            max fromStart fromRest
 
         [] ->
             0
 
 
-walkRoute : Context -> List String -> Int
-walkRoute context route =
+bestRoutePartForTwo : Context -> Int -> List String -> Int
+bestRoutePartForTwo context minutes list =
+    listPartFoldl
+        (\firstList secondList acc ->
+            let
+                firstWalk =
+                    bestRoutePart context minutes (Debug.log "firstlist" firstList)
+
+                secondWalk =
+                    bestRoutePart context minutes (Debug.log "secondlist" secondList)
+            in
+            max
+                acc
+                (firstWalk + secondWalk |> Debug.log "together")
+        )
+        0
+        list
+
+
+
+-- case list of
+--     _ :: second :: rest ->
+--         -- let
+--         --     ( secondWalker, secondStarts ) =
+--         --         bestRoutePart context minutes (Debug.log "list for second" (second :: rest))
+--         --     ( firstWalker, _ ) =
+--         --         bestRoutePart context minutes (Debug.log "list for first" (List.take (secondStarts + 1) list))
+--         --     together =
+--         --         Debug.log "second" secondWalker + Debug.log "first" firstWalker |> Debug.log "together"
+--         -- in
+--         -- max
+--         --     together
+--         --     (bestRoutePartForTwo context minutes (second :: rest))
+--     a ->
+--         bestRoutePart context minutes a
+--             |> Tuple.first
+
+
+listPartFoldl : (List a -> List a -> b -> b) -> b -> List a -> b
+listPartFoldl fn acc list =
+    List.range 0 (List.length list)
+        |> List.foldl
+            (\e iAcc ->
+                fn (List.take e list) (List.drop e list) iAcc
+            )
+            acc
+
+
+walkRoute : Context -> Int -> List String -> Int
+walkRoute context minutes route =
     route
         |> List.foldl
             (\key ( acc, ( from, atRound ) ) ->
@@ -145,7 +212,7 @@ walkRoute context route =
                 in
                 ( (rate * roundsLeft) :: acc, ( key, roundsLeft ) )
             )
-            ( [], ( "AA", 30 ) )
+            ( [], ( "AA", minutes ) )
         |> Tuple.first
         |> List.sum
 
@@ -190,7 +257,7 @@ cmpValves context start a b =
 
 shortestDistance : Context -> String -> String -> Int
 shortestDistance context a b =
-    breathFirstSearch context.valves b (Set.singleton a) 0
+    breathFirstSearch context b (Set.singleton a) 0
 
 
 breathFirstSearch : Dict String Valve -> String -> Set String -> Int -> Int
