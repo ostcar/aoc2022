@@ -153,36 +153,17 @@ bestRoutePartForTwo context minutes list =
         (\firstList secondList acc ->
             let
                 firstWalk =
-                    bestRoutePart context minutes (Debug.log "firstlist" firstList)
+                    bestRoutePart context minutes firstList
 
                 secondWalk =
-                    bestRoutePart context minutes (Debug.log "secondlist" secondList)
+                    bestRoutePart context minutes secondList
             in
             max
                 acc
-                (firstWalk + secondWalk |> Debug.log "together")
+                (firstWalk + secondWalk)
         )
         0
         list
-
-
-
--- case list of
---     _ :: second :: rest ->
---         -- let
---         --     ( secondWalker, secondStarts ) =
---         --         bestRoutePart context minutes (Debug.log "list for second" (second :: rest))
---         --     ( firstWalker, _ ) =
---         --         bestRoutePart context minutes (Debug.log "list for first" (List.take (secondStarts + 1) list))
---         --     together =
---         --         Debug.log "second" secondWalker + Debug.log "first" firstWalker |> Debug.log "together"
---         -- in
---         -- max
---         --     together
---         --     (bestRoutePartForTwo context minutes (second :: rest))
---     a ->
---         bestRoutePart context minutes a
---             |> Tuple.first
 
 
 listPartFoldl : (List a -> List a -> b -> b) -> b -> List a -> b
