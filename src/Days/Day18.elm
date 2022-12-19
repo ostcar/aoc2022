@@ -1,4 +1,4 @@
-module Days.Day18 exposing (parsePoint, parserPointList, puzzleInput, run1, solution, testInput, testSolution)
+module Days.Day18 exposing (puzzleInput, solution, testSolution)
 
 import Expect
 import Parser exposing ((|.), (|=), Parser)
@@ -11,7 +11,7 @@ solution input =
     case Parser.run parserPointList input of
         Ok points ->
             ( run1 points |> String.fromInt
-            , "TODO"
+            , run2 points |> String.fromInt
             )
 
         Err _ ->
@@ -24,6 +24,11 @@ testSolution =
         \_ -> solution testInput |> Expect.equal ( "64", "58" )
 
 
+{-| Point is (x,y,z).
+
+It has to be comparable. So {x:Int,y:Int,z:Int} is not possible in elm :(
+
+-}
 type alias Point =
     ( Int, Int, Int )
 
@@ -62,6 +67,12 @@ run1 points =
     surfaces points
 
 
+run2 : Set Point -> Int
+run2 points =
+    addClosedPoints points
+        |> surfaces
+
+
 maxDim : Set Point -> Int
 maxDim points =
     Set.foldl
@@ -72,40 +83,27 @@ maxDim points =
         points
 
 
-minDim : Set Point -> Int
-minDim points =
-    Set.foldl
-        (\( a, b, c ) acc ->
-            min acc (min a (min b c))
-        )
-        0
-        points
-
-
 surfaces : Set Point -> Int
 surfaces points =
     let
         max =
             maxDim points
-
-        min =
-            minDim points
     in
     List.foldl
         (\a accA ->
             List.foldl
                 (\b accB ->
                     accB
-                        + (Set.filter (\( x, y, _ ) -> a == x && b == y) points |> Set.map tupleThird |> Set.toList |> countSurface)
-                        + (Set.filter (\( x, _, z ) -> a == x && b == z) points |> Set.map tupleSecond |> Set.toList |> countSurface)
                         + (Set.filter (\( _, y, z ) -> a == y && b == z) points |> Set.map tupleFirst |> Set.toList |> countSurface)
+                        + (Set.filter (\( x, _, z ) -> a == x && b == z) points |> Set.map tupleSecond |> Set.toList |> countSurface)
+                        + (Set.filter (\( x, y, _ ) -> a == x && b == y) points |> Set.map tupleThird |> Set.toList |> countSurface)
                 )
                 0
-                (List.range min max)
+                (List.range 0 max)
                 |> (+) accA
         )
         0
-        (List.range min max)
+        (List.range 0 max)
 
 
 tupleFirst : ( a, b, c ) -> a
@@ -138,6 +136,15 @@ countSurfaceHelper list acc =
             countSurfaceHelper (afterFirstGab a) (acc + 2)
 
 
+{-| afterFirstGab expects a sorted list. Removes all items before the first gab.
+
+A Gab is if the numbers are not ascendant.
+
+afterFirstGab [1,2,3] == []
+afterFirstGab [1,3,4] == [3,4]
+afterFirstGab [1,3,4,7] == [3,4,7]
+
+-}
 afterFirstGab : List Int -> List Int
 afterFirstGab list =
     case list of
@@ -150,6 +157,90 @@ afterFirstGab list =
 
         _ ->
             []
+
+
+addClosedPoints : Set Point -> Set Point
+addClosedPoints points =
+    let
+        openPoint =
+            openCaves points
+    in
+    forPointsInCube
+        (\point acc ->
+            if isInClosedCave points openPoint point then
+                Set.insert point acc
+
+            else
+                acc
+        )
+        points
+        (maxDim points)
+
+
+forPointsInCube : (Point -> a -> a) -> a -> Int -> a
+forPointsInCube fn acc max =
+    List.foldl
+        (\x accX ->
+            List.foldl
+                (\y accY ->
+                    List.foldl
+                        (\z accZ ->
+                            fn ( x, y, z ) accZ
+                        )
+                        accY
+                        (List.range 0 max)
+                )
+                accX
+                (List.range 0 max)
+        )
+        acc
+        (List.range 0 max)
+
+
+isInClosedCave : Set Point -> Set Point -> Point -> Bool
+isInClosedCave points openPoint testPoint =
+    not <| Set.member testPoint points || Set.member testPoint openPoint
+
+
+openCaves : Set Point -> Set Point
+openCaves points =
+    openCavesHelper (maxDim points) points Set.empty (Set.singleton ( 0, 0, 0 ))
+
+
+openCavesHelper : Int -> Set Point -> Set Point -> Set Point -> Set Point
+openCavesHelper max points visited queue =
+    if queue == Set.empty then
+        visited
+
+    else
+        let
+            newQueue =
+                Set.diff
+                    (Set.foldl
+                        (\( x, y, z ) acc ->
+                            Set.union acc
+                                (Set.fromList
+                                    [ ( x + 1, y, z )
+                                    , ( x - 1, y, z )
+                                    , ( x, y + 1, z )
+                                    , ( x, y - 1, z )
+                                    , ( x, y, z + 1 )
+                                    , ( x, y, z - 1 )
+                                    ]
+                                    |> Set.filter (filterInBorder max)
+                                )
+                        )
+                        Set.empty
+                        queue
+                    )
+                    (Set.union points visited)
+        in
+        openCavesHelper max points (Set.union visited queue) newQueue
+
+
+filterInBorder : Int -> Point -> Bool
+filterInBorder max ( x, y, z ) =
+    x >= 0 && x <= max && y >= 0 && y <= max && z >= 0 && z <= max
 
 
 testInput : String

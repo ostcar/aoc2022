@@ -10844,29 +10844,6 @@ var $author$project$Days$Day18$maxDim = function (points) {
 		0,
 		points);
 };
-var $elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
-	});
-var $author$project$Days$Day18$minDim = function (points) {
-	return A3(
-		$elm$core$Set$foldl,
-		F2(
-			function (_v0, acc) {
-				var a = _v0.a;
-				var b = _v0.b;
-				var c = _v0.c;
-				return A2(
-					$elm$core$Basics$min,
-					acc,
-					A2(
-						$elm$core$Basics$min,
-						a,
-						A2($elm$core$Basics$min, b, c)));
-			}),
-		0,
-		points);
-};
 var $author$project$Days$Day18$tupleFirst = function (_v0) {
 	var a = _v0.a;
 	return a;
@@ -10880,7 +10857,6 @@ var $author$project$Days$Day18$tupleThird = function (_v0) {
 	return c;
 };
 var $author$project$Days$Day18$surfaces = function (points) {
-	var min = $author$project$Days$Day18$minDim(points);
 	var max = $author$project$Days$Day18$maxDim(points);
 	return A3(
 		$elm$core$List$foldl,
@@ -10894,13 +10870,13 @@ var $author$project$Days$Day18$surfaces = function (points) {
 								$elm$core$Set$toList(
 									A2(
 										$elm$core$Set$map,
-										$author$project$Days$Day18$tupleThird,
+										$author$project$Days$Day18$tupleFirst,
 										A2(
 											$elm$core$Set$filter,
 											function (_v0) {
-												var x = _v0.a;
 												var y = _v0.b;
-												return _Utils_eq(a, x) && _Utils_eq(b, y);
+												var z = _v0.c;
+												return _Utils_eq(a, y) && _Utils_eq(b, z);
 											},
 											points))))) + $author$project$Days$Day18$countSurface(
 								$elm$core$Set$toList(
@@ -10918,24 +10894,152 @@ var $author$project$Days$Day18$surfaces = function (points) {
 								$elm$core$Set$toList(
 									A2(
 										$elm$core$Set$map,
-										$author$project$Days$Day18$tupleFirst,
+										$author$project$Days$Day18$tupleThird,
 										A2(
 											$elm$core$Set$filter,
 											function (_v2) {
+												var x = _v2.a;
 												var y = _v2.b;
-												var z = _v2.c;
-												return _Utils_eq(a, y) && _Utils_eq(b, z);
+												return _Utils_eq(a, x) && _Utils_eq(b, y);
 											},
 											points))));
 						}),
 					0,
-					A2($elm$core$List$range, min, max));
+					A2($elm$core$List$range, 0, max));
 			}),
 		0,
-		A2($elm$core$List$range, min, max));
+		A2($elm$core$List$range, 0, max));
 };
 var $author$project$Days$Day18$run1 = function (points) {
 	return $author$project$Days$Day18$surfaces(points);
+};
+var $author$project$Days$Day18$forPointsInCube = F3(
+	function (fn, acc, max) {
+		return A3(
+			$elm$core$List$foldl,
+			F2(
+				function (x, accX) {
+					return A3(
+						$elm$core$List$foldl,
+						F2(
+							function (y, accY) {
+								return A3(
+									$elm$core$List$foldl,
+									F2(
+										function (z, accZ) {
+											return A2(
+												fn,
+												_Utils_Tuple3(x, y, z),
+												accZ);
+										}),
+									accY,
+									A2($elm$core$List$range, 0, max));
+							}),
+						accX,
+						A2($elm$core$List$range, 0, max));
+				}),
+			acc,
+			A2($elm$core$List$range, 0, max));
+	});
+var $author$project$Days$Day18$isInClosedCave = F3(
+	function (points, openPoint, testPoint) {
+		return !(A2($elm$core$Set$member, testPoint, points) || A2($elm$core$Set$member, testPoint, openPoint));
+	});
+var $elm$core$Dict$diff = F2(
+	function (t1, t2) {
+		return A3(
+			$elm$core$Dict$foldl,
+			F3(
+				function (k, v, t) {
+					return A2($elm$core$Dict$remove, k, t);
+				}),
+			t1,
+			t2);
+	});
+var $elm$core$Set$diff = F2(
+	function (_v0, _v1) {
+		var dict1 = _v0;
+		var dict2 = _v1;
+		return A2($elm$core$Dict$diff, dict1, dict2);
+	});
+var $author$project$Days$Day18$filterInBorder = F2(
+	function (max, _v0) {
+		var x = _v0.a;
+		var y = _v0.b;
+		var z = _v0.c;
+		return (x >= 0) && ((_Utils_cmp(x, max) < 1) && ((y >= 0) && ((_Utils_cmp(y, max) < 1) && ((z >= 0) && (_Utils_cmp(z, max) < 1)))));
+	});
+var $author$project$Days$Day18$openCavesHelper = F4(
+	function (max, points, visited, queue) {
+		openCavesHelper:
+		while (true) {
+			if (_Utils_eq(queue, $elm$core$Set$empty)) {
+				return visited;
+			} else {
+				var newQueue = A2(
+					$elm$core$Set$diff,
+					A3(
+						$elm$core$Set$foldl,
+						F2(
+							function (_v0, acc) {
+								var x = _v0.a;
+								var y = _v0.b;
+								var z = _v0.c;
+								return A2(
+									$elm$core$Set$union,
+									acc,
+									A2(
+										$elm$core$Set$filter,
+										$author$project$Days$Day18$filterInBorder(max),
+										$elm$core$Set$fromList(
+											_List_fromArray(
+												[
+													_Utils_Tuple3(x + 1, y, z),
+													_Utils_Tuple3(x - 1, y, z),
+													_Utils_Tuple3(x, y + 1, z),
+													_Utils_Tuple3(x, y - 1, z),
+													_Utils_Tuple3(x, y, z + 1),
+													_Utils_Tuple3(x, y, z - 1)
+												]))));
+							}),
+						$elm$core$Set$empty,
+						queue),
+					A2($elm$core$Set$union, points, visited));
+				var $temp$max = max,
+					$temp$points = points,
+					$temp$visited = A2($elm$core$Set$union, visited, queue),
+					$temp$queue = newQueue;
+				max = $temp$max;
+				points = $temp$points;
+				visited = $temp$visited;
+				queue = $temp$queue;
+				continue openCavesHelper;
+			}
+		}
+	});
+var $author$project$Days$Day18$openCaves = function (points) {
+	return A4(
+		$author$project$Days$Day18$openCavesHelper,
+		$author$project$Days$Day18$maxDim(points),
+		points,
+		$elm$core$Set$empty,
+		$elm$core$Set$singleton(
+			_Utils_Tuple3(0, 0, 0)));
+};
+var $author$project$Days$Day18$addClosedPoints = function (points) {
+	var openPoint = $author$project$Days$Day18$openCaves(points);
+	return A3(
+		$author$project$Days$Day18$forPointsInCube,
+		F2(
+			function (point, acc) {
+				return A3($author$project$Days$Day18$isInClosedCave, points, openPoint, point) ? A2($elm$core$Set$insert, point, acc) : acc;
+			}),
+		points,
+		$author$project$Days$Day18$maxDim(points));
+};
+var $author$project$Days$Day18$run2 = function (points) {
+	return $author$project$Days$Day18$surfaces(
+		$author$project$Days$Day18$addClosedPoints(points));
 };
 var $author$project$Days$Day18$solution = function (input) {
 	var _v0 = A2($elm$parser$Parser$run, $author$project$Days$Day18$parserPointList, input);
@@ -10944,7 +11048,8 @@ var $author$project$Days$Day18$solution = function (input) {
 		return _Utils_Tuple2(
 			$elm$core$String$fromInt(
 				$author$project$Days$Day18$run1(points)),
-			'TODO');
+			$elm$core$String$fromInt(
+				$author$project$Days$Day18$run2(points)));
 	} else {
 		return _Utils_Tuple2('Invalid', 'Input');
 	}
@@ -11169,6 +11274,10 @@ var $author$project$Days$Day09$comPos = F3(
 		return _Utils_Tuple2(
 			A2(fn, p1X, p2X),
 			A2(fn, p1Y, p2Y));
+	});
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
 var $elm$core$Dict$update = F3(
 	function (targetKey, alter, dictionary) {
