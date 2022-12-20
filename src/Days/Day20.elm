@@ -2,24 +2,288 @@ module Days.Day20 exposing (puzzleInput, solution, testSolution)
 
 import Array exposing (Array)
 import Expect
-import Set exposing (Set)
 import Test
 
 
 solution : String -> ( String, String )
 solution input =
-    ( "TODO"
-    , "TODO"
+    let
+        heap =
+            parseInput input
+    in
+    ( run1 heap |> String.fromInt
+    , run2 heap |> String.fromInt
     )
 
 
 testSolution : Test.Test
 testSolution =
     Test.test "test input" <|
-        \_ -> solution testInput |> Expect.equal ( "TODO", "TODO" )
+        \_ -> solution testInput |> Expect.equal ( "3", "1623178306" )
+
+
+run1 : Heap -> Int
+run1 heap =
+    let
+        mixed =
+            mixNodes heap
+
+        zero =
+            findPointerToZero mixed
+
+        n1000 =
+            goNext mixed zero 1000 (heapSize mixed)
+
+        n2000 =
+            goNext mixed n1000 1000 (heapSize mixed)
+
+        n3000 =
+            goNext mixed n2000 1000 (heapSize mixed)
+    in
+    [ n1000, n2000, n3000 ]
+        |> List.map (\p -> heapRead p mixed |> .value)
+        |> List.sum
+
+
+run2 : Heap -> Int
+run2 heap =
+    let
+        withKey =
+            Array.map (\n -> { n | value = n.value * 811589153 }) heap
+
+        mixed =
+            List.repeat 10 ()
+                |> List.foldl
+                    (\_ acc ->
+                        mixNodes acc
+                    )
+                    withKey
+
+        zero =
+            findPointerToZero mixed
+
+        n1000 =
+            goNext mixed zero 1000 (heapSize mixed)
+
+        n2000 =
+            goNext mixed n1000 1000 (heapSize mixed)
+
+        n3000 =
+            goNext mixed n2000 1000 (heapSize mixed)
+    in
+    [ n1000, n2000, n3000 ]
+        |> List.map (\p -> heapRead p mixed |> .value)
+        |> List.sum
+
+
+parseInput : String -> Heap
+parseInput input =
+    let
+        values =
+            String.lines input
+                |> List.filterMap String.toInt
+
+        heap =
+            List.indexedMap
+                (\idx value ->
+                    { value = value
+                    , before = modBy (List.length values) (idx - 1) |> unsafe
+                    , after = modBy (List.length values) (idx + 1) |> unsafe
+                    }
+                )
+                values
+                |> Array.fromList
+    in
+    heap
+
+
+mixNodes : Heap -> Heap
+mixNodes startHeap =
+    let
+        heapLength =
+            heapSize startHeap
+    in
+    List.range 0 heapLength
+        |> List.foldl
+            (\addr heap ->
+                let
+                    pointer =
+                        unsafe addr
+
+                    node =
+                        heapRead pointer heap
+                in
+                if node.value == 0 then
+                    heap
+
+                else
+                    let
+                        newNeighbor =
+                            goNext heap pointer node.value (heapLength - 1)
+
+                        append =
+                            if node.value < 0 then
+                                appendToRingBefore
+
+                            else
+                                appendToRingAfter
+                    in
+                    removeFromRing pointer heap
+                        |> append pointer newNeighbor
+            )
+            startHeap
+
+
+findPointerToZero : Heap -> Pointer
+findPointerToZero heap =
+    heap
+        |> Array.toIndexedList
+        |> List.filterMap
+            (\( addr, node ) ->
+                if node.value == 0 then
+                    Just (unsafe addr)
+
+                else
+                    Nothing
+            )
+        |> List.head
+        |> Maybe.withDefault (unsafe -1)
+
+
+type alias Node =
+    { value : Int, before : Pointer, after : Pointer }
+
+
+undefined : Node
+undefined =
+    { value = 0, before = Pointer 0, after = Pointer 0 }
+
+
+goNext : Heap -> Pointer -> Int -> Int -> Pointer
+goNext heap from steps mode =
+    if steps > 0 then
+        goNextHelper .after heap from (modBy mode steps)
+
+    else
+        goNextHelper .before heap from (remainderBy mode (negate steps))
+
+
+goNextHelper : (Node -> Pointer) -> Heap -> Pointer -> Int -> Pointer
+goNextHelper nextFn heap pointer steps =
+    if steps <= 0 then
+        pointer
+
+    else
+        let
+            next =
+                heapRead pointer heap
+                    |> nextFn
+        in
+        goNextHelper nextFn heap next (steps - 1)
+
+
+removeFromRing : Pointer -> Heap -> Heap
+removeFromRing pointer heap =
+    let
+        node =
+            heapRead pointer heap
+
+        nodeBefore =
+            heapRead node.before heap
+
+        nodeAfter =
+            heapRead node.after heap
+    in
+    heap
+        |> heapWrite node.before { nodeBefore | after = node.after }
+        |> heapWrite node.after { nodeAfter | before = node.before }
+
+
+appendToRingAfter : Pointer -> Pointer -> Heap -> Heap
+appendToRingAfter me before heap =
+    let
+        meNode =
+            heapRead me heap
+
+        beforeNode =
+            heapRead before heap
+
+        after =
+            beforeNode.after
+
+        afterNode =
+            heapRead after heap
+    in
+    heap
+        |> heapWrite before { beforeNode | after = me }
+        |> heapWrite me { meNode | before = before, after = after }
+        |> heapWrite after { afterNode | before = me }
+
+
+appendToRingBefore : Pointer -> Pointer -> Heap -> Heap
+appendToRingBefore me after heap =
+    let
+        meNode =
+            heapRead me heap
+
+        afterNode =
+            heapRead after heap
+
+        before =
+            afterNode.before
+
+        beforeNode =
+            heapRead before heap
+    in
+    heap
+        |> heapWrite before { beforeNode | after = me }
+        |> heapWrite me { meNode | before = before, after = after }
+        |> heapWrite after { afterNode | before = me }
+
+
+
+-- Heap
+--
+-- Think of it as a separate package that would only expose (Pointer, unsafe, Heap, heapRead, heapWrite, heapSize)
+-- And Heap would be generic (Heap a) and would be used as 'Heap Node'.
+
+
+type Pointer
+    = Pointer Int
+
+
+unsafe : Int -> Pointer
+unsafe i =
+    Pointer i
+
+
+type alias Heap =
+    Array Node
+
+
+heapRead : Pointer -> Heap -> Node
+heapRead (Pointer addr) heap =
+    Array.get addr heap
+        |> Maybe.withDefault undefined
+
+
+heapWrite : Pointer -> Node -> Heap -> Heap
+heapWrite (Pointer addr) node heap =
+    Array.set addr node heap
+
+
+heapSize : Heap -> Int
+heapSize heap =
+    Array.length heap
+
+
+
+-- Input
+
 
 testInput : String
-testInput = """1
+testInput =
+    """1
 2
 -3
 3
@@ -27,8 +291,10 @@ testInput = """1
 0
 4"""
 
+
 puzzleInput : String
-puzzleInput = """-2312
+puzzleInput =
+    """-2312
 5492
 793
 -773
