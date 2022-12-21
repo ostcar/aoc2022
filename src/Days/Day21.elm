@@ -1,4 +1,4 @@
-module Days.Day21 exposing (Monkey(..), MonkeyName, Operation, monkeyCrowdParser, monkeyParser, monkeyWithNameParser, operationParser, puzzleInput, solution, testInput, testSolution, wordParser)
+module Days.Day21 exposing (puzzleInput, solution, testSolution)
 
 import Dict exposing (Dict)
 import Expect
@@ -10,7 +10,7 @@ solution : String -> ( String, String )
 solution input =
     case Parser.run monkeyCrowdParser input of
         Ok monkeyCrowd ->
-            ( run1 monkeyCrowd |> String.fromFloat
+            ( run1 monkeyCrowd
             , run2 monkeyCrowd
             )
 
@@ -22,10 +22,6 @@ testSolution : Test.Test
 testSolution =
     Test.test "test input" <|
         \_ -> solution testInput |> Expect.equal ( "152", "301" )
-
-
-type alias MonkeyName =
-    String
 
 
 type Operation
@@ -51,6 +47,10 @@ calc n1 op n2 =
             n1 / n2
 
 
+type alias MonkeyName =
+    String
+
+
 type Monkey
     = NumberMonkey Float
     | OperationMonkey MonkeyName Operation MonkeyName
@@ -60,94 +60,155 @@ type alias MonkeyCrowd =
     Dict MonkeyName Monkey
 
 
-type Tree
-    = TreeNumber Float
-    | TreeMe
-    | TreeNode Tree Operation Tree
-
-
 
 -- Part 1
 
 
-run1 : MonkeyCrowd -> Float
+run1 : MonkeyCrowd -> String
 run1 crowd =
-    case Dict.get "root" crowd of
-        Just monkey ->
-            calcMonkey crowd monkey
+    calcMonkey crowd "root"
+        |> Result.map String.fromFloat
+        |> resultOkOrError
+
+
+calcMonkey : MonkeyCrowd -> MonkeyName -> Result String Float
+calcMonkey crowd monkeyName =
+    case Dict.get monkeyName crowd of
+        Just (NumberMonkey i) ->
+            Ok i
+
+        Just (OperationMonkey subName1 op subName2) ->
+            case ( calcMonkey crowd subName1, calcMonkey crowd subName2 ) of
+                ( Ok number1, Ok number2 ) ->
+                    Ok <| calc number1 op number2
+
+                ( Err err, _ ) ->
+                    Err <| "calcMonkey: first sub: " ++ err
+
+                ( _, Err err ) ->
+                    Err <| "calcMonkey: second sub: " ++ err
 
         _ ->
-            -1
-
-
-calcMonkey : MonkeyCrowd -> Monkey -> Float
-calcMonkey crowd monkey =
-    case monkey of
-        NumberMonkey i ->
-            i
-
-        OperationMonkey name1 op name2 ->
-            case ( Dict.get name1 crowd, Dict.get name2 crowd ) of
-                ( Just otherMonkey1, Just otherMonkey2 ) ->
-                    calc
-                        (calcMonkey crowd otherMonkey1)
-                        op
-                        (calcMonkey crowd otherMonkey2)
-
-                _ ->
-                    0
+            Err <| "unknown monkey: " ++ monkeyName
 
 
 
 -- Part 2
 
 
+type Tree
+    = TreeNumber Float
+    | TreeMe
+    | TreeNode Tree Operation Tree
+
+
 run2 : MonkeyCrowd -> String
 run2 crowd =
-    leftRightFromRoot crowd
-        |> Result.andThen sortMeToLeft
+    crowd
+        |> buildRootTrees
         |> Result.andThen
             (\( tree, n ) ->
-                findMyNumber tree n
+                calcWithX tree n
             )
         |> Result.map String.fromFloat
         |> resultOkOrError
 
 
 resultOkOrError : Result String String -> String
-resultOkOrError r =
-    case r of
-        Ok v ->
-            v
+resultOkOrError result =
+    case result of
+        Ok str ->
+            str
 
-        Err v ->
-            v
+        Err str ->
+            str
 
 
-findMyNumber : Tree -> Float -> Result String Float
-findMyNumber treeWithMe right =
-    case treeWithMe of
-        TreeNode sub1 op sub2 ->
-            sortMeToLeft ( sub1, sub2 )
-                |> Result.andThen
-                    (\( left, secondNumber ) ->
-                        findMyNumber left <| moveToRight secondNumber op right
-                    )
+buildRootTrees : MonkeyCrowd -> Result String ( Tree, Float )
+buildRootTrees crowd =
+    case Dict.get "root" crowd of
+        Just (OperationMonkey name1 _ name2) ->
+            case ( crowdToTree crowd name1, crowdToTree crowd name2 ) of
+                ( Ok tree1, Ok tree2 ) ->
+                    case ( reduceTree tree1, reduceTree tree2 ) of
+                        ( Ok (TreeNumber f), Ok reduced2 ) ->
+                            Ok ( reduced2, f )
+
+                        ( Ok reduced1, Ok (TreeNumber f) ) ->
+                            Ok ( reduced1, f )
+
+                        _ ->
+                            Err "buildRootTrees: reduce of a tree failed, or non of them is a number (TODO: Show witch)"
+
+                _ ->
+                    Err "buildRootTrees: one tree of root can not be converted (TODO: Show error)"
+
+        _ ->
+            Err "buildRootTrees: need a root-OperationMonkey"
+
+
+crowdToTree : MonkeyCrowd -> MonkeyName -> Result String Tree
+crowdToTree crowd name =
+    if name == "humn" then
+        Ok TreeMe
+
+    else
+        crowd
+            |> Dict.get name
+            |> Result.fromMaybe ("crowdToTree: monkey " ++ name ++ " is not in crowd")
+            |> Result.andThen
+                (\monkey ->
+                    case monkey of
+                        NumberMonkey i ->
+                            Ok <| TreeNumber i
+
+                        OperationMonkey name1 op name2 ->
+                            case ( crowdToTree crowd name1, crowdToTree crowd name2 ) of
+                                ( Ok subTree1, Ok subTree2 ) ->
+                                    Ok <| TreeNode subTree1 op subTree2
+
+                                ( Err err, _ ) ->
+                                    Err <| "crowdToTree: subTree1: " ++ err
+
+                                ( _, Err err ) ->
+                                    Err <| "crowdToTree: subTree2: " ++ err
+                )
+
+
+calcWithX : Tree -> Float -> Result String Float
+calcWithX treewithX number =
+    case treewithX of
+        TreeNode subTree op (TreeNumber subNumber) ->
+            toOtherSide subNumber op number
+                |> calcWithX subTree
+
+        TreeNode (TreeNumber subNumber) op subTree ->
+            (case op of
+                Substraction ->
+                    calc subNumber op number
+
+                Division ->
+                    calc subNumber op number
+
+                _ ->
+                    toOtherSide subNumber op number
+            )
+                |> calcWithX subTree
 
         TreeMe ->
-            Ok right
+            Ok number
 
-        TreeNumber _ ->
-            Err "findMyNumber: treeWithMe has to be a TreeNode, got 'treeNumber'"
-
-
-moveToRight : Float -> Operation -> Float -> Float
-moveToRight fromLeft op right =
-    calc right (transformOperation op) fromLeft
+        _ ->
+            Err "calcWithX: invalid input: Tree has to be TreeMe or a TreeNode where one of the sub Trees is a TreeNumber"
 
 
-transformOperation : Operation -> Operation
-transformOperation op =
+toOtherSide : Float -> Operation -> Float -> Float
+toOtherSide number1 op number2 =
+    calc number2 (reverseOperation op) number1
+
+
+reverseOperation : Operation -> Operation
+reverseOperation op =
     case op of
         Addition ->
             Substraction
@@ -162,82 +223,25 @@ transformOperation op =
             Multiplication
 
 
-leftRightFromRoot : MonkeyCrowd -> Result String ( Tree, Tree )
-leftRightFromRoot crowd =
-    case Dict.get "root" crowd of
-        Just (OperationMonkey name1 _ name2) ->
-            case ( crowdToTree crowd name1, crowdToTree crowd name2 ) of
-                ( Ok t1, Ok t2 ) ->
-                    Ok ( reduceTree t1, reduceTree t2 )
-
-                _ ->
-                    Err "leftRightFromRoot: one tree of root can not be converted (TODO: Show error)"
-
-        _ ->
-            Err "leftRightFromRoot: there is no root in the crowd"
-
-
-crowdToTree : MonkeyCrowd -> MonkeyName -> Result String Tree
-crowdToTree crowd name =
-    if name == "humn" then
-        Ok TreeMe
-
-    else
-        Dict.get name crowd
-            |> Result.fromMaybe "crowdToTree: monkey name is not in crowd"
-            |> Result.andThen
-                (\monkey ->
-                    case monkey of
-                        NumberMonkey i ->
-                            Ok <| TreeNumber i
-
-                        OperationMonkey name1 op name2 ->
-                            case ( crowdToTree crowd name1, crowdToTree crowd name2 ) of
-                                ( Ok sub1, Ok sub2 ) ->
-                                    Ok <|
-                                        TreeNode
-                                            sub1
-                                            op
-                                            sub2
-
-                                _ ->
-                                    Err "crowdToTree: one subtree has an error (TODO show me)"
-                )
-
-
-reduceTree : Tree -> Tree
+reduceTree : Tree -> Result String Tree
 reduceTree tree =
     case tree of
         TreeNode sub1 op sub2 ->
-            let
-                left =
-                    reduceTree sub1
+            case ( reduceTree sub1, reduceTree sub2 ) of
+                ( Ok (TreeNumber a), Ok (TreeNumber b) ) ->
+                    calc a op b
+                        |> TreeNumber
+                        |> Ok
 
-                right =
-                    reduceTree sub2
-            in
-            case ( left, right ) of
-                ( TreeNumber a, TreeNumber b ) ->
-                    TreeNumber (calc a op b)
+                ( Ok reduced1, Ok reduced2 ) ->
+                    TreeNode reduced1 op reduced2
+                        |> Ok
 
                 _ ->
-                    TreeNode left op right
+                    Err "reduceTree left or right of subtree is wrong (TODO show sub err)"
 
         _ ->
-            tree
-
-
-sortMeToLeft : ( Tree, Tree ) -> Result String ( Tree, Float )
-sortMeToLeft ( tree1, tree2 ) =
-    case ( tree1, tree2 ) of
-        ( TreeNumber f, _ ) ->
-            Ok ( tree2, f )
-
-        ( _, TreeNumber f ) ->
-            Ok ( tree1, f )
-
-        _ ->
-            Err "sortMeToLeft: One Tree has to be a number"
+            Ok tree
 
 
 
