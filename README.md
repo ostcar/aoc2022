@@ -1,6 +1,6 @@
 # Advent of Code 2022
 
-![Number of stars](https://img.shields.io/badge/Advent_Of_Code_2022-42_*-success)
+![Number of stars](https://img.shields.io/badge/Advent_Of_Code_2022-44_*-success)
 
 This time in elm
 

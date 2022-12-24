@@ -266,12 +266,6 @@ nextDirection tower repeatInstructions =
             , direction
             )
                 |> Just
-
-        -- _ =
-        --     if directionIdx == 0 then
-        --         Debug.log "directionIdx,shapeIdx, hight" ( directionIdx, tower.shapeIdx, towerHight tower )
-        --     else
-        --         ( 0, 0, 0)
     in
     case repeatInstructions of
         Infinite ->

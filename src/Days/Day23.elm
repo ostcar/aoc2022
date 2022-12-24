@@ -56,7 +56,7 @@ untilAllAreOk deep elves =
 
     else
         moveToNext next
-            |> untilAllAreOk (Debug.log "deep" (deep + 1))
+            |> untilAllAreOk (deep + 1)
 
 
 printElves : ElvesPosition -> String
