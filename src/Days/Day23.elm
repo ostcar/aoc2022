@@ -3,7 +3,7 @@ module Days.Day23 exposing (printElves, puzzleInput, smallInput, solution, testI
 import Array exposing (Array)
 import Dict exposing (Dict)
 import Expect
-import Parser exposing ((|.), (|=), Parser, succeed)
+import Parser exposing ((|.), (|=), Parser)
 import Set exposing (Set)
 import Test
 
@@ -291,7 +291,7 @@ elvesPositionParser =
             Parser.oneOf
                 [ Parser.oneOf [ Parser.symbol ".", Parser.symbol "\n" ]
                     |> Parser.map (\() -> Parser.Loop set)
-                , succeed (\( line, column ) -> Parser.Loop (Set.insert ( column - 1, line - 1 ) set))
+                , Parser.succeed (\( line, column ) -> Parser.Loop (Set.insert ( column - 1, line - 1 ) set))
                     |= Parser.getPosition
                     |. Parser.symbol "#"
                 , Parser.end |> Parser.map (\() -> Parser.Done set)
