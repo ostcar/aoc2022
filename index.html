@@ -798,11 +798,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.cS.ay === region.ci.ay)
+	if (region.cT.ay === region.cj.ay)
 	{
-		return 'on line ' + region.cS.ay;
+		return 'on line ' + region.cT.ay;
 	}
-	return 'on lines ' + region.cS.ay + ' through ' + region.ci.ay;
+	return 'on lines ' + region.cT.ay + ' through ' + region.cj.ay;
 }
 
 
@@ -1871,9 +1871,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.cr,
-		impl.cZ,
-		impl.cT,
+		impl.cs,
+		impl.c_,
+		impl.cU,
 		function() { return function() {} }
 	);
 });
@@ -2734,8 +2734,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		U: func(record.U),
-		a4: record.a4,
-		a1: record.a1
+		a7: record.a7,
+		a4: record.a4
 	}
 });
 
@@ -3004,10 +3004,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.U;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.a4;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.a7;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.a1) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.a4) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3957,11 +3957,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.cr,
-		impl.cZ,
-		impl.cT,
+		impl.cs,
+		impl.c_,
+		impl.cU,
 		function(sendToApp, initialModel) {
-			var view = impl.c_;
+			var view = impl.c$;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3993,12 +3993,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.cr,
-		impl.cZ,
-		impl.cT,
+		impl.cs,
+		impl.c_,
+		impl.cU,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.a3 && impl.a3(sendToApp)
-			var view = impl.c_;
+			var divertHrefToApp = impl.a6 && impl.a6(sendToApp)
+			var view = impl.c$;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4006,12 +4006,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.b8);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.b9);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.cW) && (_VirtualDom_doc.title = title = doc.cW);
+				(title !== doc.cX) && (_VirtualDom_doc.title = title = doc.cX);
 			});
 		}
 	);
@@ -4067,12 +4067,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.cH;
-	var onUrlRequest = impl.cI;
+	var onUrlChange = impl.cI;
+	var onUrlRequest = impl.cJ;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		a3: function(sendToApp)
+		a6: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4088,9 +4088,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.bL === next.bL
-							&& curr.bs === next.bs
-							&& curr.bH.a === next.bH.a
+							&& curr.bN === next.bN
+							&& curr.bu === next.bu
+							&& curr.bJ.a === next.bJ.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4098,13 +4098,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		cr: function(flags)
+		cs: function(flags)
 		{
-			return A3(impl.cr, flags, _Browser_getUrl(), key);
+			return A3(impl.cs, flags, _Browser_getUrl(), key);
 		},
+		c$: impl.c$,
 		c_: impl.c_,
-		cZ: impl.cZ,
-		cT: impl.cT
+		cU: impl.cU
 	});
 }
 
@@ -4170,17 +4170,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { co: 'hidden', cb: 'visibilitychange' }
+		? { cp: 'hidden', cc: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { co: 'mozHidden', cb: 'mozvisibilitychange' }
+		? { cp: 'mozHidden', cc: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { co: 'msHidden', cb: 'msvisibilitychange' }
+		? { cp: 'msHidden', cc: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { co: 'webkitHidden', cb: 'webkitvisibilitychange' }
-		: { co: 'hidden', cb: 'visibilitychange' };
+		? { cp: 'webkitHidden', cc: 'webkitvisibilitychange' }
+		: { cp: 'hidden', cc: 'visibilitychange' };
 }
 
 
@@ -4261,12 +4261,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		bS: _Browser_getScene(),
-		b_: {
-			b1: _Browser_window.pageXOffset,
-			b2: _Browser_window.pageYOffset,
-			b0: _Browser_doc.documentElement.clientWidth,
-			bq: _Browser_doc.documentElement.clientHeight
+		bU: _Browser_getScene(),
+		b0: {
+			b2: _Browser_window.pageXOffset,
+			b3: _Browser_window.pageYOffset,
+			aH: _Browser_doc.documentElement.clientWidth,
+			aK: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4276,8 +4276,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		b0: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		bq: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aH: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		aK: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4300,15 +4300,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			bS: {
-				b0: node.scrollWidth,
-				bq: node.scrollHeight
+			bU: {
+				aH: node.scrollWidth,
+				aK: node.scrollHeight
 			},
-			b_: {
-				b1: node.scrollLeft,
-				b2: node.scrollTop,
-				b0: node.clientWidth,
-				bq: node.clientHeight
+			b0: {
+				b2: node.scrollLeft,
+				b3: node.scrollTop,
+				aH: node.clientWidth,
+				aK: node.clientHeight
 			}
 		};
 	});
@@ -4338,18 +4338,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			bS: _Browser_getScene(),
-			b_: {
-				b1: x,
-				b2: y,
-				b0: _Browser_doc.documentElement.clientWidth,
-				bq: _Browser_doc.documentElement.clientHeight
+			bU: _Browser_getScene(),
+			b0: {
+				b2: x,
+				b3: y,
+				aH: _Browser_doc.documentElement.clientWidth,
+				aK: _Browser_doc.documentElement.clientHeight
 			},
-			ch: {
-				b1: x + rect.left,
-				b2: y + rect.top,
-				b0: rect.width,
-				bq: rect.height
+			ci: {
+				b2: x + rect.left,
+				b3: y + rect.top,
+				aH: rect.width,
+				aK: rect.height
 			}
 		};
 	});
@@ -5056,7 +5056,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {bm: fragment, bs: host, bF: path, bH: port_, bL: protocol, bM: query};
+		return {bp: fragment, bu: host, bH: path, bJ: port_, bN: protocol, bO: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5341,19 +5341,19 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $elm$browser$Browser$sandbox = function (impl) {
 	return _Browser_element(
 		{
-			cr: function (_v0) {
-				return _Utils_Tuple2(impl.cr, $elm$core$Platform$Cmd$none);
+			cs: function (_v0) {
+				return _Utils_Tuple2(impl.cs, $elm$core$Platform$Cmd$none);
 			},
-			cT: function (_v1) {
+			cU: function (_v1) {
 				return $elm$core$Platform$Sub$none;
 			},
-			cZ: F2(
+			c_: F2(
 				function (msg, model) {
 					return _Utils_Tuple2(
-						A2(impl.cZ, msg, model),
+						A2(impl.c_, msg, model),
 						$elm$core$Platform$Cmd$none);
 				}),
-			c_: impl.c_
+			c$: impl.c$
 		});
 };
 var $author$project$Main$ShowDay = function (a) {
@@ -5433,6 +5433,7 @@ var $author$project$Days$Day18$puzzleInput = '\n18,9,5\n8,4,14\n13,16,14\n5,14,1
 var $author$project$Days$Day19$puzzleInput = '\nBlueprint 1: Each ore robot costs 2 ore. Each clay robot costs 4 ore. Each obsidian robot costs 3 ore and 20 clay. Each geode robot costs 2 ore and 17 obsidian.\nBlueprint 2: Each ore robot costs 4 ore. Each clay robot costs 4 ore. Each obsidian robot costs 4 ore and 11 clay. Each geode robot costs 4 ore and 12 obsidian.\nBlueprint 3: Each ore robot costs 4 ore. Each clay robot costs 4 ore. Each obsidian robot costs 3 ore and 19 clay. Each geode robot costs 4 ore and 15 obsidian.\nBlueprint 4: Each ore robot costs 4 ore. Each clay robot costs 4 ore. Each obsidian robot costs 3 ore and 20 clay. Each geode robot costs 2 ore and 10 obsidian.\nBlueprint 5: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 18 clay. Each geode robot costs 2 ore and 19 obsidian.\nBlueprint 6: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 11 clay. Each geode robot costs 2 ore and 16 obsidian.\nBlueprint 7: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 4 ore and 8 clay. Each geode robot costs 3 ore and 7 obsidian.\nBlueprint 8: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 17 clay. Each geode robot costs 2 ore and 13 obsidian.\nBlueprint 9: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 3 ore and 12 clay. Each geode robot costs 3 ore and 17 obsidian.\nBlueprint 10: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 2 ore and 15 clay. Each geode robot costs 3 ore and 9 obsidian.\nBlueprint 11: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 2 ore and 16 clay. Each geode robot costs 2 ore and 18 obsidian.\nBlueprint 12: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 15 clay. Each geode robot costs 2 ore and 8 obsidian.\nBlueprint 13: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 4 ore and 11 clay. Each geode robot costs 3 ore and 15 obsidian.\nBlueprint 14: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 9 clay. Each geode robot costs 3 ore and 7 obsidian.\nBlueprint 15: Each ore robot costs 4 ore. Each clay robot costs 2 ore. Each obsidian robot costs 2 ore and 16 clay. Each geode robot costs 2 ore and 8 obsidian.\nBlueprint 16: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 4 ore and 16 clay. Each geode robot costs 3 ore and 15 obsidian.\nBlueprint 17: Each ore robot costs 4 ore. Each clay robot costs 4 ore. Each obsidian robot costs 4 ore and 20 clay. Each geode robot costs 2 ore and 8 obsidian.\nBlueprint 18: Each ore robot costs 2 ore. Each clay robot costs 4 ore. Each obsidian robot costs 4 ore and 13 clay. Each geode robot costs 3 ore and 11 obsidian.\nBlueprint 19: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 2 ore and 12 clay. Each geode robot costs 2 ore and 10 obsidian.\nBlueprint 20: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 19 clay. Each geode robot costs 3 ore and 19 obsidian.\nBlueprint 21: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 2 ore and 19 clay. Each geode robot costs 3 ore and 10 obsidian.\nBlueprint 22: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 16 clay. Each geode robot costs 2 ore and 11 obsidian.\nBlueprint 23: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 10 clay. Each geode robot costs 3 ore and 10 obsidian.\nBlueprint 24: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 3 ore and 15 clay. Each geode robot costs 4 ore and 16 obsidian.\nBlueprint 25: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 2 ore and 5 clay. Each geode robot costs 2 ore and 10 obsidian.\nBlueprint 26: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 3 ore and 18 clay. Each geode robot costs 4 ore and 16 obsidian.\nBlueprint 27: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 11 clay. Each geode robot costs 3 ore and 14 obsidian.\nBlueprint 28: Each ore robot costs 4 ore. Each clay robot costs 4 ore. Each obsidian robot costs 2 ore and 7 clay. Each geode robot costs 4 ore and 13 obsidian.\nBlueprint 29: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 3 ore and 20 clay. Each geode robot costs 3 ore and 14 obsidian.\nBlueprint 30: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 4 ore and 8 clay. Each geode robot costs 2 ore and 8 obsidian.\n';
 var $author$project$Days$Day20$puzzleInput = '-2312\n5492\n793\n-773\n5453\n-2076\n-1728\n-7702\n4318\n8316\n-3366\n-3814\n9182\n-673\n-8201\n7847\n9691\n4044\n802\n-8114\n8944\n-2438\n-3460\n-6923\n-4847\n-7341\n2063\n-9848\n6702\n2560\n6058\n-7669\n7315\n-6427\n5165\n3147\n-1320\n4789\n6296\n-806\n1185\n-1445\n-982\n2759\n-8506\n-5959\n5683\n-6623\n-8571\n-5834\n-9022\n8729\n-7420\n-9812\n-9162\n-240\n7302\n2221\n-4352\n-4248\n5177\n9037\n-6880\n-2117\n9569\n-1037\n726\n2866\n-4587\n3384\n998\n9665\n3982\n3169\n4547\n612\n2857\n-2601\n-982\n-4267\n-740\n2817\n-818\n-8005\n-3697\n497\n-8039\n-116\n8438\n-8460\n2609\n709\n3590\n1323\n2202\n-1246\n-736\n-3992\n7811\n127\n-2609\n8314\n-5668\n-6449\n-6512\n3972\n-5998\n-7462\n4542\n-6350\n8424\n5046\n-3554\n6481\n-4521\n1307\n-172\n-7391\n79\n-179\n-7320\n9750\n-5916\n8531\n5522\n5133\n-1506\n4151\n-2793\n5448\n-2267\n998\n-6216\n3894\n-1297\n7112\n8486\n-6030\n-1815\n-1451\n4165\n828\n8678\n-1751\n-9528\n5056\n-9702\n9288\n8683\n-1924\n-6171\n-7050\n-9968\n-3909\n-9834\n-8325\n-2528\n-2247\n-1075\n6684\n6038\n-6309\n-3562\n2333\n3593\n-18\n-9857\n-4318\n6923\n-5266\n1408\n-7781\n2037\n-519\n4085\n7054\n-4111\n2817\n-5375\n870\n-8252\n4142\n3500\n-9371\n-2040\n-7381\n6216\n7143\n-6814\n673\n3104\n-1693\n6050\n-2416\n7112\n4114\n5367\n4566\n2560\n4361\n4131\n4337\n7876\n-3000\n-8724\n-2088\n6785\n-5326\n-7107\n3739\n-302\n9519\n-5331\n8759\n6867\n-9267\n4816\n-749\n-1980\n1830\n9715\n1634\n-6922\n-288\n4436\n63\n-156\n1185\n-5004\n-9093\n-8661\n8447\n233\n-854\n3154\n-5589\n-5490\n2321\n-1006\n3688\n6313\n4704\n6598\n430\n-7073\n-6571\n-3768\n6203\n8453\n8735\n-4070\n8059\n-4734\n-1827\n1330\n586\n-8858\n1938\n1366\n6031\n3744\n-7191\n8032\n3586\n-3196\n-460\n3032\n2387\n450\n1391\n-3905\n-2774\n6690\n-9103\n8220\n-6594\n8834\n-3559\n-9337\n2199\n-9026\n2904\n-8552\n499\n7727\n6519\n-17\n-3625\n-302\n4611\n9129\n9756\n6869\n-2262\n-4677\n3533\n19\n5877\n5224\n3783\n5992\n-2218\n-5097\n3956\n9335\n-5586\n-9441\n3252\n-4307\n-1111\n6509\n-116\n-4926\n-7394\n1270\n-1773\n6658\n3317\n-8704\n-3692\n6482\n2451\n7241\n-350\n-5042\n-9182\n2602\n9752\n-8475\n-5018\n-267\n-9360\n599\n917\n5210\n4388\n909\n-1063\n8311\n1831\n8235\n-9129\n-7420\n-284\n-1940\n4079\n-7284\n-4893\n4913\n-8602\n-59\n6105\n-4934\n1196\n-6947\n-1508\n-8961\n2112\n-6739\n-8401\n9750\n-3697\n85\n2240\n-5882\n-1900\n3783\n5747\n4388\n5225\n6858\n-3799\n6119\n8592\n-3328\n4716\n-6391\n-7721\n4813\n3223\n6303\n8780\n4400\n-7964\n8810\n8247\n8776\n-5738\n-2655\n-2036\n9906\n-6834\n92\n6695\n1740\n29\n-9758\n-7016\n-8170\n-7780\n4243\n-3391\n2989\n-7678\n2154\n-4515\n4475\n8011\n-3785\n-3518\n5532\n8387\n806\n-9546\n655\n804\n-5420\n4138\n8495\n8975\n-2559\n8202\n8268\n-6923\n1671\n-9892\n6337\n6205\n6024\n6038\n-3289\n4626\n4356\n-3104\n7633\n9404\n-3630\n-4041\n106\n-4493\n3651\n6983\n-5958\n819\n6105\n1910\n4645\n-1293\n-8747\n8655\n-6928\n9025\n1984\n-9959\n-9290\n-7834\n3588\n2967\n3048\n4730\n-8653\n-4434\n6105\n8028\n-4909\n-7865\n-6832\n-1267\n8129\n4131\n-9615\n-7137\n3956\n464\n-588\n5260\n2181\n-3581\n649\n8992\n-6427\n-3292\n-5641\n-8274\n-2283\n-3455\n1417\n7054\n3937\n-1797\n-615\n-2526\n6210\n6222\n-6007\n-3764\n-1743\n-3123\n9495\n8269\n3675\n1085\n-1859\n8578\n-1240\n-4734\n1196\n1332\n-3507\n-6268\n3380\n-6530\n3264\n-4958\n-7533\n8869\n2666\n-6780\n7739\n-4128\n-8229\n9624\n-8005\n-1897\n-9773\n8000\n-419\n269\n5048\n-5962\n4319\n6834\n-9624\n-5247\n-2683\n-9050\n-5335\n5244\n-3052\n929\n-3922\n-4806\n-7085\n4186\n-5127\n7790\n527\n-222\n4043\n9900\n4630\n5056\n-9425\n-2369\n-1442\n-7949\n5228\n7449\n3945\n726\n-1722\n-3439\n-1037\n-4998\n-5130\n5158\n-227\n-8075\n3917\n5228\n9382\n-7582\n787\n-2895\n-7385\n9750\n-8872\n-1263\n5877\n4398\n9200\n4061\n8059\n9960\n5756\n-3241\n-2283\n9568\n-5852\n-3630\n-2336\n-3596\n4649\n-7203\n4473\n-8025\n-9991\n-8721\n1307\n-5487\n4632\n1799\n2468\n2834\n2571\n-3894\n7319\n8466\n-7831\n-7428\n5475\n6296\n9191\n6193\n-843\n8566\n9398\n7317\n-3984\n-1886\n-5012\n4014\n-3554\n6002\n-5254\n8412\n-4059\n7761\n-7363\n9025\n-1960\n1905\n-304\n-2877\n7707\n-3120\n8969\n-545\n-9237\n885\n3830\n7085\n-8779\n9198\n4123\n517\n480\n-6380\n9713\n-2029\n-947\n-5205\n-9126\n-4653\n5254\n3153\n2067\n7872\n-3545\n1864\n9068\n4516\n6440\n-9167\n4281\n4859\n-6318\n-3155\n8699\n-5310\n-38\n-4889\n-1805\n-9405\n-1235\n3285\n1579\n1265\n-850\n259\n1513\n-1490\n7916\n-9000\n-7515\n2756\n831\n2387\n-6922\n-6299\n8992\n3336\n4473\n1728\n1366\n-2893\n-8891\n7818\n-3140\n2972\n1088\n2718\n9495\n64\n7527\n8638\n-8670\n6740\n-2971\n1849\n5365\n7997\n2941\n5528\n8065\n6973\n-5858\n1355\n6359\n-7757\n-3968\n-1985\n-3194\n1425\n-6928\n4616\n-1912\n-5892\n-9337\n-4007\n-1299\n5042\n3825\n-5517\n5056\n-9180\n-4646\n-843\n6038\n7750\n-7705\n1294\n8809\n6888\n-1634\n-8823\n-2995\n-7983\n-7333\n-7315\n2240\n-4881\n497\n-4026\n-6921\n714\n4513\n-2134\n-4600\n-4863\n7388\n-6344\n-8589\n9381\n-7674\n-9967\n-9237\n2679\n-8598\n-6741\n7739\n-7720\n-1899\n-5265\n-5665\n-2580\n-8820\n8550\n9121\n-1218\n8832\n-1776\n-4814\n-1570\n-7969\n-6529\n8232\n-4867\n-638\n-1263\n3918\n8720\n-6378\n-7501\n3894\n-663\n3894\n1264\n555\n-1139\n9538\n-7029\n4909\n1751\n-6800\n7761\n6810\n6708\n-3571\n7994\n9707\n5187\n-3084\n5458\n-5274\n-8246\n5730\n2425\n7931\n-6800\n-6008\n-2705\n-5151\n-6268\n-1054\n6176\n-6809\n7683\n-4342\n-7797\n-6430\n4127\n-3148\n7294\n6188\n8729\n3463\n3375\n5648\n788\n3996\n7650\n8952\n-7078\n-8155\n-6166\n-3726\n-2742\n3845\n1103\n-5164\n6507\n-2219\n4131\n9421\n-8277\n7068\n-8046\n833\n-684\n-6160\n-8604\n-6384\n-2081\n940\n3239\n1962\n3502\n3576\n-3320\n-335\n5644\n-200\n823\n8320\n-7803\n6209\n-7565\n1042\n769\n-5705\n7494\n-4419\n5726\n5198\n-6879\n3377\n-6890\n-6072\n-3633\n-100\n-8584\n2961\n-5839\n8191\n9055\n-5330\n-3082\n-8589\n-7126\n-9861\n7624\n8486\n-272\n-1092\n-3047\n9349\n6014\n8554\n-2986\n1425\n-2615\n-1855\n5442\n-8509\n9775\n-8855\n6313\n-8060\n-102\n8809\n2374\n5400\n7789\n-6100\n-1473\n-916\n-6715\n-1828\n-5649\n6314\n-1946\n-895\n8774\n5894\n-8284\n3825\n8737\n500\n-1468\n2542\n-7925\n7775\n9221\n-2916\n-9878\n-6427\n9800\n-468\n-8699\n9798\n9424\n8910\n8582\n-8806\n-4157\n8620\n-5136\n-952\n-9019\n-6947\n-601\n-5789\n-9535\n6028\n-8930\n8466\n-5689\n3254\n-4709\n4394\n2281\n3362\n2813\n-5808\n3420\n6002\n-9398\n9653\n5728\n9204\n-4846\n-7691\n-8087\n6772\n-451\n-2286\n2826\n5945\n-7702\n9713\n5468\n4660\n672\n-1854\n-3970\n1905\n3685\n6425\n5102\n-7462\n1913\n6360\n-8581\n6604\n9384\n9117\n2574\n4436\n-6263\n8516\n-2059\n6378\n-6492\n4242\n-9681\n-6126\n436\n5520\n9528\n3885\n1227\n-8501\n1230\n-6933\n-5230\n-9432\n-1313\n-2136\n-1379\n1439\n-2864\n2839\n3340\n-226\n-4206\n9121\n-9572\n8567\n-8298\n7244\n9526\n-8506\n-7922\n-901\n-523\n-6310\n2811\n2324\n-7384\n8812\n-916\n2580\n-2966\n9885\n-3400\n-6277\n-5818\n-663\n-7179\n7344\n6022\n2865\n-676\n1375\n8622\n1965\n-9990\n-4255\n5796\n-3903\n8008\n-78\n-4997\n-460\n8437\n-6563\n-5517\n-1827\n6257\n-5413\n-6169\n6869\n5890\n9791\n5425\n-7310\n7249\n1175\n4417\n-527\n4115\n-834\n9427\n6924\n731\n-1537\n-4632\n-1218\n3677\n-8488\n-946\n-5430\n580\n4976\n5132\n8448\n-3109\n4014\n-4493\n-5671\n6507\n3688\n-9214\n-2641\n3508\n7581\n-9640\n-2308\n3598\n4940\n-3843\n-7364\n-1693\n2367\n2589\n9435\n-7914\n-5655\n7388\n379\n6022\n1899\n2607\n-6226\n8992\n1231\n-8751\n-4158\n1888\n-2145\n-5874\n-5713\n-9526\n1060\n-3324\n-834\n8534\n-1807\n9906\n1217\n9946\n1892\n8556\n6182\n-2868\n7988\n-1555\n-9400\n2212\n1311\n6349\n-9405\n3703\n9120\n5284\n4672\n-8397\n-7984\n-5319\n-7955\n-1570\n6475\n-2479\n266\n-3865\n3550\n1313\n5476\n3052\n9659\n2696\n-8760\n6568\n-5512\n-4938\n7835\n-6933\n1821\n5033\n3504\n7070\n-2016\n1147\n-2652\n-4622\n-4126\n-9118\n6462\n1563\n3285\n8275\n-8593\n-4833\n-1318\n-6620\n-2818\n4893\n5076\n356\n-4435\n6210\n9037\n6929\n-6950\n-6710\n-1735\n3541\n-5278\n-1451\n8176\n885\n-9108\n-2591\n-1165\n660\n2387\n1829\n3490\n3048\n7244\n-6423\n3571\n-5055\n-1272\n-84\n6388\n2320\n-4569\n2382\n5900\n-7482\n7915\n5668\n9089\n9963\n-6007\n6337\n-5863\n-6139\n-1803\n-1863\n8283\n-8654\n-7952\n-6938\n-5541\n484\n-8487\n-3356\n-2433\n-9859\n-1960\n7112\n8010\n-7200\n9261\n5926\n-2610\n-7854\n6988\n-4258\n-9209\n-3029\n6578\n-1779\n-6575\n9899\n4561\n7564\n-6399\n-7750\n-1276\n-1242\n9793\n-1650\n400\n-4830\n-9533\n6806\n2157\n-5517\n-9506\n-1925\n-519\n5650\n-8327\n4683\n788\n7457\n-4476\n6695\n-4255\n7292\n760\n-8423\n1603\n-4258\n6097\n-567\n5582\n1323\n-3113\n9303\n-3025\n-8242\n6039\n8692\n2309\n-5558\n-916\n-7193\n5906\n-9774\n8231\n491\n8404\n-9325\n-9261\n4790\n-5419\n4394\n-2174\n-8130\n6327\n7412\n6495\n-5814\n6741\n-6791\n9147\n-828\n-619\n1841\n1120\n-9057\n123\n430\n-3828\n6360\n5831\n-5059\n-7599\n-6946\n-9640\n4733\n2834\n524\n-5316\n8832\n-1566\n-5477\n-4370\n1991\n6716\n8755\n-3455\n7821\n-90\n-8899\n-7101\n1785\n-2925\n1299\n9571\n-8319\n8304\n-1690\n-6509\n-5792\n4825\n6801\n-1638\n-4783\n4784\n-5668\n4170\n7228\n-2326\n9793\n-4041\n-9295\n7134\n-4845\n528\n3199\n-1632\n3372\n-5856\n-2582\n7039\n-7775\n-6401\n5747\n-6986\n2608\n5091\n-8261\n-8431\n-1591\n-6165\n4835\n6467\n312\n9873\n-6425\n-9224\n1633\n8856\n5961\n-4968\n8583\n-268\n-6396\n6791\n8721\n-2141\n-2248\n-9119\n4338\n-9103\n-3693\n-706\n-975\n3854\n-1136\n8930\n6511\n-445\n917\n-1024\n-3782\n8406\n2624\n-9544\n-4830\n-5255\n-9561\n-2948\n-1011\n9056\n8291\n3320\n-5316\n1148\n-8261\n1330\n-2145\n-9226\n-1257\n1905\n-3227\n-6728\n-6107\n7278\n-9645\n879\n-3758\n4980\n-7956\n6640\n4053\n-7842\n-6749\n363\n-6904\n-3055\n-768\n7220\n-5118\n6750\n7737\n-3422\n6328\n4844\n-2690\n1113\n-7072\n3528\n-4331\n-5164\n-4056\n-4821\n-982\n2502\n7885\n-8553\n9740\n5105\n-5824\n2693\n5459\n2462\n-3001\n9783\n6766\n-9286\n-6516\n2307\n-908\n-1325\n904\n-84\n-1526\n278\n7384\n655\n-4468\n1264\n4952\n-5002\n5700\n-9261\n-966\n-438\n-466\n-3756\n-9867\n-2088\n4125\n1930\n9294\n-1243\n-5604\n-2422\n-2385\n9296\n9426\n6767\n-6467\n8846\n-1315\n7568\n4391\n85\n-2167\n-9427\n-6613\n-2586\n2008\n4540\n9421\n-7046\n8466\n-2939\n6699\n-8174\n3384\n-2700\n3199\n-4011\n-8991\n-1129\n2216\n8273\n7977\n-3962\n-2334\n-2747\n7765\n1765\n-4471\n1863\n-6768\n-7752\n-5945\n8593\n-2225\n2550\n9650\n8842\n465\n6133\n-952\n7479\n5645\n4520\n-8873\n4429\n9857\n-4567\n-124\n6193\n-7916\n-1299\n1811\n-5195\n8974\n-8604\n6126\n-7579\n-7828\n8882\n-5002\n-6102\n3891\n-589\n-5697\n7519\n-1335\n-311\n-6777\n5704\n1962\n-4950\n9814\n5400\n610\n-2093\n7898\n-6492\n-1165\n-1063\n1658\n-7184\n-3384\n5101\n4733\n1231\n9255\n-712\n4122\n4402\n5443\n3877\n7541\n4473\n-3633\n-9959\n9260\n9177\n1788\n-5986\n-5165\n8969\n6031\n741\n-7417\n7002\n6992\n-4374\n-8995\n2832\n2250\n2221\n-2791\n-2287\n-9125\n-1692\n4930\n-443\n4349\n-8602\n3553\n9117\n8304\n209\n6650\n745\n1058\n-3994\n-7437\n8476\n-7390\n-6864\n2467\n1798\n-292\n-6487\n2954\n-3029\n1192\n-1955\n4256\n5615\n4335\n7948\n-7963\n-831\n8499\n-1778\n5063\n2069\n610\n6032\n1447\n6898\n2154\n-6397\n7996\n-7809\n-3279\n6789\n7245\n8794\n-7078\n-1434\n-3953\n-3029\n7262\n-4640\n4742\n-1063\n7790\n2320\n-1721\n6128\n-4219\n7482\n3385\n-2949\n-6830\n-1522\n-3530\n-9002\n-4798\n7347\n7847\n-8651\n9432\n1612\n-5705\n-9216\n-5384\n-2064\n7739\n7113\n6250\n7192\n2927\n7901\n-2990\n-736\n3892\n-2641\n7870\n5061\n4500\n278\n3569\n5059\n-8721\n9991\n1219\n-1289\n-6273\n-8618\n-9085\n6235\n-7551\n-2850\n-7188\n-9828\n2381\n-1298\n-5671\n-2114\n-3312\n-5589\n-394\n8484\n-4008\n3378\n-9841\n-3357\n6888\n4421\n-5959\n-2719\n-5031\n1945\n5058\n1732\n8774\n-9907\n9240\n3189\n-8103\n8526\n-7588\n6113\n-9506\n1096\n-7420\n5688\n-3131\n-8204\n4321\n1860\n-3439\n5902\n5484\n-7310\n7544\n-9184\n3579\n-8311\n9400\n-2046\n3613\n2834\n-3828\n4483\n-3687\n2474\n9175\n5682\n2134\n8178\n4669\n-8999\n4089\n3745\n6187\n-3255\n4496\n-4086\n-5667\n-4719\n-9530\n57\n-5557\n-1809\n4683\n-6874\n9649\n238\n-5274\n2548\n-1610\n2406\n6760\n3829\n-6658\n-7076\n-8907\n-8252\n4473\n-6559\n9751\n9946\n-1815\n-4719\n6440\n-3154\n-4584\n-8861\n5988\n-6730\n5975\n-6449\n3127\n6406\n7501\n-4504\n-5805\n-8832\n3352\n-3961\n-3453\n9800\n-8757\n-9250\n5575\n-1894\n-1130\n2529\n2060\n819\n8152\n-6329\n-6967\n-451\n-3261\n1670\n4090\n-6879\n-638\n-5435\n2187\n3891\n5504\n4337\n3137\n-9570\n2350\n9955\n5628\n8522\n-165\n-7442\n-5330\n8494\n-8458\n5667\n-3922\n-5440\n-7066\n7265\n-8704\n490\n-5609\n-768\n1537\n-7702\n5884\n-1198\n4784\n1935\n-9959\n3985\n-1213\n-518\n-7078\n-9683\n-4973\n-2189\n9598\n-4616\n7220\n3335\n8211\n7294\n-5295\n4813\n-3329\n2697\n5383\n-2611\n4052\n-9056\n5442\n-5822\n8230\n2860\n2797\n2893\n1320\n7805\n9598\n-6575\n1307\n-3383\n7434\n7853\n-6166\n2096\n-2921\n-8558\n2689\n-2719\n9225\n-2812\n-7176\n6243\n-7995\n-7186\n8770\n-953\n-3986\n9430\n-9280\n5951\n254\n9268\n1664\n6491\n8121\n-6876\n2805\n-265\n8954\n5634\n-4938\n-6880\n7449\n-9839\n6036\n4772\n-5325\n3763\n-3455\n-8766\n1458\n-605\n-6746\n7846\n-8180\n8340\n9269\n7054\n-5084\n-98\n9491\n2893\n-8571\n3179\n2972\n-9473\n1502\n9398\n-621\n1562\n-1657\n1670\n9896\n7344\n-9187\n-2085\n-2781\n342\n-9159\n6214\n802\n-2429\n-7600\n4489\n-7485\n-4674\n2709\n-446\n-8240\n9394\n8159\n-4058\n5910\n-1281\n9760\n-6626\n5440\n4697\n-5100\n6509\n4256\n-4904\n244\n1154\n-7067\n-4251\n-4759\n5617\n-8546\n8747\n5770\n-4909\n1447\n612\n-8622\n2866\n-2947\n-1800\n-8985\n-3800\n-6839\n-1256\n-8119\n6427\n8187\n-4392\n-2980\n-7103\n-2337\n5830\n-3644\n4052\n4591\n-2181\n6072\n6905\n5783\n-3905\n-9064\n-3083\n4615\n-3437\n1133\n3153\n-1922\n-4065\n-8069\n-6436\n7889\n4440\n-7021\n-638\n-5127\n8977\n2839\n6777\n7054\n-5443\n3666\n-9640\n-1863\n-2244\n-8397\n6744\n9748\n5783\n7727\n-6548\n7052\n-4846\n-7240\n8565\n-6165\n-9038\n2975\n-6850\n-8567\n-7842\n4297\n-474\n-5606\n-4723\n-203\n-4902\n6313\n92\n-784\n-5997\n-2915\n-6920\n-8873\n-5885\n85\n-3035\n8715\n3763\n-4255\n6210\n5214\n3284\n-5662\n-585\n2621\n3569\n8826\n-9532\n-9323\n1430\n159\n-1831\n-373\n-5837\n-6559\n2129\n-6731\n2932\n-9463\n7930\n-5585\n9567\n2601\n-6215\n-4804\n9927\n-8269\n-9660\n6692\n7859\n855\n-3444\n-545\n-1924\n3776\n6273\n7774\n400\n5129\n6999\n-8423\n-243\n8011\n7236\n-555\n9279\n2752\n4931\n4728\n8293\n6421\n4497\n3458\n-8929\n9792\n-1333\n-4216\n1379\n-6254\n8851\n9346\n8174\n5712\n1899\n4115\n4437\n-7151\n6917\n9104\n-5838\n-1454\n779\n8637\n7494\n-7076\n7365\n3931\n-2719\n8075\n-5323\n-7745\n9761\n-5792\n5746\n5575\n9704\n-9334\n-8704\n9364\n-4196\n4914\n3552\n-6741\n-7272\n3199\n6427\n-3097\n-2195\n-3535\n-5885\n-7161\n-4290\n-5912\n5957\n9337\n-6472\n9037\n5573\n2384\n2474\n5497\n5889\n-9663\n-5332\n5913\n-48\n3398\n6039\n-1025\n4567\n-1689\n-7643\n8403\n6422\n2666\n4681\n7571\n9306\n-4140\n8668\n5961\n1728\n9600\n4567\n-9947\n7947\n2311\n7683\n4036\n-9118\n-1440\n7701\n-718\n7252\n-5748\n8074\n9077\n1430\n309\n7223\n7241\n6924\n-1726\n2580\n323\n9592\n-147\n9734\n-6509\n-2141\n9899\n8912\n-9095\n-1534\n-1722\n-6731\n-4674\n-5668\n9543\n2181\n-5971\n-4285\n-5435\n8785\n6022\n3483\n3442\n-4311\n-9718\n491\n-234\n-6505\n-2233\n1054\n1843\n-8170\n3725\n9367\n-9708\n2884\n575\n1466\n-4904\n-7163\n-6509\n-9898\n-1035\n4218\n-3782\n-7972\n4094\n-4022\n7344\n3528\n6745\n-8677\n-564\n599\n-1588\n-638\n-2547\n7384\n-3223\n-8978\n-3131\n2367\n38\n4294\n2227\n-4687\n-8416\n-7749\n-901\n5156\n5381\n7208\n9451\n-1072\n-6165\n4274\n-9330\n-5692\n-976\n8507\n-4214\n3267\n-693\n4016\n-4859\n4131\n2624\n-2195\n-5747\n-3433\n-5309\n4909\n-1789\n1970\n1113\n6654\n9294\n580\n2701\n-3072\n-1058\n-450\n-3553\n8842\n-6902\n5849\n-8210\n3129\n-4568\n7319\n9289\n1953\n-2772\n3176\n7831\n-5215\n-7078\n-269\n-9613\n-5990\n140\n-3349\n-1868\n-6378\n7029\n3786\n9495\n4946\n-3908\n5746\n7246\n6543\n3375\n-6525\n3179\n4829\n-5690\n-4458\n-5067\n3563\n-9505\n8886\n-6046\n8975\n-9892\n4232\n-3386\n6748\n5560\n-5068\n-4307\n8256\n-4803\n6559\n-726\n7262\n3603\n-6032\n-1753\n1072\n-3515\n1160\n-4265\n8809\n7319\n-2341\n-4621\n-5593\n4672\n-7252\n7876\n-2824\n-2708\n151\n6484\n2609\n2708\n-9044\n-7454\n4473\n-3075\n-5664\n1659\n9212\n-8951\n-3382\n8762\n7569\n-2142\n-3045\n-7361\n110\n6810\n1104\n-373\n-4500\n-9051\n-3242\n2221\n5025\n-4297\n-6710\n7853\n-6452\n7998\n-9213\n-7520\n-6727\n5334\n1096\n678\n-4395\n7679\n-4022\n6257\n-3939\n9591\n8016\n-4342\n8010\n5402\n1423\n8834\n6389\n9001\n5102\n3868\n-7905\n8265\n-2083\n6772\n-8806\n-1136\n-5612\n-5127\n-7981\n-5655\n480\n-3419\n368\n-2090\n5293\n7052\n4686\n3386\n-708\n3991\n-684\n-2381\n4228\n-9954\n-9993\n4285\n-6467\n6787\n-3366\n-4653\n-3731\n-4257\n-1246\n3925\n2320\n1536\n-3196\n-1374\n-5465\n-7690\n-716\n1929\n859\n3442\n3500\n-6460\n7761\n5628\n-4119\n4069\n9037\n105\n9498\n8235\n-2437\n3472\n-5420\n-6518\n3972\n-7627\n-8503\n6050\n4393\n-8440\n1986\n2187\n-5589\n2686\n3888\n-9356\n-543\n2822\n5302\n-7034\n-7778\n9334\n-5462\n-267\n-6891\n-2707\n7407\n8805\n7388\n6184\n3346\n6847\n-5971\n-417\n-3326\n-1592\n5544\n-6800\n7034\n-5441\n-9441\n-6987\n1815\n5783\n6926\n-4314\n-9892\n-1500\n2904\n-1946\n-9074\n-7659\n-4333\n-3553\n-916\n3237\n-7151\n-6030\n-8337\n418\n-9384\n1192\n2558\n7496\n-7729\n8273\n9305\n3827\n7519\n2133\n1879\n1001\n258\n-3963\n119\n4186\n5239\n-7204\n7704\n9534\n-8682\n-4772\n-7978\n5929\n6107\n506\n1760\n5782\n5895\n-3687\n-78\n-7125\n-534\n-4774\n6218\n9585\n8200\n-5340\n-9302\n3559\n8846\n3552\n1671\n-5477\n-9118\n7790\n-3757\n8365\n7394\n8465\n7245\n3956\n-592\n2205\n-5882\n6476\n-5732\n-6477\n6713\n4709\n4714\n7356\n-1080\n-983\n-9975\n-8190\n-7574\n828\n-6316\n3515\n451\n1098\n5400\n238\n480\n-5998\n-4376\n1974\n9915\n-7151\n-128\n-5130\n-4423\n8491\n3122\n7110\n-9930\n-7341\n-1882\n-3439\n8231\n1407\n-6444\n-4772\n-8872\n-2853\n8031\n6313\n-9629\n4347\n-5487\n-1799\n-1225\n8026\n6920\n4427\n3467\n-2158\n909\n8977\n-5982\n3825\n-718\n7908\n4464\n-1220\n693\n8293\n-8873\n5243\n3511\n8604\n-5990\n-4492\n-4091\n5688\n1240\n664\n3712\n3048\n-9240\n-5267\n247\n-2010\n5327\n-2030\n8030\n-5240\n-3302\n480\n4323\n-8323\n-4590\n2769\n8506\n-1556\n-1827\n-6216\n-4879\n-156\n-1447\n5967\n-1840\n-5838\n7409\n8444\n-5008\n-7949\n6069\n284\n-9103\n-8612\n797\n5615\n-2375\n-9861\n2789\n5978\n-59\n4821\n7116\n4054\n2816\n-8543\n-1099\n9062\n5718\n9635\n6353\n-3312\n1227\n2144\n5770\n9824\n-2918\n-7958\n4640\n1036\n7693\n-951\n5293\n-4364\n6883\n-4395\n7615\n1097\n8269\n-9907\n5813\n-5369\n4001\n-4965\n-4567\n8939\n-145\n3003\n-6977\n8293\n1299\n9247\n-2988\n7170\n6638\n431\n-8887\n3279\n-946\n-4148\n6039\n2067\n-282\n-71\n8031\n425\n-6890\n878\n-1532\n820\n-8918\n-5336\n1989\n-7692\n-1915\n-684\n7818\n254\n7294\n7865\n4192\n-6782\n-6593\n-9534\n-6708\n7805\n-6548\n-5502\n-6471\n-3453\n-736\n-60\n450\n-2995\n4978\n3135\n1408\n7241\n-4262\n-1352\n1200\n5332\n-3276\n-8900\n3210\n317\n1659\n-8895\n-68\n1728\n7241\n-5572\n8605\n2181\n7379\n5184\n3720\n-7081\n-906\n8125\n-4793\n-387\n-9056\n-6572\n5129\n9554\n-206\n3680\n-1500\n8300\n9128\n-6752\n1001\n8338\n-2893\n3567\n314\n4180\n-7983\n5575\n4745\n-302\n5910\n5877\n9130\n-4624\n490\n-6477\n508\n-2262\n5063\n9995\n5492\n-8571\n-2076\n-7245\n7531\n-4395\n5668\n-8525\n9198\n5457\n5282\n-9627\n-8023\n-4275\n-6099\n-9415\n5771\n3678\n-6865\n417\n-1681\n-9044\n8269\n610\n-7461\n-7621\n-4022\n5225\n-4529\n9988\n-2569\n9810\n1996\n1283\n9364\n-7877\n6015\n-7076\n-352\n-9273\n-3114\n-9044\n8524\n1634\n6057\n-5687\n1947\n4940\n2461\n-5043\n-4571\n-5986\n4391\n-9838\n6912\n-5398\n-318\n-5024\n1465\n3817\n8656\n4389\n-4034\n4052\n7988\n-8598\n9693\n7317\n4356\n783\n-5211\n-1854\n3219\n-3521\n-6814\n-4709\n6055\n1394\n-10\n3384\n403\n9590\n4927\n1524\n1098\n-9975\n9585\n6222\n499\n148\n-5770\n-4801\n-8148\n-7928\n3359\n-7612\n3226\n-4709\n1527\n-2568\n-5296\n3739\n-9003\n-806\n1984\n2059\n7955\n7818\n5364\n793\n6822\n3946\n151\n-9630\n9630\n2324\n662\n3333\n-8448\n6754\n437\n-2029\n-4255\n6568\n8500\n-3622\n810\n9004\n8653\n1164\n-8115\n-1858\n-2642\n611\n-7246\n-8085\n-6299\n-4599\n5226\n-4384\n-1024\n-4938\n-1431\n-6083\n2496\n6922\n4660\n1912\n-8991\n-8297\n-6895\n-9607\n1696\n6072\n-3326\n-5078\n1355\n7649\n1118\n-3072\n-5738\n-4741\n3892\n-647\n-6566\n-2195\n3768\n-1397\n-4046\n-3118\n-8531\n4909\n-6367\n5292\n-3083\n151\n-591\n3367\n-8325\n6439\n-6505\n-7330\n2456\n8503\n-5579\n5852\n-7902\n-667\n-3492\n-6341\n7979\n8307\n-29\n-8265\n-2614\n-4590\n-7186\n-3785\n-3744\n3300\n5701\n3678\n-2580\n527\n-120\n-7978\n-5319\n7443\n-5475\n-1506\n-7191\n-9281\n-7356\n-2628\n7251\n-1997\n3924\n-5266\n-8651\n9217\n5305\n9111\n-2939\n7519\n-8554\n-5596\n-3718\n-9826\n5615\n-3270\n7568\n-901\n-7112\n-7598\n7930\n-1075\n2380\n-9192\n-9157\n-9773\n-9061\n-4003\n2896\n4243\n7496\n3191\n4741\n9293\n-8230\n9568\n5013\n-7046\n-9040\n-3302\n2822\n-3767\n-6571\n2286\n9978\n-5369\n-3987\n321\n-9841\n-9334\n-4786\n1332\n2154\n350\n-1841\n-397\n238\n-1815\n-8499\n-4930\n8627\n3968\n1148\n-2153\n-4273\n279\n119\n-3390\n-4077\n-7011\n-2595\n140\n7960\n-6277\n6223\n4957\n-3939\n6988\n-5028\n-9901\n1603\n-5892\n-775\n-9280\n3171\n-1522\n5108\n4891\n3685\n4661\n-7643\n-552\n8337\n-5832\n8644\n3003\n-9386\n6223\n8612\n787\n-3622\n9641\n3003\n-9341\n-7802\n9602\n-3767\n-8598\n7949\n723\n-4998\n-6073\n-5646\n4880\n-2046\n7167\n1100\n6188\n-2993\n5320\n-4615\n-5113\n2264\n6658\n1364\n8910\n-8873\n-9623\n-1256\n5575\n7718\n-8815\n-8254\n4073\n2488\n-7385\n-9406\n-1283\n-2330\n439\n-2260\n-3460\n-1411\n1800\n-1868\n8900\n2905\n-7883\n-8724\n-6531\n7876\n6834\n9389\n8247\n-1522\n-2524\n7145\n-8339\n5056\n7401\n-8273\n3776\n-6665\n8064\n8148\n2243\n-7815\n1924\n-3212\n-6806\n4323\n904\n-4695\n9209\n-6907\n1291\n1529\n-4561\n-7375\n-1211\n2558\n-2141\n5043\n6989\n-5202\n-2176\n-5916\n2884\n-6187\n-3430\n-2237\n-1213\n5977\n-6300\n3245\n8531\n-4257\n-9381\n802\n-78\n-4860\n7008\n-4722\n1110\n9955\n3907\n1910\n8930\n-2195\n-3785\n5610\n5135\n3491\n7948\n3403\n-338\n1694\n-8961\n-3504\n-8033\n-9811\n6823\n6748\n8362\n-5673\n5260\n5914\n-809\n4578\n-2719\n2755\n-42\n1258\n1601\n767\n-347\n7552\n4349\n5549\n-9012\n-4066\n-3864\n6657\n-4258\n7015\n5905\n3870\n-7769\n3896\n3956\n1996\n8506\n-1060\n-5314\n6853\n-7459\n-5834\n-9179\n9981\n-5594\n3705\n-799\n1788\n6874\n-4405\n2345\n-5994\n-9878\n425\n3474\n323\n-4786\n-7819\n-5507\n-8999\n1683\n-5020\n-8423\n-9015\n-1037\n909\n-1304\n9494\n-4815\n7341\n2170\n4724\n-9026\n-5085\n-4041\n-4282\n8747\n2902\n5352\n3576\n-8931\n1536\n-8880\n376\n6995\n1446\n2811\n4310\n9204\n-6879\n-9143\n-78\n-2334\n5345\n3317\n-9839\n-8793\n-833\n4699\n-2420\n-3265\n-8066\n3885\n-7660\n-7341\n13\n8711\n-2510\n-8420\n-3856\n9808\n1921\n-2644\n-6183\n-6786\n7739\n4036\n-5541\n-9182\n4427\n7008\n-4938\n-228\n-3505\n7569\n1683\n5763\n-728\n2236\n-943\n5351\n-8467\n101\n-7916\n-9075\n1983\n-8025\n5674\n9528\n-2621\n6098\n8770\n4600\n6519\n-8724\n-3047\n6462\n5293\n-9484\n8464\n106\n-2368\n-2455\n9659\n-3489\n8326\n7198\n5617\n-1513\n-2437\n3380\n7835\n-517\n-4778\n-6895\n-7224\n3200\n2324\n4704\n-7740\n4029\n-4071\n723\n3889\n-5732\n-1338\n-7655\n9258\n-4148\n-8233\n4544\n804\n9968\n-6880\n5772\n-6405\n3637\n2752\n-5041\n6317\n1884\n-2007\n-2908\n-8629\n-5600\n9867\n-421\n-6378\n-5810\n7684\n3456\n-7571\n-9877\n-5828\n-2763\n9288\n491\n8692\n-5648\n4501\n-4434\n-569\n-3339\n1118\n-961\n516\n5412\n-9462\n8219\n2882\n7319\n-4920\n-7027\n-3528\n1097\n4900\n8282\n4135\n4658\n8008\n-8843\n9656\n7044\n-3992\n-5136\n-3968\n-4330\n-3265\n9567\n-2542\n497\n-5318\n-18\n-6056\n-3651\n9104\n-6477\n-2719\n5268\n5570\n703\n8809\n-4719\n7949\n-2175\n3009\n6939\n9709\n4264\n-7758\n5746\n-9630\n4579\n4909\n3571\n8199\n8743\n6349\n-5785\n1889\n1893\n4256\n-2987\n4089\n2112\n-4104\n1333\n-3443\n-7134\n77\n4963\n4908\n-9050\n-7842\n7564\n-9229\n-6378\n2975\n-7823\n6418\n269\n522\n-6300\n6174\n7005\n-5378\n-7981\n-9356\n-9072\n2569\n8999\n-6390\n-5935\n-5057\n2360\n-8700\n-3348\n-90\n3191\n1789\n-8654\n7768\n-6404\n-8873\n-6821\n4562\n1085\n4429\n-9579\n-7957\n7294\n-427\n-7934\n2968\n1508\n-6905\n-5993\n-1688\n-8417\n1780\n9540\n-4450\n1536\n5184\n8111\n9877\n3466\n2279\n-5254\n-6850\n6936\n-5318\n-7691\n-6390\n5400\n6108\n8351\n-9275\n-6229\n-5441\n-9950\n-5475\n1480\n5686\n-8082\n-128\n9648\n5982\n9904\n1974\n-4077\n-9764\n-4525\n-5834\n6285\n6559\n-6806\n1577\n-7459\n7276\n839\n9633\n-7440\n9191\n4709\n-7421\n-5043\n-2217\n-5419\n8031\n9873\n4658\n-2961\n-3223\n3226\n2189\n6134\n1939\n-4390\n-1323\n-240\n-8850\n6122\n7885\n1991\n2271\n6261\n-8012\n-6213\n-3041\n4125\n6966\n-5882\n-6915\n-5345\n-3925\n709\n978\n6321\n7461\n2433\n7315\n-4675\n-656\n-8237\n-7938\n-340\n-5314\n-4571\n1699\n1525\n-6613\n-2064\n4562\n6285\n4192\n-173\n7710\n-7469\n-3785\n-2248\n4375\n8399\n-833\n-427\n5295\n-7999\n7236\n-5517\n-5989\n-6017\n965\n-3883\n-7937\n7707\n-1892\n-2085\n8111\n-7516\n9569\n8043\n532\n-1663\n8001\n-1162\n9170\n-7059\n-8235\n-6865\n-9272\n6119\n-3662\n3870\n1339\n6589\n-4588\n-4322\n1549\n-9520\n6393\n7102\n621\n9389\n-4111\n5768\n-3700\n3018\n-5154\n-8234\n8634\n-2928\n-6425\n1709\n3657\n-9595\n-8276\n-844\n-4257\n770\n-4722\n-3718\n5091\n-8724\n7964\n5288\n8921\n-4719\n527\n-6946\n5186\n3598\n5259\n4359\n4147\n9435\n5992\n-6929\n1058\n-9752\n-4909\n4756\n-1902\n837\n6293\n6326\n7847\n-8692\n-9016\n8851\n8842\n8743\n1989\n-3991\n-6232\n-9571\n425\n2666\n9009\n4745\n-1197\n2866\n-2479\n8453\n-6310\n9490\n-1892\n-1313\n-2941\n-5062\n-4521\n-4219\n6337\n-2011\n7727\n-205\n2094\n2780\n6791\n3547\n-9513\n7262\n-9526\n-1306\n8873\n342\n6483\n376\n1897\n9068\n-5133\n1822\n-6727\n-3922\n-2009\n3515\n4391\n-3029\n2778\n7117\n8232\n6898\n-1425\n7289\n1346\n462\n-5431\n3643\n-7627\n8974\n-5687\n-7501\n5783\n132\n1799\n-6425\n-8416\n-8904\n8380\n-6216\n-6391\n-5792\n-5770\n4126\n-9622\n8842\n-2096\n2929\n-1438\n-3156\n-2796\n-7415\n1924\n6898\n6991\n-4968\n-8032\n998\n-3780\n1969\n8453\n2515\n-1596\n-6004\n3195\n-5012\n4594\n141\n1449\n2834\n-5076\n5824\n34\n3463\n-736\n-5096\n691\n3876\n5463\n6703\n-1072\n3853\n-7937\n-8593\n9037\n-2492\n1952\n2293\n-4422\n-2151\n5214\n5234\n5988\n-8011\n4501\n8970\n8678\n8386\n4525\n8340\n-7246\n-2570\n-5829\n2271\n-6614\n-8375\n-4515\n9674\n-2724\n-7871\n3973\n594\n3875\n1614\n-8339\n1879\n-7555\n5093\n6353\n-5309\n-9118\n-7390\n0\n-7598\n-4177\n8634\n7534\n1556\n349\n-9441\n3579\n-4653\n-2416\n-2194\n-4484\n-6483\n-5383\n-78\n-5205\n-1242\n813\n3590\n6240\n-3736\n-7390\n-7632\n5321\n-6299\n-4615\n-2210\n6188\n2372\n7060\n-5986\n-1632\n3032\n-5612\n-5336\n-8543\n3502\n1695\n4391\n2387\n4547\n1110\n-3353\n-545\n804\n-1809\n-5353\n7904\n8120\n5855\n1657\n-6626\n-6422\n-4870\n-1404\n-6229\n-3968\n2585\n2060\n-1821\n1577\n810\n-8408\n-7540\n7897\n279\n6039\n6656\n-9330\n2591\n8567\n-5495\n7354\n7443\n8697\n-9959\n925\n3180\n-6647\n8556\n-1018\n-1293\n9569\n-2128\n-1431\n7483\n-3984\n-649\n-8978\n4285\n262\n-5191\n-2759\n4835\n-5834\n1294\n-3856\n3084\n-8885\n-2708\n-1693\n-8948\n-6021\n1629\n3961\n2760\n2861\n-6797\n5184\n8419\n-9162\n6810\n-8473\n9899\n9844\n-2044\n-9103\n-3183\n-8697\n5303\n7412\n8344\n5003\n5957\n6327\n-8799\n2425\n-5159\n1732\n7934\n5728\n-7328\n-605\n-8552\n-6232\n-9200\n-3586\n6145\n8498\n-2780\n649\n5957\n3744\n-9775\n7645\n7354\n1335\n4195\n-5747\n6484\n8567\n7851\n1910\n8259\n-3384\n-9657\n2189\n-7643\n-5612\n-3674\n-6521\n-4128\n2187\n-3000\n-9708\n3052\n6262\n-4863\n8010\n3371\n5220\n-38\n3744\n-3828\n-6773\n-2962\n2887\n497\n425\n7873\n4140\n8657\n2461\n-7654\n8640\n6365\n4225\n6829\n4186\n2301\n-2793\n-6554\n7241\n-7102\n659\n-7999\n9335\n-1223\n-7090\n6542\n-2019\n-873\n-9624\n6293\n6039\n-6108\n8204\n2860\n5098\n-7132\n9694\n-1973\n-1217\n-3264\n-7112\n8296\n-8850\n4014\n-1837\n480\n-7667\n8005\n4750\n1059\n-4798\n-187\n4728\n7007\n-2369\n505\n-590\n-1827\n9692\n-6294\n9115\n9756\n2380\n4533\n-8557\n6450\n9019\n9514\n-6594\n7060\n2477\n2259\n-5578\n-85\n7356\n6055\n7649\n-2742\n29\n-5146\n-7621\n-2829\n-2427\n-3827\n6197\n9143\n-9622\n-4062\n-6232\n-1470\n2591\n7104\n-206\n9517\n-8918\n4658\n-7199\n-48\n2662\n6782\n-4705\n-9459\n-3950\n-9057\n-2526\n4866\n5611\n-7128\n4238\n1706\n-9179\n-6611\n5615\n-3148\n5074\n-9463\n-4435\n266\n4733\n-1242\n4407\n5334\n-2856\n-3600\n2666\n9396\n-1224\n-7132\n1957\n-3651\n-8843\n-8699\n-6879\n-9957\n-648\n-8212\n6511\n-2657\n5351\n7541\n8556\n7344\n-3734\n-4679\n-9580\n8416\n-8\n3976\n-8397\n-2827\n3666\n-3230\n-9044\n-9821\n-3836\n-8100\n-1502\n-4011\n-4569\n9761\n-8261\n4533\n9424\n-9374\n-6630\n4941\n2496\n-1902\n1491\n-9374\n3398\n2018\n-9983\n-6165\n1750\n-5885\n-383\n-2319\n9426\n5058\n8016\n-8079\n-576\n7192\n5003\n-5885\n-414\n-6455\n2511\n662\n-2997\n9240\n2670\n6145\n-6745\n-3414\n-6450\n-2425\n-335\n2475\n3671\n-4809\n-5888\n-3508\n4522\n-2626\n2970\n9659\n4590\n-4730\n-4722\n-5018\n-916\n4268\n-7102\n-2070\n-5414\n3533\n-6170\n-2247\n-6590\n-7211\n5153\n1360\n-2995\n-9954\n-7684\n-2668\n-335\n9352\n-698\n-133\n-3571\n-3419\n-4821\n-4222\n1603\n-4835\n-2259\n1547\n-2244\n8811\n-151\n-1201\n1008\n2212\n-739\n-9308\n-3766\n8964\n-240\n4044\n8368\n1944\n6672\n7953\n3481\n-4273\n-3961\n-6222\n-9274\n5345\n5834\n-4737\n9009\n-7920\n1128\n8227\n6031\n-4925\n-1714\n-6649\n-460\n183\n9207\n-6046\n2196\n-5435\n2797\n9783\n5909\n1103\n-6800\n9507\n-9967\n7643\n-7489\n4104\n-8978\n8732\n8582\n8013\n-2724\n-9453\n645\n-5489\n-3939\n-5242\n3400\n6392\n3355\n-2111\n-6056\n-8164\n-3053\n-6399\n1921\n-9171\n-68\n-4051\n-5292\n-2462\n-4215\n4733\n-1397\n47\n-5508\n425\n-1883\n-4273\n-8058\n-3972\n7223\n5112\n2154\n-5770\n7949\n8859\n-6140\n876\n7153\n4082\n-1025\n4462\n3629\n7006\n-1790\n2221\n-4133\n-5881\n259\n720\n-6333\n-953\n-749\n1092\n-1037\n4657\n8842\n4075\n-163\n9342\n558\n-5932\n-2319\n-5168\n-8259\n4266\n1592\n2389\n6351\n8556\n6039\n-248\n-6163\n-116\n7369\n-5998\n-2572\n-5181\n-8613\n372\n-8880\n-9597\n4453\n-9775\n-2547\n9640\n-1404\n9001\n8351\n5364\n3377\n-5316\n7518\n1801\n7070\n-4133\n5740\n1146\n-5307\n-9975\n-3460\n7818\n-1809\n-6152\n-1204\n3292\n3734\n-7803\n4001\n-5202\n5747\n1526\n-3045\n-5540\n6697\n2618\n7086\n4230\n1282\n2755\n-5638\n-5562\n-108\n2600\n-4321\n-2492\n-9473\n5957\n-1133\n-892\n5765\n3675\n-6046\n5497\n-773\n7607\n1526\n-9037\n1789\n1944\n-4342\n-5042\n-7299\n-9663\n-472\n-6905\n-4902\n7109\n-6946\n-9443\n1957\n-1247\n3834\n1904\n4014\n9367\n-5834\n4013\n-3265\n-9544\n7826\n-5557\n3747\n1848\n-2747\n1763\n7110\n9740\n-6326\n1550\n-8806\n886\n-1692\n621\n-2318\n-2134\n8851\n-9455\n6829\n6212\n4231\n-9032\n5475\n1265\n-266\n-266\n-7812\n831\n6041\n-787\n178\n7112\n-753\n1676\n6785\n-3034\n-7140\n-6678\n1425\n3896\n-8604\n-4845\n-3478\n6291\n70\n8512\n-1011\n-6948\n4547\n8822\n9089\n-3883\n8273\n6755\n2170\n-7420\n8031\n-1800\n837\n-485\n-8679\n-3348\n5730\n9397\n-2344\n3651\n5514\n1688\n-5743\n8640\n-8667\n-9101\n372\n-2657\n-3782\n7262\n6058\n-7034\n-7193\n6004\n-1135\n-2223\n-7027\n-4662\n-1242\n2456\n-6222\n6197\n6695\n4025\n-7363\n3533\n9713\n-6273\n-7379\n1355\n-383\n-1882\n-9203\n7521\n-8303\n-4640\n-240\n4398\n-3756\n5300\n2396\n9107\n6837\n9589\n-8655\n-3455\n7931\n5288\n6212\n8644\n-4086\n-5556\n-3605\n6591\n8482\n-7391\n7898\n821\n-9683\n-2569\n-7078\n4879\n9921\n-9772\n-1675\n5588\n1058\n-860\n-7392\n-3218\n5499\n6216\n4473\n6210\n-5278\n132\n-1231\n2585\n-7112\n-3865\n4741\n1892\n4073\n4142\n3887\n-8210\n4239\n-3057\n-1247\n-197\n-8115\n-1883\n2029\n6337\n-5321\n-798\n7434\n2029\n-4894\n-7469\n5746\n3214\n-2885\n9598\n-3215\n-4772\n4645\n5263\n6055\n3744\n7774\n3461\n-4734\n6680\n-5585\n1891\n1542\n-7905\n-2908\n-425\n9432\n1695\n-8178\n3503\n-1293\n2028\n-9261\n-8178\n-8058\n8489\n-7812\n-3736\n-3056\n-6157\n8653\n-5405\n1096\n-333\n-9319\n3339\n1335\n4123\n4547\n-4432\n4946\n-3545\n3156\n2462\n9946\n51\n-1134\n6576\n-3436\n5617\n-6425\n-1506\n3201\n2905\n4238\n-5132\n5409\n6349\n2760\n491\n6999\n-6552\n4265\n-9103\n6039\n-9163\n-9496\n7860\n-3785\n13\n8842\n-4772\n-9622\n3261\n271\n-7660\n4662\n5858\n-8431\n-8779\n-559\n9284\n9303\n8780\n3892\n-7479\n8794\n-4622\n-5606\n3466\n-4134\n7344\n-2691\n3375\n-1133\n-2429\n-448\n3443\n-8201\n-3057\n6113\n-5562\n2311\n6427\n-5692\n403\n7459\n1549\n-1563\n1954\n-9166\n-5462\n2189\n853\n8443\n-9894\n-4630\n-2070\n-7034\n-2206\n723\n-1228\n-2484\n2467\n7607\n5293\n870\n-2064\n2329\n-873\n9483\n-6800\n353\n2028\n8549\n8964\n9408\n9007\n-8406\n-2484\n3870\n9519\n-5874\n5176\n-919\n-5452\n-1890\n-9887\n3275\n2816\n7647\n-1376\n742\n5574\n2305\n-9003\n9633';
 var $author$project$Days$Day21$puzzleInput = '\nsbdn: bctf + msbv\nnfdd: jnlb * bbjn\nsbmt: zzcd * vpbd\ndvpb: 12\nhrqh: 20\nqdsq: 19\ndmhs: qjst / psrt\nmwbf: 2\nfhmh: 4\nfnnt: 5\nctmw: 9\nshtl: rhmb * gmhp\nqrnh: gwnm * ssml\ngcnm: tjjh / wwwr\nnncw: wbzd * sfcw\nqgfs: dzbv + wdrc\nqpff: 3\nwggh: 7\ncdsl: qvnp / wlsd\nwpnr: 4\nmqqt: 6\ndnlg: njzj * cjsv\nwvwh: tjzt + hwqg\nzmrd: 9\ntqfd: 2\njzzg: mrdl * gcqg\nnmdj: hsht + bttm\nhfhj: 18\nqqqf: mngf + nshb\nvtvm: wzjs + qdvf\nblsj: 3\njnfz: 1\nsfgz: nwjm - qbmd\nmlbw: 2\njnjb: 14\nrnbh: fhdc / mnzr\nzwrp: zhpw * ftfm\njhnt: 2\nhlmd: 9\njnbb: jcmn + gmtf\npmhz: prqw - gdhc\nwhht: 2\njgpd: 3\ntchz: 5\nmcvd: 11\nbmwn: 2\nqwst: 5\nbfjs: rgfv - hlpf\ntwwb: 2\ndpjf: mqgc * tjfg\nwbzd: 7\nslml: 3\nftvq: 3\njqcs: bqgr * fztn\nrjwc: hzwm + ffdv\njvqm: 3\njnhr: zbnf * hnpq\nbmzm: 5\nqljm: zjnn * stcb\nfsvt: 2\nmttn: gzgb + jgfs\ngswz: qvqg * dbvp\nnwwj: 2\nfhfs: tdwr + qrnh\nwcfq: 6\ngfgv: qmtj + gchq\nvsgm: jwdd * rfrd\nhzwm: 2\nsrqm: thrf * rddb\ncftz: swvg + sshh\nvvtp: 2\nstsg: ztwz * spvr\ngjvw: wjtv * brvp\nblmg: 3\ndclj: 17\ncqlb: slmz + bdmh\nmjhq: nqnq * sjdh\nhfqb: 4\ndnzv: 6\nrfjn: 2\nbcfm: gfrl * nmdp\nbzwm: 4\nrdtl: hfhc * ljlg\nnzwz: chgr - cmdw\nqbpq: lnns + sgzf\nlbnm: sqbw - mpfn\nzpmf: 2\nqmvs: 2\ntrpv: hcbg - wzqv\nzhnp: mfqm + svgg\nbrvp: 7\nlhds: frvr + gpdw\nmnrp: 2\ndmmg: 2\nbvjv: sgrn + dtmf\nppsj: 10\nrlfj: nmwn * pgrc\njtvr: 9\nwdlh: 6\nhzhr: 2\nmbvt: gdwj + mvff\nsjcg: wcjj * pshs\nlnbw: dtdg * bzcg\nrbtz: msmb * nswp\ndjtg: lrww * rldc\nrpjv: cnhs * wqmt\nlwrl: 2\ncvdf: 13\njztf: 2\nfmnq: wqqp + znnj\nvhtm: lvln / nfms\ngmrl: mwdm * dtvd\nqgzz: 9\ndprf: hglc + fctd\nmsqd: 6\nchvq: 2\nztgn: 4\ngppd: 2\ngwrw: lnrh + jcfr\nrjft: 4\nrvdg: 2\nzhqp: 7\ntrjl: 5\nsnlj: 6\ntvdp: svps + bdmp\ncdqj: gspr * lpbn\nzrjs: 3\ngrcg: 13\nzcnf: 2\nbqtw: qwjg + mmrq\nvpjc: svcq + htng\nwjqc: 2\nfwsg: 3\nvrqz: sjmc * lzzg\npdhv: 4\nmqgc: jtjf + wqvr\ngfrv: qbwn * plrq\nfrsq: 19\ntzps: 2\nbzft: 11\nglwr: jdfh + gbvs\ntrwg: ggsv * vcvg\nnqzw: zwdg * qsdt\ndhdh: qqlz * frhf\nsfpj: hjlh * jbfl\nldmr: 2\ndplv: 5\nfdsp: 12\nzjlj: 3\nstcb: 3\nzqlm: 6\njltr: tqvq + wplp\nsqng: mrpf + vnth\npgtz: vzgp * mlsg\nwlsd: 2\ncrzv: wfct + jjdf\nfcqm: zccs * tdmg\nrlrr: glwr * gqwc\nnmwn: 13\nbzlp: ctnc * gzdt\ntfgq: 5\nmrlt: sbjm + pmnd\nvpbt: glss + mrqs\ncqfp: csrh + sjpf\ncmbl: 14\ndtll: zbcg / mpsb\nmrrc: nncw / sppr\njwlz: sdmd + pphp\nbbzz: 2\nmnjh: gbdp + wjmt\nswhv: pnsc * zpwv\nzffq: 2\nbpbq: 10\nrbpb: 2\nsdhg: zwfb * ccnc\nqlds: 3\nzlbn: svdf * ffpf\nqbmd: 2\njlnp: 3\nhffq: hrbc * lhdt\nnbsj: hpnj + zqlm\nbzjm: 5\nzbcq: tqcc * mwgs\nvhfw: 2\nmltq: 5\nhfrg: 4\nfgjs: zbdm * dgpc\nnshb: ndnl * tvvb\ngrvb: qwqc * jcrs\nwtdw: gldv + nhnf\nvvgf: chct + mszt\ncjmd: qncq + ddpb\nnhjn: sjcg / zpmf\ntdng: nzcm + vhfw\nzsrg: 2\nhbbc: 7\nmqhg: 5\nmwdm: dqfd + sntl\ncqgs: rvhg + mzvg\nhqhd: hhwb / cdrs\ngsfj: jnqq * tchz\npvlz: 5\nbnlh: 4\nhnbh: 9\nnfds: ddst + nlqn\nrdqq: phnj - vfbg\nmpfb: fqvv * jdch\nbhtv: bghm * vfzj\nmnlg: bcvt - hvfz\nhbsz: 1\nngmf: plfm * lpff\npprz: 13\nqbmm: 3\ntzmw: 2\nzcmc: 13\nrlrh: mmhs * zzbb\nfzpc: zshb * vvtq\nzqgr: 19\nwbjp: 4\nlcgw: cmjc * csgl\nnvvg: tjnj * gddz\nzqvn: htdp + zgcp\ndlfp: dtdq * npql\nndrd: dszg + wvwh\nsjpf: 1\ntqhn: pddt + fbhs\nwlwd: 2\npngv: qmqd * qsdf\nbzcm: zbdl * rzrr\nzmtv: 14\njgjj: rsdn + gfwv\nqgrs: vrqz * zsrg\nfnvb: 4\nzbcg: tzmf * wrrn\nfqmp: 2\nwzqf: 11\ngntq: gqbs * blbl\ntcfb: 5\nbtpd: gmrl - dbbq\nnmmj: gpzb * sfvr\nthwn: 2\ncplt: 2\ntwmh: znmm * cnzr\nsvzw: 1\nfqwr: 2\ncttl: bsnm + mqzt\nfdzp: 4\nqwwp: dzpr * bbzz\nspng: 2\nqmtj: bgfc * rtql\nlcrd: vtjb * mzvl\nlshc: jbtz * gctq\nzvdn: 3\nzhwb: fgvs - rjsp\nfvdd: nsqr - dqfq\ngplw: vdsw + mgcb\nwmlq: hrqr / zqpz\ndtdg: 4\nlnns: wdmv * gvqg\nmrsb: nnfh * qglg\nrjnt: 2\nfvgd: gbbc * zmsv\nvfbg: qnmp * hltz\nqjtm: 2\nzqhf: 5\nrddb: swqs * jljs\nzhss: 2\nvpbd: 4\nfflt: qbls / zwmh\nbsbl: dzvl + jbfv\nwqsb: pstv - fjtw\ndrrz: 2\nmssq: 4\nhhmn: 3\ntprf: znvf * zrlz\nbrrw: fwbm + qfpf\ntdmg: 2\nbwhn: 9\nnvzr: ffjs * pzmg\nssml: zmsj * svzh\nvzgp: ltwt + qjrv\nltnm: wcmp * svpd\nhrqr: rbzv * ndbg\nrfmv: 3\ndnsn: 2\nhptl: trsd + rgjz\ncnhs: pnqg * npjd\nfwpt: 2\ngjlm: 5\nttlm: 13\nvwgb: zqcs + pcwp\nvlpt: 5\nncds: 3\nwjdr: 3\ncsnr: 10\nffcj: 4\njllj: whlp * frnc\nzgfm: 3\ntnft: tqjf * sbhf\npbwb: 9\nbrqf: 4\nnjsm: gbdt + npsz\nqphz: hfdb * fzcc\nqcrr: 2\nfjvr: jffs + qjfh\nrpzr: 7\nlzdn: nmdq + lscd\nzcbq: fvgq + wgct\nsblg: 3\nbfgb: 9\nddpb: wlwd * lzvs\nvmnr: zstq * cfvn\njbfv: 3\npgrc: 17\ntzrr: 3\nsqph: vmbv + lmdd\nrgdb: trvj * rsgv\nrvmz: 7\njvgp: bmrf * nnvc\nvpdp: rpnq * jsfn\ntqgj: 3\nffbm: 2\nvnth: pmps * qghj\nnprf: 2\ndbwf: 2\nfcsw: 18\nmqql: 2\ntdmf: 7\nfhdc: jqph + czwd\nftpp: 2\nwzmg: qtnf * rwzb\ncswj: zdvw * gzsc\npnqf: 5\nhfnq: mhdd * fgvz\npdtw: 2\nswwr: 2\nfbmd: 3\ndbfn: 3\npnfh: 3\nfjbv: brhv + zshw\nwqbq: 3\nwngj: gsfj + rchc\njcdh: hsnd + tfmf\nqvtf: hgll + tvvv\nrjwf: bpnp * hdfn\nncfl: 19\nczwd: lbvt * wwnr\nbwns: wtjn * bplf\nzmwz: glnl + twmh\ndbqd: wddg / fbwr\njdfb: qdsq * cqsd\ndqcj: 2\nvlzz: lrgr * vbzl\npwft: rhnq * wcmw\npfgl: dpjf / qrcq\nwjms: 9\nwqrw: ngsh * zhnd\nmjwr: 5\ngshv: zfdl + pdbd\njgfs: zfgq * qsng\nrgnh: 5\nqqpp: smnq + mhvv\nplfm: 7\nzdwj: 2\nzqrh: 11\nthrf: qshf * dqjg\nnpnp: 3\njtfn: 17\nhjwg: 11\njlwt: 2\nzvpd: ltzz / mlbw\ndmcm: wzht + bgnr\nnlqn: lzdn * zgvg\nhgpm: vhvf * mppq\ncwwb: jfhl * gljq\nfhdz: 4\nnpsz: 10\npnqn: fbvn * gscc\ndrmg: 13\nctnc: 17\ncmdw: pllt * fhtf\nscqm: nbvw * zmcq\nrtbf: 5\nfgvs: lngz * mcjf\njqph: qnwt - bvqq\nsfzm: 4\nlrgr: 11\nqqrz: 3\ngpmm: jmhb * nfzg\ngscc: 5\nwqqp: rvhn * zjlj\npddt: 3\npsfp: 1\njdjn: rhpf + dbpv\nwjlc: 3\npdtr: rwqn + mjss\npmrr: fpgp / wqsb\nnpcq: 2\nhsds: 5\nvgws: 5\nqnbt: 4\nzjsm: 4\nzgws: 15\ndjmp: 18\nqdqj: 2\ngvbg: 4\njlpt: lqmq * bqvz\nmbhm: hzpb * mshr\nrcvc: 5\nfzcc: zqhf + pnvr\ntfsh: 20\nlwld: wtvs * vjgg\nscdj: 7\nspgv: tcdr + tfsb\nsmlg: jmbd * fgzz\npqpq: cfgt + mbvt\nllhz: vnjd * zcdd\npgcf: 4\ndfnb: 5\nqtsb: rlrh * qzjn\nhpwf: wzwt + bzqs\njrbz: njzz + sqhb\njngh: 6\njmhb: 5\ndhbc: qpqs + bbjs\npvww: 2\ngttq: 2\nphjs: bnfj + mqbr\nbrhl: fmdh * wnnc\nprqz: ptjp * nnfc\nhhfw: frvn * mrlt\nzlfh: 3\nmmps: 3\nmlgn: 2\npbwr: 7\ndzbv: lvnr * sdgt\ntttc: 4\nbszz: 2\nlppw: cjbq + fjpl\ndjcj: bdpp / tztt\ndtdq: 3\nfwwp: fhnv + fdsp\nmpnt: zppf + bjvs\nqnfz: 4\njmdp: 2\nsdlg: lmqq + fbvb\nqbhz: lqds + qdcn\nhmnn: 9\nwfbn: cvdf * pcdr\ntlqj: tdnj + zmfh\nvfzj: 7\nndnl: 2\nhqzz: bqdh + wbjp\njjld: wppj + fmzc\nndzz: 5\nlzdg: hjlw * bmgv\nnbrp: 2\nvjcw: gsbc + jfnh\ndsvn: 3\ngtzb: 2\nphhr: 3\npslv: szqs * wzvt\ndrvg: mvgh * pgqv\nvghb: 4\nvjrs: sldb + zntp\nfqhb: sqzs + fvcn\ncqjz: slwd + zzfb\ntnhh: zpzt * qzcz\npnbp: mmlj * fgjs\nttfs: mlfn + mvpv\nrzsm: 5\ntzmd: 7\nljmv: drbt * ntrq\nstvb: 2\ndtmf: mgqb * dqbg\ncnbc: 4\ngppt: schn + tcjp\nqdgr: 3\nfhhp: ccwf + pdtg\nfbhs: 19\ncbsl: 3\nsnct: 4\nvnjd: 3\nwstl: 3\nqsdt: gpgl + wlpz\ngljq: 2\nnlmg: bssw + hjzl\npjhh: 5\nshzw: ljmv / rtsv\ncvjr: 2\nwzjs: 3\nmmlj: 9\nhsvq: 2\ngqwc: czst * rstl\njljs: 3\nnpmn: zgws * nmfv\ndvwb: dfgb + bvjv\nwplp: tgtq * wqmw\nzntp: plcs * frsq\nzshb: tnwb + bsfq\nllmb: 3\ndjtf: qfwg + zdth\ntnjp: 4\nwzrw: tgwb * jzwj\ndgbf: mccf / fsft\nnbzq: 7\nqtjm: 2\ngzmb: 6\ntjvn: rcvc + sszv\nbsmz: 4\nvzmm: 5\nznnj: 5\nbrfb: dtzn * rcml\nbdpq: vrlt * bszz\nrfth: 3\nprqw: nlwm * zzqt\nfdfj: nvcj / mmps\njsfn: 5\nhcpl: tjtw * nrsf\nzqjc: lwls + mlzt\ncsrl: 2\nstnw: 11\ncprm: sjtc * zlcl\nhndt: wzmg * cqpl\nsrfr: 1\nzdvw: 5\nwqvr: pgmr * mllz\ndpns: mghl * mptl\nhrbc: lzqd + wzqf\nwwfq: 5\nhmcs: wzll + pctz\nwbzc: 4\nfjpl: 4\ncmcl: djvw / cfbm\nfzhr: 4\nsssj: 8\nzvmr: nrfs + vfsb\nrwtm: 4\nrbtv: 2\nmgsm: 2\nfqnr: qzqz * ncvs\nndbg: zdfz * hwqc\ngsln: 3\nrgdz: trmh * clhn\nglqw: pvlz * pnpv\ntzph: bdbp * hjsj\nplcl: tzrh / cpbm\ngpgh: 4\ndbrg: 3\nzrbb: cggm + tffw\njfqp: 4\nhtfp: vchh * ffmj\nggmn: nbsf * svbw\nvfqz: 7\nbdpp: dlfr + qtrc\nrwdw: ncfl * wjvz\nzfdl: zvpd * rfrp\nhcrr: 3\nhhdp: 3\nchnw: 4\njqhz: mqqt * hcgj\nmvzs: prcg - bbzc\nmngw: pfgl * nppq\nvrqn: fbqw * tncw\nwzqv: gcpl + lppw\nnmdc: 7\nbrsj: 3\nmmrq: jqtb / rssc\nqfcf: pnqn * fqwr\nnfbf: qchr + tlwf\ntbph: frmw + vgws\nqbld: 3\ngptr: cdvh * qbmm\ndqlt: 17\ngldv: 4\nrrhp: jhmc + sqnb\npbrh: qlpf + mrqp\nvsnl: svjl / qqrz\nmhdd: 3\nbjtt: chwq + tclj\nhsdn: hhhj / nszz\nlzzg: 2\nvqmb: 5\nghtc: 7\nvnzp: lbql + fnnq\nmngf: 2\nqbpp: ztnb * hpjc\nfmzv: 3\nvjgg: 3\npnsc: ccwj + fqhb\nhltq: wjwt + lcrp\nbtms: 3\nnvfs: dvwb * hbdc\nztlh: jpbg + fhfs\nsvzh: 2\npnvr: znbv * nsgq\nsfvr: brfb * mdcj\nqfwv: rrcr * vznb\nwwnz: njsm - zhss\nlfcg: grcg * rbsl\nqtds: shtl + hcml\nzstq: 4\ndjvm: hmgb * jntd\nzdjz: jghp + nvrs\nmggw: rbpb * gqcp\nbwjd: 18\nlcdw: brtp * jmdp\nshlg: qmhs * fqdd\nbszm: 3\nzpnz: 2\ntmwz: 3\nqvdw: 5\nsbtn: 2\nmvhq: rjwf - pbrh\njqjq: cqjz * bqtw\nnrsf: 6\nzgcp: 7\ncjsb: 5\ngmhp: 2\ndltw: ltvn * tvmn\nsdmd: lfql * grzs\nvbtj: vdtd * wzmd\ngzlc: tcht * jlnp\npllt: 3\npdcz: zlqv * fnph\nvbpd: wvjj * qmvs\nqhcm: ffbm * nwcw\nftfm: 3\nrlgc: vtzf / hfqb\npmnd: zvbv + zzfz\nnppq: 7\nnsnb: grhc + lbnm\nldjw: zpvj + llqd\nmlrh: ltzs * rbjs\nrtjv: nbzq * zvfn\ntrmh: qgsw + pmll\nhfhc: hlfm * gtrb\nfvwl: mzhl + fgjm\njjdf: ttlr / tnvf\ncrrt: 3\nlhcs: llhz - gmfq\njzcm: shpj * dzdj\nswqs: vlpt * jlrw\ngrwv: 2\njlrw: 5\nrwzb: 7\nzqcz: cjzz + rbqm\nzgzs: qsmn * jwdw\nzzcd: 2\nrjsj: fgqs + qtwf\npsbr: wsbl / hzhr\nhfth: mznc * jjld\nnqlz: srdv + hlsh\nwght: 17\nvnbv: 3\ntzbv: mrzv + pzzg\nbmlc: wjdr + hpqf\nqdcm: 3\ntfcj: lqsz * tlqj\nbvlt: gvth + hfvv\ngbdt: 3\nglnl: tzrr * bpnl\npzzg: 14\ngvzz: 6\nftqg: 5\nlvss: 2\njpms: 2\ndtwg: mcvl + nftw\nsqvr: nvjc / vqjr\nrbsl: 3\nfblg: 19\ntvpt: vbdt + lszc\nddfn: 15\nztnb: 5\nrhwr: lwlm + mmth\nlthm: 4\njhrc: pjdw + qphq\ndlbd: fwnq - jrcp\ndmrq: 4\nhhhj: 14\nzphb: rtbf * ssjb\nvvzh: jwch + qbpp\nfhth: lthm + tqgj\nfpgp: zzcc * rlds\nprcb: 2\ntmfq: rjqn / rjjg\nzbnf: cvzr + rlfj\nlgjz: 5\nflbd: tsgp * bzfh\ndrsf: 11\ntdnj: blfb * hhfw\ndsww: 8\nsfnr: cmrl * mnrp\nrgvs: 8\nvdsw: 8\ngzdt: 3\nhndr: 2\nsmnq: fmnq * thwn\ncltt: 2\nbccb: 10\nbjcz: hbnt + hclw\nsrbb: 17\nhqdw: 3\nntmq: mblh / mrbp\nfbcr: 6\nbjcj: 2\npzst: rzsm * fqsh\nqnhl: pvth + vmzc\nfbgm: lnld + mszv\nsqhb: snct * mldp\njcdn: 3\nqncq: 5\npcdr: 3\nhdbd: 3\nsrsm: 9\nmmdc: 3\npzfg: mzlc * dwtg\npchq: vsnl + bnnv\ncggm: 12\ndsnc: 2\nmghl: 5\ngtvn: vgdq + ftcm\nmrpf: jqbs * tpjh\nfplm: zpfz + mlvl\ngrrs: 2\ndzdj: 4\nztwz: nndq * chbr\nbzjw: 14\ndzjv: rbtv * tbfm\ntjfg: 2\nsdpp: hhwq / rhvj\nsbtd: 8\nbjmg: hjwg + dbwf\ndtcv: drmg * vttc\ntvnd: pjvb - cgjp\ndtfp: 5\nmgjt: 2\nsbgm: hjgv - wvzj\ndmcq: 2\nljlg: 2\nrcml: 5\njstr: 2\nlrrj: vlnv * fmcv\nmdqg: jrpq + sdhg\nqngb: zzpp * rqqs\nhbnt: 9\nsmjl: wvgs * drrz\nnszz: 2\nrfrd: 3\npdtn: gmcb + mqhg\nqqfr: 11\nhqpb: 7\nqcmm: 3\nqwqc: 2\nftbq: ttdn * hgwh\nvznw: mmsc + svcb\nnwjr: 13\nlrgw: 3\nmnzr: 6\nmshr: qgfs + vwgf\nrvhr: rdtl - pprz\ncsgl: 8\nmfvh: lhqm / bvwd\nfsjl: 3\ncvlc: jdzg / rgsm\nztth: flbd + pscz\nghdt: grvb * lsnw\nfqtj: 2\nvcwt: 3\nsvvq: 2\npjct: 2\nzvmv: 7\nsztg: pfjb + qgzz\nmvtz: 4\nbqvz: 2\nmjhs: 4\nghpc: 7\npsrt: 4\nwsdt: rqsz * gnnj\ngfqn: 4\ncdrs: 5\nrgcm: svvq * cfdm\nrsdn: zdns + cprm\nztjg: gjhn / tdpf\nvwmb: 2\nffjs: 2\nrvhg: 3\ngmtz: 3\nfght: 7\nlftq: jzcm / srnt\nrbfm: gplw * ddbg\nbplf: 11\nvbcg: 2\ngldh: 19\nhjjw: 2\ngnbn: 2\nqdll: dpns * gpgq\nfcmg: pjpm + rvqv\nvwvp: 4\nhpwp: wbfd * gbwn\ngchq: mdrr + ppsj\ndtcf: 2\ndrnn: gclt + tjvn\npnnj: 11\nlhgf: 3\nwdsh: vcwt + sqht\npnqg: rgbs + mlss\nntjf: 3\nhqdq: 12\nwqmt: rctz * dlcf\ngfrl: 2\nshbj: nzng + jdnr\njzpm: djlg / smpw\nqmhd: 12\ntdhl: 18\nrqsc: zhqp * mbfh\nmrqs: fjgs * bmwn\nddjm: sjjq * blsp\nljzj: hfnq + ldjw\nnjbm: 3\nbgnr: ptgf * pnnj\nwsnq: 7\nsgzh: 3\nnwsd: gjlm * ngmf\nhltz: hlss * vmqn\nplrq: qrth + bwnt\nlbql: nqjs * vrst\njcgc: 2\nfrlb: qvwd + rsdg\nrqll: 3\nhjrv: 5\npcwp: 4\nhwsh: 3\nzrrm: tjjt * znsz\nqspn: fplm * jwlz\nfmdh: 2\ngcqg: 2\nmlzt: 16\nrvqv: srbz * vdtj\ntvcj: qmmf * tvdp\nzdln: mwfv * rgdd\ntfsb: cfbj + rhjp\njtjf: ztlh + fsns\npssn: 13\ntdmn: zjvw + phwv\nwvvm: 7\nrmtw: 3\njwgm: jcdh * jbbv\nsqpm: dzdg + mvhq\nrblr: bjdp * sbfd\ntljb: 12\nnfwq: 3\nsmqh: 19\nbnfj: plcl + cbft\nvlfz: 3\nzbvh: ddlq + fdsj\njwdd: vmvt + srqm\nwrrn: 2\nslmz: 14\nmvsc: dsnc + fjbv\npwcm: 3\nbwvv: mvsc * jsrh\ngrng: 10\nmlww: 13\nqsjg: wvvm * nbrp\ngfjg: 8\nrmgw: rrrf + jgtl\npbvc: fzpc / srrm\nsfqz: lwhl + rwtm\ncmrl: 8\nvwrf: dwlm + ngff\nzrhq: 2\nncvs: 5\ntgwg: 11\nlmdd: 10\nvjzv: ztgn + bjmg\nshnr: 9\nsvdf: 3\nbbmw: 6\nwlnz: 4\nzpzt: 2\nnjng: 19\nrtqp: phzs + ptbs\nhrtn: 7\njpqg: zbcq + gzlc\nwdlv: wtqr * hccw\nvfjz: sslc + vrqn\njvmh: smjl + zqcz\nmdnd: gfgv * rhwr\nwzbm: 2\nbbqm: 2\nqfwg: lcvl * wdmn\npjdw: gqfb * wgzm\nlhfv: dbrg * mrlr\njqlf: 11\ngglz: 17\nqbls: nflw * jbnz\nzlqq: 3\nngll: vbqd * nqwn\nzmsv: gswz + qppd\nwjvz: 2\nqfwp: 2\njzwj: 5\ntncw: czmz + vmnr\npnpv: ppvz * drsf\nthcn: 3\ndgwv: 6\nlvln: cltt * phmh\nhqtc: nlmg + zbpn\ndwgd: 8\nmzjm: dbqd - gpls\nfjgs: llwq + qzcf\njtbm: flbl * bdpq\nmvcs: 5\ngbvs: hvhq * ndvr\ncpvm: pcvr * jwpz\nvfng: bwcs * scmr\nbzcg: fsjl * bwhn\nhttw: 11\nzbpn: jztf * rvmz\njcmc: qvfn + pmpv\ntcqr: 2\nppvz: 2\nqgqn: gwgc / mjhs\ndvbq: 4\nzmcq: fjcf - wbtq\nhzpb: qbld * vnlz\ntffw: vpbm / zbpq\nqmjw: 20\nqbwn: 3\nczmz: 5\nwjrw: 3\nnhgg: 3\nztpz: 2\nwvft: fqtj + fnnt\nhwhr: 3\njvbv: hhdp * vrzh\ntnth: 5\nqdqd: 2\nbpnl: 3\nvmlb: 17\ngmfg: 3\nzmnd: bnlh * jdgn\nddvh: nwjr + mcph\ntqdf: 14\nfdrb: vspr + flvh\nwrtr: 16\nzqcn: 2\nlbvt: 2\ntqjf: trzd + mtsj\nwcmw: sjpr + zdjz\nlbgz: 4\nzmfh: 7\nwlpz: 4\njrcp: 5\nhmpf: 2\nqqpt: 2\nrgsm: 6\nvzqj: nqlz + fbgm\nvzlw: 10\ngsjq: lrgw * ddhr\nnwcw: 5\nbghm: jrbz / wrhr\nrmms: rmgw * qvzl\nhgll: brfg - pnbp\nwmtn: 6\nnfht: 19\ndcpb: jstr * pthm\nwqbh: 4\nzrbq: 8\nnsjw: 5\ngpdw: 8\nrgph: nfnn + fhsp\nvjmm: 3\nnhjw: wbjt + dsll\nmzds: hppv * sptd\nmcrp: qsjg * jjqp\nqpjs: 2\nlbfm: tcqr + nwml\nwmfn: 2\npfsc: 2\nmpsb: 2\nbwtr: cmbl - cmqd\nspdn: 5\nhcln: 17\nggrr: 9\nrhvj: 2\njhqw: 3\nzhnd: svfc - tddv\nrznj: fwsg * rglh\nrrtp: 5\nvbfm: 7\ntnwb: njnf + fqjd\nwzll: 17\nhcbg: dhbc / bszm\nvlhv: 2\ncnmc: cvmb * ftqg\nvwvr: ddfn + bbpp\nrtql: 11\nswcd: 4\nmwqp: 8\nvwlj: hghh * qdqj\ngqmd: 1\nmgfj: gmqz * bmlc\nnnfh: pwft + cpvm\nvwgf: ffsq * bsmz\nhpqf: 9\nzzrg: bblp * jdlb\nzzqt: 2\nfqsh: 11\nccwj: qlsv + vsls\nwsph: 11\nsbfd: glpp + pcbd\nbzfh: 3\nhpjc: 10\npqlm: hwlg * ftmn\nsrgh: cfhl + dfht\nttdn: 3\nhnqw: fqtq * znnh\ntwdq: gssr / dgmh\nwdmv: cgzh * sbmt\nsrnt: 2\ncqwj: jhqw * dsvn\ngqbs: 4\njpcq: 9\ntzmf: jvzz + zqjc\nzwmv: dmrq * qcrr\nfztn: 2\nzshz: jzch * rqrz\njwdw: 4\nmdcj: 4\ntdfl: shnr * ptgb\nhlsh: vzmm * qtjm\nfvdr: 3\nbdmh: zlbn + tnhh\nhwvq: 2\nzqcs: 3\nwlbv: dnsn * pmrr\nnbsf: hcvc + jzzg\ndssl: bjcj * gmfg\nnfft: 5\npshs: 2\nnjhz: 3\nwwbj: 4\nwdfr: bhlz * mvzs\ngrrg: lfrw + hbdp\njzns: lmtg + gnvg\ndnmf: jdfb + qtgr\nsjpr: hqvt + qqzq\ncbqd: 2\nsfcw: hnbh + cmfn\nspvr: 2\ntcfd: btpd / jchs\npstv: tjjd * rmtw\nhvbd: dtfp * scsm\nzmwd: 8\nvmzc: dtcn + vhdl\ntztt: 2\nmccf: ntzd + mdnd\nngzf: 2\nvtsf: 3\ngpls: jfcp * nrrl\nzwvp: 12\nqpqs: bscl + mrgm\nthcb: 2\nsvfc: jzns + pqnz\njrtt: ccmr * gwrw\nzsdg: fshp / vvtp\ntnnl: vzrj * tggm\nbsfq: nhjn + zshz\nqchr: wjhn + qnsp\nnsjv: spvg * hqdw\nmfnf: 2\nccwf: tsjz + wjrt\ndgss: dwgd + cqlb\nnnfc: 2\ndtvb: 2\nrtvq: nvpp + lgzr\nhmgb: sbtd + pvww\nbzqs: czdz * vdnb\ngnml: vdcr * qmvc\nvlnv: tjvh + msqd\nmgqr: 2\ngfwv: sqbz * stvl\nwgtz: 7\nmpfj: 11\ntvvb: tdmn - ptbj\ntpjh: wrdf + vjrs\nhzbz: 1\nfvln: 4\nchbr: 5\nmjrr: 3\ntvmn: 2\njhfl: 8\nwzht: 4\nrgmv: crzv + pngw\npftv: mnlg - qbhz\nrtsv: 3\nnsgb: 2\nljcq: sfgz * vbfv\nqzqz: 7\nsjmc: lnpp + ftbq\nqnsp: 4\nvlmn: 4\nfjhf: qpjs * gjsb\nmbfh: 5\nmcph: 18\ngspr: hwvq + sfqz\nrvqz: cslr * ffcj\nngqn: rmtp + dtcf\npzmg: zsdg + gpvg\nvspr: 15\nprpg: qnfz * qmhn\nzzlc: 3\nzfgq: 11\nzjmm: 4\nrlvl: 2\nwtvs: 7\nrctz: 2\nlvvj: 2\nnpjd: wbln * zrjs\nwwwr: 3\npdfr: 5\nnjhb: 14\nwrsn: swhv + brrw\nvpbm: zqgr * cbsl\ngsdf: qqdp + lbrd\nbqgr: 8\nnzvs: mlrh + znth\nrnmn: 4\nwnnc: 12\ntvmq: lrfl * qlds\nnprm: fbjd + pmhw\nmvgh: 3\nshcr: vrvl * wwfq\ncfbj: 3\nhcvc: nbfv + bhhj\nvmzq: 10\nnmdq: 1\nlhll: 2\nwvjj: hndr + flbp\ngmqz: 7\nffnf: njhz * vzlw\ngzsc: tcfd - qdrr\ncwbp: 7\nqphq: hlcp + ngqj\nlwhb: hlgn * qtbw\nmvff: 8\nnhnf: gsjq - csgw\npqnc: 5\nfdfh: 4\njhlr: 13\nbcnt: thhj * ndwp\nwnbp: 2\nbbbb: hjfq - clss\nlwhl: 7\ntbfm: dzqg + mnvz\ncsrh: ftpp * nqmd\npdtg: gpjw * dmcq\nbclm: 5\ncbft: jqhz + ltrl\nltjq: rzpv * dmcm\nlngz: dnlr * dfnb\nmbhf: 2\nszfv: 4\nfmcv: 6\njzps: 4\nhjfq: dcmj + btfc\nzwth: zmnd - jfdv\nrlds: vjzr * hjjw\nbvqq: pdtn * mlww\nwshl: dzjv / gqsq\nzjtl: 4\nspvg: btms * zqrh\nmptl: 5\ndcjb: 5\nmzvg: 3\nnsgq: 2\nmjdm: ltcm * mgqr\nqrgc: 3\nmnvz: 19\nblfb: 2\ngnnj: wjfv * crtd\nsvrq: 2\nmrlr: gqmd + qljm\nfrhf: dcjb + nprf\nwdhh: 2\nqjbw: jhrc + qfzh\nsvps: lhfv * gvwd\nmcjz: 2\nnzqw: hvbl + glzp\ntmct: vhtm * hnqw\nphnj: qdll + nclb\ntdpf: sblg + tnjp\nqjlt: 2\nhclw: hqzz * jfqp\nbvnm: snvr - wmgj\ndnlr: 5\nrstl: 13\nptjp: hhmv / hdqb\nfvdl: frtq * fwpt\nnggh: 2\nbwcs: bccb * qnbt\nchgr: qpfz * jtgm\ngfqv: zgfm * bzcm\njwpz: hnzj + hmcs\nlqsz: frlg + fhth\npvth: ccph + hbfl\ntjnj: 9\nshpj: dhbz + wmrb\nfgpz: 9\nfrnc: 9\nsfhs: wjqc * bzjw\nnfms: 2\ndzvl: 10\ntsjz: 1\nsqfm: qqpp * jcgc\ndsll: 16\nlmpq: 4\nqhpl: 2\nzlnm: 4\ngvzc: bgtj + mcvd\ntlwf: qqpt * fdmz\nmfqm: rlgc + tjzj\nbpbw: 13\nszns: rmhb * mfpd\nhcgj: qjlw * qtds\nwbjj: 4\njsdj: 6\nwzwt: hndt + ptsh\ndrbt: 3\nflpt: 16\ntmzd: crnj + dqlt\nswzn: 15\nflbl: 6\nzlsd: 8\nstzw: nsrq + bdvb\nlndf: 3\nldsm: brsj * vgnj\nsshh: 10\nmwzb: 8\ngdrg: 13\nltwt: czht * vhrz\nwrhr: 2\nwnbw: dlqs + jvrp\nvzgg: jnbb + qdrj\nrwqn: 3\nfmzc: 4\nmjss: 3\ndszg: zzln + jtfn\nndvr: hdbd * qdgr\ntrsd: 5\nwjrt: 5\ngqjg: bvww * zcbq\nfgvz: 2\nvjqb: vlzz / csrl\nmddr: 1\nzzbb: fjqv - pvhf\nvhdf: smqh * qrgc\nbnvb: qwwp / ngzf\ncqpl: 2\nznts: nqcf - fcdp\ngdhc: 15\nhgpv: 3\ndjvw: nnfb + dtcv\nfrvn: 2\nvqjr: 2\nzjnn: 2\nzstj: 3\nvtzf: ptvt * jhlr\nbbzc: nqzw / qtzl\nffpf: 5\nghcq: htwh * mqpw\nzlms: 1\nzfrm: gglz * lfns\ntgwj: 2\njjpn: 5\nhccw: 3\nqlgr: 3\nsjjl: 7\nvwss: nvzr * gmtz\nrvhn: 2\nqjfh: 2\nsgsj: 3\nsslc: dmws + hgpm\njcfr: 3\njsld: 14\ngbwn: 14\nqqdp: rvzd * nwnr\nlhdt: 5\nrgnn: lzzn * jpms\nddlq: 6\nmqzt: swzn + cblh\ntnfg: 10\nclss: 2\nzrdl: 9\njzch: 4\nqjsz: 5\nrrcr: llmd + qjtm\ndlcf: qspn - bsln\nbttm: 4\nmzvl: 3\nqjgl: fhhp / fphm\nmfpp: 2\nszqs: 5\nplnm: hlmd + nslp\ngvqg: pzqt * sbgj\nglpp: lrnq * rqsc\njjdl: jdlz * zffq\nbdvb: 3\ntnwg: swcd * zcnf\ntnvf: 2\nsrdv: 3\nljbl: 4\nvlfq: zwmv + thcn\ncnll: 3\nhgwh: svzw + dgwv\nmszv: 19\nfwdq: bbqm * pgcf\nnqbg: 5\nmgqd: ctnd * gnqp\ngsbc: gtvn + whzg\nlcvl: 3\npmll: fcwz * tzbv\njjvn: zmwd + srfr\ngsnr: 10\nqfgt: 5\nwcpn: 2\nlpbn: 2\ntjzj: 5\njzwh: 1\nltvn: 5\nvphl: lgjz * tpts\ntgwn: wvlm * hqtc\ngltr: fjvr * qvdw\nqztw: czfw * gfrv\nmgmj: 6\nzvls: 2\nlnpp: bngp * sssj\nwvtj: ppcd * wllp\ncncv: 11\nvvtq: 2\nzsvh: jpcq * wcfq\njcmn: fjhf + cftz\nczmw: mpfj * bzft\njgtl: nfht + mvtz\njdnr: 2\nldtd: zwrp + wbfg\nvlvr: fgbd + hlnh\nrhnq: 7\ncgzh: 2\nzwbd: 17\nlfrw: 5\nwcmp: 2\nwmgj: tdng * tbph\ntfvm: rlvl * fdcj\ncwlj: rwdw + tvmq\nffmb: 11\nrvfv: rqll * sfwf\nwhlp: 2\ndcmj: 3\nvvrs: hrfp / gpvn\nmzhl: 1\nsqsz: wspv * jdjn\ndmlv: 3\nzwmt: rrtp + zqcn\nplsp: 4\ntclj: fvdr * jsrz\nqmhs: 2\nfgzz: fwdq - cdph\nvgnj: sglw + drnn\ntjtw: 2\npdbd: lhzc / vghb\nbmqb: 1\njnbd: 8\ngzlt: 3\nsnhr: 1\ngnpm: rznj / szzr\nltnd: zdwj * wgtz\njddv: zbms - zsvh\nnwml: qwwj * lhgf\ntddv: 11\npsdp: nbqf * mzhb\nfmrf: jtvr * hggs\npqqm: 4\nqbnm: 2\nfbvb: 4\njnlb: 6\ndflw: fvln + djgh\nvdcr: cqgd + ngmh\nlwls: mnww + wggh\nhwqc: 2\nvbdt: qfwv / whht\njdch: gnsr + qdqd\nhdqb: 3\nsbgj: 2\nqtbw: 2\nsrzs: 1\nsvbw: 5\nwtqr: hzbz + zbvh\ntqcc: ffnf + dvbq\ngvwd: 3\ngbsg: rcrb * hwhr\nnmms: nmmj + mvqv\nnqmd: fdrs * npcq\nnmdp: gcnm - zcmc\ncvmb: fblg + qmhd\nqmmf: 5\nsbvw: llfl + fvpl\nsbvq: mpfb + qtwg\nvhqv: 3\nsbdq: rpzr * wznw\ntlnc: rbtz / bmnt\ngntg: mlcg + stqm\nqzjn: 5\ncvzr: mzjm / lfqz\nsqht: rvdg * bpbw\nqwmp: hwsh + tttc\nhjsj: 3\nbcqm: cqfp * czmw\nmwgs: 2\nqcqp: qhnr / ddtt\nwwzg: dqlv / dlfp\nlrww: tlrn - wzrw\nwfwj: jhlp + jwhm\npvvr: 3\nblvg: 3\ndhhc: 3\nghdc: 2\njvmb: rvwz / fhdz\nlwws: vfss * wcpn\nfvpl: 1\nglmm: nvvg + mgqd\nbdmp: 4\nznnh: 3\ngddz: 4\njlcl: 5\nblsp: 2\nmnww: gpwj * lhcs\njwch: ltlj + sqvr\nwbfd: 2\nfdmz: 17\ngfrm: 6\nwsvq: 2\nbhfg: 2\ntcdr: dqcj * qlgr\ndqvg: nmms + dfnt\nstnz: 2\ndgsr: 17\nzsjl: qfcf / mvcs\nnwnb: mjdm + jnfz\ncrqr: gptr * jvqm\nsgrn: 14\nzlgp: 5\ncczp: 5\nqtnf: gwgv + lwhb\ngswv: jqpm + ppcq\nftmn: 2\ntcqh: hzhp + mgfj\ntfmf: nqjd * cfjn\nfczw: wnvf * wfnw\npthm: 3\nvlqv: 2\nmpfn: hbbj + tsqp\nhrfp: gnpm * zlwb\nptsh: mjdz + cfqt\npdvq: 8\nzqpz: 7\ngnvg: tfvm + wvft\ndqfd: tzps * nsnb\nvdtd: 7\nsfwf: bjhs + hsbb\ncslr: 3\nwcjj: rgnh * cntm\nsmwb: bmqb + mlsl\nzzpp: 5\nqldw: jbll * dgss\nmlsl: vfqz * cczp\ngcpl: dhdh * zvmv\ngmcb: 14\nwmbw: 2\nllqd: 6\ndbrj: 4\nqtwm: gmsb * jwnm\njghp: 5\ndgmh: 2\nbtfc: 16\nffsq: hvhc + psfp\nflvh: scqm - fmjb\nhqvt: bvzb * crrt\npwqg: 8\ndsgf: vhnw + dlbf\nszrr: wbjs + bcqm\ngsmn: lhds + jlpt\nvbqd: vvhj + rnth\nhmvl: vwvp + srdb\nzptt: 7\ngpvn: 4\ncdmw: bhfg * bnvb\nrhtf: rrth * szrr\nbrtp: hqdq + wfcn\nzdns: ljsl + wdlh\nqgsw: njhb * jgpd\nhjjs: 5\nmznc: 3\nndwp: bsvp + bzpb\ntltv: 7\nwbjs: djzc * mcjz\ngrzs: jvgp / pnqf\nbqnp: 2\nqtwg: mppd * trgw\nbsnm: prcb + vlmn\nmbwj: 5\njwht: 4\nnwjm: qhcm + htfp\nznth: nvfs / vtsf\ntdwr: jlmr * fdrb\nsjdh: zpww * cjrp\ngwgc: wdhh * sqfm\nthhj: 2\nqrvc: 2\nmrzv: 15\nnnvc: 10\nqwmt: wjrw * hltq\nczst: 2\nrjsp: gpgh * mdcm\nffmj: 3\nfvgq: zgqp / zlqq\nmtwt: 4\nlzzn: 3\nzdgr: sqng / qpjv\ngnhr: 13\nhgcv: 10\ndwtg: 5\nlgzr: 1\nfzff: wqbh * vjbg\nfhnv: qhgt + tprf\nwgzm: 7\ncdqg: 4\nztjb: 4\ntrvj: shdd + qcqp\nhhqq: nhqs + lcrd\nscsm: bhrv * zphb\nwnqb: ldzg + mddj\nwcmj: lrwj / vwrp\nnbvw: ncds * sffg\nmwwh: 2\nqrth: ghdt + bhtv\ncjrp: 2\ndsgs: 5\ngqsq: 2\nsnvz: vsgm - rdqq\nctlh: qrvc + lfhg\nqqzq: mbhf * mdqg\nhsbb: nmdj * sbtn\nzlwb: 4\npmps: 3\nvmbv: 3\nsvnm: vznw + tlnc\nmgqb: wsvq * fdfh\nvgfs: hfbv * ldtd\ntzrh: wdsh * blmg\nrwdz: 13\nhbdc: vtqq * rvqz\nhlpf: glws * nnlv\ngtqt: pbpn * frlb\nvfss: nmwz + cttl\nfnsb: qcmm * vwjf\nttlr: bzlp * fdll\njfnh: 4\ncgjp: jztd * mgjt\nhglc: 2\nrdsp: fmrf - tfgq\npdcd: 4\nfjqs: qdjw * mwbf\ncpbm: 3\nqsmn: dtll + dclt\ncrjc: 2\nbgfj: 3\nbjdp: 4\ntltm: czqz + stpz\nwfcn: 1\nbwnt: 18\nzmsj: zmrd + znts\nqjrv: 15\njfsr: 5\nmdcm: cncv * gvbg\nvcqw: hclz + drld\nflbp: 5\ncrnj: 6\nsngb: 5\nhfvv: sgsj * zzlc\ngnvh: 2\njvrp: 7\nhfbv: 3\nlshv: 4\ncjsv: qpff * wdsp\nphwv: 5\nphzs: 9\nhvhq: 4\nvzrj: swql + wqwm\nlfns: 4\nslwd: 1\nftbt: wsgm * dcqv\nsqwh: 5\npfcw: 2\nlfhg: 9\nmlcg: dmhs * qvsg\nnzng: njbm + jnjb\nsnvr: crqr * tdcr\ntqvq: tmct + fcmg\nlhlb: 4\nsqnb: jlwv * phbv\nbtmv: 2\nsdgt: 9\nmswg: zgjr - qlhw\nftmj: 2\nqghj: jnhr - mzds\nqtwf: vmlb * dprf\nzzln: 1\nnblb: 5\nzjll: 2\nlrzb: 2\nwvlm: 2\ngpgl: zlsd + fltn\njdfh: 1\ndzqg: szfv * ftsj\njvzz: sfpc * ggcc\nptgb: wtdw * ndzz\nwsbl: qprz - cvlc\ngnfn: qvtf / tddp\nwlnv: 2\nqmqd: 4\ncflm: 3\nvhvf: jjwh + tgwn\nrpnq: 2\nzpfz: dtwg * qztw\ndcpj: 2\nhcml: 3\nrjqg: rtvq * jhfl\nqzjw: wqbq * twwb\nwpzp: 17\nmddj: ffmb + hhnw\ndpjg: 5\nzpww: gfph + nzwz\nsrdb: 4\ncfvn: mbpf + bwvv\nvznb: 13\nghbf: qphz * bjtt\nngmh: vjcw / vhlz\nnqnq: 3\ndtzn: 2\nwppj: qjhb / qfwp\njbtz: fwqf + hsdn\nsjtc: 2\nqhgt: fqnr - grng\nbssw: dnzv * fswb\nrnjh: qsrh * hrqh\nqfpz: 5\nfwnj: djcj + rwwr\nzshw: 1\ngfnm: lvwn + jjvn\nlsnw: 8\nsgqn: 5\nbjhs: dlbd + snhr\nnmwz: sqwh * frsz\nsfpc: 3\nblbl: 2\nrgdd: ctmf - bcjz\nmfqs: wsdt + gdrg\nzpvj: 1\ntdlf: 4\ndhbz: 2\ndbpv: 10\nltzz: qtdn * hvgc\ndvmb: 8\npngw: gwzn - gnfn\nnlzm: 3\nmrbp: 2\nwvzd: 5\nwvqr: gsdf * gwml\nnbfq: 8\nnvgj: hspq * jtrm\nqqlz: 5\nmnqc: 18\nnrfs: ghdc + sgqn\nnzqp: cmld + trwg\nnvrs: 5\ncfgt: 4\nngff: 17\nhdfn: 5\nwbln: zjtl + dcpb\nwthh: 2\nnsrq: fvwl * zjll\njqlg: sgjw + qzjh\nzdth: vjzv - dpwr\nfhsp: 9\nsbhf: 2\nvhvp: tmzd + qqqf\nqnmr: mswg * sjjl\nfvhw: psdp + ngll\nvggg: 4\nwdqd: bmzm * lpts\nftbs: mggw / chvq\nshdd: nsbg / vdzs\nwqcl: sgnf * lvvj\nhtdp: 16\ndpwr: 4\nrhmb: 4\nrlwn: 2\nrwth: sfpj - vnzp\nfqtq: 2\nnnlv: pbwb + zsjl\nnljf: zscd * ffbr\nftcm: 6\npqnz: mddr + mtgg\nhtwh: 5\nzwmh: 2\nhumn: 120\nnsqr: jvmh / vjmm\ndjzc: wvhm * jzpm\nlhqm: gntg * rddr\njwhm: 1\nwjfv: 3\ndqbg: 3\nbsdn: 3\nhhwq: 14\nhvgc: 2\ngmsb: 2\npjpm: grrg * nsjw\nrhpf: nlzm + dltw\ntvvv: hpwp * stnw\nwdmn: 2\nsjsf: 2\njlwv: jsdj + vcdp\ntsgp: 2\nbgtj: 18\nvmbp: jjdl + qgrs\nzzpb: mfcc * rmwv\nqrgl: 5\nhtfq: 2\njdgn: wthh * ppqb\nwznw: 3\nfsns: lznd * fvhw\nwbjb: lcdz * rnmn\nsvpd: 3\nzznz: zbzf * sbrq\ndfgb: 15\ntcht: 5\nfdcj: 6\nnfzg: nfft + dvpb\njhmc: stnz * qqfr\nntrq: 7\nbbpp: 18\nvchh: 3\nbsgt: jqlf * blfg\nnvpp: 5\nnbfv: ltnd * vwmb\ndrld: hpph + rrgj\nvwsv: fdht * rblr\ntggm: 4\nrrth: 2\nmtsj: mfnf * bltd\nhbsd: 2\nwbfg: 16\nbvrg: pzzs + qbcm\nnqjd: rhzt + zmwz\nsbjm: jhnd * zhlh\nvjcr: 11\nggsv: 4\ngshr: 2\ngwml: 2\nzvfn: 5\nbctf: djtg * vwrf\nmwgj: 5\nvdtj: wwnz + bnvh\nrjpm: 2\nmlfn: 5\ngmtf: wgwc + frqd\njthh: tnth + bfhp\nqprz: wrsn / zwmt\npzzs: 9\ndjgh: hqrp * npnp\nzzcc: 3\nzwfb: 5\nblfg: 3\ndlqs: 7\nznmm: 5\ncjzz: zwvp * vvrs\npctz: mfqs + stzw\njzql: fmzv * vhqv\nlvzj: tqfd * nbsj\nmmhs: 3\nlngh: 18\njbnz: 3\ncmrz: 4\ntjvh: hbsd + wjwp\nbfnd: czmv * wpzp\nmvpv: 2\nwdtd: zpqq * rfcz\ngclt: 14\nlmwj: 1\nqfpf: ftmj * bvnm\nlnld: qmzq * drvg\nclhn: 2\ngpzb: cvjr * dbrj\npcbd: hfrg * wngj\nsqbw: rdsp * ftvq\nsqzs: 11\nnfnn: 4\ngnqp: 10\nsgjw: 3\nnfpz: 2\nbfhp: 1\ntbhm: 7\nrlbw: hlcm * tdfl\ngrhc: tzmd * hctq\nbsrr: 18\nnvjc: glmm + thcb\nltll: tvcj + mbhm\ndlbf: trgg + ggcv\nstvl: crjc + tfgr\nnclj: 19\ncjcv: 3\nhctq: 7\nflnz: 5\nzppf: plzw + wmlq\nzwdg: 4\ncmjc: 4\nmsmb: 2\njchs: 2\nfshp: jrhf * msjq\nbzwh: pnfh * dhhc\nsgnf: 4\nfhtf: 3\nscmr: btzq + hqhd\ngqfb: cjmd + tpjs\nchfr: gfqv / pjct\nqrnl: 3\nwvgs: gshv + psbr\nplnb: 2\nlhzc: sqpm * chnw\nnclb: vwsv + mrsb\ndght: 10\nffbr: vmfv * jltr\nqvwd: hmpf * wsgr\nvhnw: gldh * mqql\nzbdm: 3\nhhwb: humn - bwns\nwgct: gjvw * plnb\nmbpf: 1\nzhpw: 5\nqdvf: lqdg * rlwn\njhgm: 5\nwzhb: 3\nczdz: shbj * dsgs\nrjqn: vhdf - rgcl\nwgwc: gppt * phpn\nvjzr: tbtl / vrvd\nfgjm: zjth * qrnl\nmgcb: nzll + pccp\ngtmp: mjrr * ljcr\nmlsg: hfhj + qvqm\nmllz: rlrr + djvm\nhvfz: gtmp * tqdf\nffdv: 9\ndfnt: cflm * cnmc\nqnmp: ljzj * zlfh\nggcq: 2\nqglg: 2\nfjqv: slhc * hpmp\nglws: 7\nhlgn: jzps * dncl\nrvzd: 3\nsntl: hpwf / mgsm\ncfdm: rgph * gnvh\nwvzj: srzs + prpg\nnhqs: 16\nmrdl: wgsn / llln\nnftw: 5\ndgbp: 3\nmhvv: sbdq + stpt\nqsdf: 3\ndfht: hcln * cwlj\nwdsp: bclm + wqcl\nddtt: 4\nspqb: 8\nfmjb: pbvc * zvdn\nzbzf: vbpd + nldt\nhspq: gvzz * hmvl\njrpq: pfcw * dzrj\nbngp: 2\nrnvt: jgjj + dsbs\nlscd: bjcz * nfpz\nhhmv: vlfz * wnqb\nhcqr: lvss * vwpt\nthzg: sgnn * dmmg\nnscj: 4\nsjst: fdfj - jjpn\nfgbd: pslv * gghb\nhvbl: 5\nfrlg: 16\nqhnr: nzvs + wdfr\nbhbc: qwst * qfpz\nrsdg: bqqt + wsdw\nfvcj: 2\nnlsq: wdlv * nggh\nczqz: mnqc / nwwj\nrmhb: 9\nrqsz: 2\nbsln: cwwb * tfcj\nlnlt: 3\nptgf: 5\nmppq: hhqq * fpts\nqqjm: 6\nwjmt: wwcj * vqmb\nzqfd: 12\ntlbq: zqfd * jfsr\nmfcc: llbc * ltfq\njtrf: dqvj / nwbm\nhjlw: 3\nfjlh: vfng - zzrg\nljsl: 1\nfphm: 2\ncjbq: bhsg - ztth\nwjwt: phqg * mwqp\nrzrr: wzhb * blvg\ncpsg: 3\ndfqq: 19\nczht: 4\nqmvc: 5\nvbcw: blsj * qdcm\njfcp: 9\nlqmq: fhjg * hhmn\nljcr: lwld + hstg\ngmfq: 2\nqtdn: zwbd + gbsg\ndtvd: 2\nwwnr: jqjq - rwth\ngzhc: frzv * mrlw\nvsdh: 2\nwzmd: 6\ngngm: vplv - cpnq\nrssc: 2\nmvqv: tzph + mfvh\ngwgv: 5\ndjlg: rfth * fdlj\ntjpw: fgtb + shcr\njcvq: 5\nrqjq: 2\nnfsw: 2\nrwwr: qqrp + tzbf\nzgvg: 2\nstpz: 4\nrfcz: 3\nhvhc: jcdn * bwtr\nrddr: 2\nfhjg: 3\nfnph: 16\nmblh: dvmb + nlsq\ntrzd: nwsd * snvz\ncdph: 2\ntdjj: 5\nstqm: hjrv * pjhh\nsvjp: dfqq * sqpz\nhpmp: cpsg + nhqh\nctnd: 9\nswql: 16\ntgqv: 3\nvrpr: mngw + tqgh\ngjsb: 17\ntsqp: 2\nhbmr: pwbj * fzhr\nmppd: 2\nsbrq: 9\nvgdn: 5\ngpgq: qjsz * jpqg\njllt: jwgm + dvfm\ncpnq: 20\nvbzl: 2\nrvwz: dnmf * jnbd\ntjzt: 5\nsjrf: 3\nhsnd: lfcg + bcfm\nhpph: 2\nnlwm: vbtj - bsbl\ndzrj: wfbn + mtwt\ngtrg: 4\nfbjd: sfnr - qrgl\njnqq: 4\nbvzb: 5\ntbtl: mzgw * nhgg\njmbd: bbbb * zrpb\nzzfb: jhnt * mcwj\nsvcb: 18\nmrfp: llmb * ddsl\nrgfv: bwpn - ldsm\npfjb: 10\ntfvf: 4\nfjtw: 3\nbzpb: 7\nfgtb: qjbw * drjf\npddj: vbjq + zdln\nplcs: 3\nbscl: svjp + qtsb\ntqgh: gzhc + vfjz\nmlvl: qtwm * jvbv\ngpwj: 2\nbqqt: 2\nqzcf: dcpj * ngqn\nmzgw: ctmw + cbqd\nsbsv: 2\nlrfl: qfgt + qbnm\nddrd: 2\njtgm: 2\nllln: 2\nsgzf: fvdd * rcsd\nwspv: 4\nftcz: fmsz + qngb\nschn: 3\nlfqp: rjqg + wwbj\nfvwp: 2\nhphn: 1\ndcfn: 4\nwqdn: smlg / lshv\nrbqm: 1\nbtzq: pfwq * srrc\npjvb: czvm * rnjv\nhtrw: 5\nnvcj: lcgw + gfnm\ngqcp: wcmj + zgzs\nllmd: 12\nctlg: 3\ndfdc: httw * pdtr\nmtpw: wmbw + ggrr\nmrqp: rgvs * trjl\ntljh: 2\nsgnn: trpv + phcg\nqtrc: dtvb * bcnt\npprj: lvzj + vtvm\nwjhn: mmdc * wsph\nfpml: 5\nwfct: lrzb * zhnp\nnjzz: 2\nggcv: hrtn * lggz\nwsgr: 5\nptbj: 1\nprlr: rqjq * rvhr\nqzcz: 3\nsppr: rjpm + jlcl\ngctq: tzmw * zmtv\nvcvg: vzqj + nsjv\ngrgv: gzlt * htrw\npgmr: jhgm * gpmm\nnldt: lnlt * crhz\nsvsp: sghz * tljh\nnqwn: fdzp + slml\nfpnf: wjms * jllt\nqtvw: 3\njdlz: 16\nbltd: ghbf - vrpr\nlggz: 3\nwqmw: 12\nvhdl: ltjq + mcrp\ntzbf: wvqr + nscj\nvhrz: 2\nfgqs: vvtb * fczw\njjwh: 5\nsjjq: ntcg + qldw\ntlrn: mrfp - pzfg\nlfql: 8\nzjpm: zzpb + pgtz\nwqwm: wjlc * hqpb\nhggs: 8\ncqsd: 3\nfdlj: 19\nrqqs: 2\nqsrh: 2\nmcjf: nbpd * djsh\nnljc: 5\nnqcf: fnvn * zvzf\nrcwz: 3\nvgdq: 1\nzgqp: fwnj + rgmv\ncfqt: vlhv * fjlh\nbhlz: 3\ngzpt: sdlg + hphn\nwjtv: 17\nmqpw: 5\nfjns: 12\nbdbp: 4\nnjzj: sdpp * lwrl\nbdft: mtjz * tmwz\nbflh: 4\nzzfz: 1\nmrlw: gwrz + wdtd\ncqgd: tqhn * hssr\ndqjg: 3\nvtqq: 2\nldzg: shlg * rjnt\nbcnh: vgdn * wght\nvvtb: cwfh * gttq\njsrh: 2\ngrll: mttn - hcqr\nhqrp: 5\nbgqd: fnqf * nmdc\nhhnw: nppv * mpcg\nqpjv: 4\nbhrv: fsvt + sngb\nfrtq: 19\nntzd: plnm * nwnb\npqpm: 2\ndmws: rlbw + fpnf\nhjzl: pssn + mssq\nmszt: vpdp * zwth\nwwts: 5\nhtzb: gsln * zvls\npccp: 6\ncfhl: wnbw * tbhm\nqppd: mjwr * rhtf\nlvhb: hsvq + fhmh\ndwlm: vgfs - ddvh\nqvzl: 2\nccph: csnr * fght\nmwdg: sprd * spdn\nbhsg: mtjs + bwzd\nqvnp: cbbj * wqdn\nnnfb: rgdb - vlvr\nfdrs: 4\ngjhn: ghpc * llbf\nzbdl: 2\nrmlr: pdcd * qwmp\nvtjb: 5\njzvc: scdj * rjwc\nvwrp: 3\nppqb: wmfn * pdvq\ndrjf: 2\nmtjz: qnmr + dfjb\ndfjb: wgbr * bsgt\nrzpv: 3\ngdwj: 17\ncfjn: 2\nqrcq: 2\nlpts: 4\nvrst: 19\nhfdb: 2\nzlqv: 2\nhbdp: 2\ndzvd: hcrr * bvlt\ngzgb: gltr / nqff\nbmnt: 2\ntrgw: 10\nvdtp: 6\nnndq: 5\nzbpq: 3\nwrdf: sjsf * vjlh\nmldp: 3\nqbcm: pfsc * dclj\nqmhn: 2\njfdv: vphl + hbmr\nfvdt: 8\nqlpf: 5\nccmr: cqgs + lldc\ncmqd: 3\nvjgf: mrrc + rmlr\nmsjq: 2\nczfw: 3\nznbv: 13\nsnbd: 5\nqshf: 3\nlwlm: 1\nrhjp: 4\ndrcl: 5\njrhf: rgcm + dflw\njdlb: 6\ndgpc: 3\nttnp: 3\nfrsz: vggg + srsm\nfnqf: 2\nnqff: 5\nphmh: zvmr - zrdl\nmpgz: tgwg * fbbr\nqqwq: 10\nnrrl: 20\nswvg: 3\nvrhn: pzst / hjjs\nhpnj: lftq + cbbh\nlvwn: vrhn * gjfd\ngwzn: fvgd * tnft\nptzw: jggt + zznz\ncnzr: 5\ndlfr: drcl * dght\nptvt: 8\nllbf: pddj + glqw\ngghb: 9\ngnsr: 5\nsqpz: rtjv + grcz\ntbnc: dcfn * htzb\nfcwz: gnqz + mbwj\nccnc: pqnc * nblb\nwllp: 5\nbvww: 12\ngnqz: gshr * jwht\nbbjn: dbfn + lhlb\ndqfq: ttfs * fwwp\ncmld: ndrd * lndf\npcvr: 5\nhnzj: tltm * zmpt\nrdng: 16\nngqj: dmlv * bgfj\nmqbr: jddv + tcqh\nhstg: 16\nbvwd: 2\nbrhv: 5\nwfnw: 3\nfmsz: 17\nggvt: 1\ndzpr: lzdg + gsnr\nlzqd: qqjm * vdtp\nqdrr: rnjh * rtqp\nfrzv: wdgw + pqlm\nczvm: zfrm + dqvg\nwhzg: fjns + hcpl\nzhlh: 3\nrcrb: 2\nptbs: 10\nlnrh: 5\njsrz: nvgj + tvnd\nbrfg: qbpq * wlnv\nsvjl: rjft * hptl\nrjjg: 2\nfdll: 4\nhlnh: vlqv * ddjm\nglzp: 2\nbblp: bzwh * bfgb\nfbvn: 5\nltlj: tgqv * fmzt\nvqpg: 3\nmmth: 8\nctmf: plww * mwzb\nplzw: lmwj + jngh\njqbs: 2\nhwqg: gtzb + wbzc\nqzjh: gvzc * grwv\nltzs: 3\ndcqv: 2\nrpqj: 2\nzmpt: 2\ncdvh: 3\nqjhb: nclj * mfpp\nfrqd: 4\nlszc: zrbb * fzff\nlhtl: 3\ntpjs: 2\ntjjd: 3\nnslp: svsp + gntq\npvhf: 20\nqvqm: 4\ndjsh: fnvb + nfwq\nvrvd: 3\nmlss: ltll * flnz\nnswp: fjqs + qtvw\nqvqg: cwbp * wngm\npgqv: 2\nhtng: lvhb + cdqg\nrfrp: 12\nnwnr: 3\ngbbc: phhr + bpbq\nwqqd: 4\npmpv: cmrz + cnbc\nbdsr: cjsb + zrhq\nfqvv: 3\nznsz: wlbv + rdjg\npzqt: ttlm * qjlt\nlmtg: 10\njffs: sfhs + tdmf\nphpn: bsdn + dplv\njcrs: 4\ndclt: jcmc + jllj\njqtb: zdgr - phjs\ncrhz: 7\ntgwb: 5\nfswb: 5\nrnjv: 17\nvmqn: 3\nnjnf: 5\nbcvt: btmv * thzg\nllwq: tnnl / ztjb\nbwzd: rrhp + lngh\nsghz: 11\ntjjh: jthh * fcqm\njbbv: rhbj + nbfq\nrglh: tlns + zjsm\nwsdw: vwgb * ttnp\nrdjg: 15\nlcrp: 15\nppcq: tfvf * pfws\nfwmb: 6\nrwpf: dgsr * grrs\nvrlt: 3\nzvbv: 12\ndtcn: grgv * fgpz\nfrmw: 17\nfdht: 5\nnzll: 3\nnqjs: 3\ngpvg: wlvs * tfsh\njjqp: hmnn + fpml\nfqjd: 3\nrgbs: qwmt + csrt\nrrgj: gnhr * ztpz\njfwt: 8\nbgfc: 4\nggcc: 2\nbjvs: 18\njpbg: sbdn / zpnz\nmrgm: vjgf * blzt\nfzvq: hbbc + pngv\nntcg: bqnp * mnjh\nwvhm: cdsl - zbmn\ntpts: 3\nznvf: 6\nfnnq: smwb + jvmb\nvjbg: jrtt / mwwh\nltfq: 3\ndzdg: lhtl * nprm\nsqbz: 6\ncbbj: 2\nmdqr: 3\nvhlz: 5\nzbmn: 8\ngfph: 8\npfws: hfth - ddlg\nmjdz: rvfv + hfdj\nzgfs: 2\nsffg: 3\nsjhb: 5\nvmfv: 2\nzscd: 2\nmdrr: nfdd + snbd\nvrvl: sfzm + chfr\nhbbj: vqpg * sztg\nfvcn: jlwt * pcqg\nhjgv: jtrf * pqqm\ntlns: bwjd + zlms\nsldb: lfqp + jfwt\ngjfd: 2\nfwbm: gnml + dfdc\nhlcp: 2\nwwcj: 2\nphcg: vvgf - mjhq\njfhl: ggcq * jnnh\nvrzh: 2\nwbtq: 4\nqsng: 2\nzrpb: 2\nrcsd: 10\ngpjw: tljb + mwdg\ncfbm: 2\nwzvt: 5\npcqg: 3\nlqds: zjpm / qhpl\nlldc: 1\nqdcn: sbsv * qnhl\nmtjs: pdfr + vvzh\nqqrp: fwmb + hvbd\nnsbg: tlbq * ntmq\npphp: dsgf * vjcr\nmtgg: wmtn * nfsw\nqjst: bfnd * swwr\nmmsc: qnqh + ltnm\nlvnr: 7\njhlp: sjst + gfrm\nvbfv: 3\nddbg: 2\nzjth: 2\nqwwj: 7\nrhbj: pbwr + pwqg\nzpwv: dgjn + pvvr\nllbc: vbcg * gfqn\nwmrb: 9\nlpff: 7\nwbjt: 13\ndsbs: 12\njhlf: fzvq + zrbq\nfrvr: 5\nsptd: 10\nnppv: 2\nbmrf: szns + fqmp\nssjb: 5\nqfzh: tdjj * twdq\nrhzt: 5\nhbfl: 9\nhlss: bbmg * llbb\nwngm: cdqj / vsdh\nlrwj: rjsj * vnbv\nfmzt: 7\ngtrb: 2\nhsht: lnbw / wlnz\ndqlv: lshc + cmcl\ngbdp: 1\nvfsb: sjhb * bzjm\nhlcm: npmn + gswv\npwbj: 3\nzzcv: 3\njnvw: fvcj * vpbt\ncwfh: qjgl - vlfq\ngbst: 2\nfbwr: 3\nglss: rmms / gbst\nzhzz: nfbf * ctlh\njqpm: zrwt * nhjw\npscz: zrrm / pdtw\nlcdz: svrq * pmhz\nmbtq: bsrr + bhbc\ntgtq: lmpq * zjmm\nbqdh: 4\nzlzw: 8\nrbjs: rnbh - zhzz\nsrrm: 2\ndjrr: 3\nzpqq: mdqr + cqwj\njdzg: lwws * tdhl\nvplv: qgqn - fcsw\nprcg: zqvn * vjqb\ncsrt: bdft + srgh\nnzcm: 12\nsrbz: 2\nqvsg: 3\nwddg: cswj + ptzw\nfctd: 5\nqjlw: 2\nrldc: 2\nddlg: htfq * spqb\nhfdj: tgwj * wfwj\nddst: 13\ntcjp: 4\nrnth: vhvp * ljbl\nwnvf: 2\nnpql: 3\nqpfz: vmzq + tbnc\nqnwt: ljcq * njng\nzccs: 11\nmlcb: 4\nmpcg: hgcv + hbsz\nrqrz: 2\nrgjz: 1\nwdrc: 3\ndbvp: wstl * mpnt\nfwnq: 15\nhppv: wpnr + bcnh\nmsvs: 8\nvjlh: gppd * msvs\nrqcz: 7\ngrcz: 6\nhzhp: vwvr * pqpm\ngwnm: dgbp * cnll\nvwpt: lbgz + djrr\nsprd: 5\njntd: 18\nnhqh: 10\nvttc: npht - jqcs\nzrwt: 12\nbmgv: 11\nwjwp: 4\nqmzq: 3\ncntm: 3\nzvzf: ldmr * qmjw\nmwfv: 7\njtrm: wrqh + tjpw\nrsgv: 3\nvwjf: 2\nnbpd: 7\nzdfz: tnfg + jzwh\nngsh: 3\nqlsv: brhl - dssl\ntrgg: 12\nnwbm: 4\nqdjw: pdhv * zgfs\ntddp: 9\njwnm: bfjs - sgcd\nslhc: 13\nwtjn: 5\nbbjs: srbb * rdng\nmzlc: jzvc / shzw\nsvcq: 3\nlmqq: 4\nmcwj: 3\nvcdp: 13\nsszv: fvwp * rgnn\njztd: nljf + ztjg\nhnpq: 2\ncblh: nzqw + vcqw\nrrrf: ghtc * gfjg\nrmwv: wqrw + rwpf\nltcm: 3\nnmfv: 2\nwgbr: nfds + dzvd\ndbbq: lrrj + dnlg\nsgcd: jcvq * rnvt\nqdrj: mtpw * ctlg\npfwq: 7\nwgsn: rfjn * gngm\nvnlz: 3\ntdcr: wwzg - nzqp\nftsj: vwlj + nljc\nqtgr: rdfv + dwmg\ngwrz: mwgj * tmjz\nblzt: snlj + bdsr\nrzlh: 3\nstpt: wbjj * sbvw\nroot: gqjg + rpjv\nhlfm: 14\nsmpw: 3\nfbbr: 2\ntjjt: 2\nvbjq: mpgz + djmp\nppcd: 7\ntmjz: gnbn * jqlg\nrchc: hffq / wvzd\nhclz: plsp * vbcw\nnflw: nsgb * tltv\nfsft: ggvt + tcfb\nfbqw: zhwb * wwts\nzrlz: mltq * lhll\nphqg: 7\ngvth: 1\nfdsj: 2\nfjcf: fvdt + jhlf\nrgcl: 3\njlmr: mlgn + ftcz\nddsl: grll + rbfm\nbsvp: 4\njrws: 7\nrmtp: bzwm * qzjw\nfltn: fbcr + sqph\nlqdg: dsww + dpjg\nwlvs: 4\ntfgr: 4\nmcvl: spgv * ddrd\nbcjz: 3\nhjlh: fnsb * gtrg\nbqpn: fvdl + pchq\nczmv: 2\nqtzl: 2\nqlhw: sgzh * zlgp\nplww: 2\ndjnj: rwdz + nqbg\ndqvj: gzmb + prlr\nszzr: 3\nwsgm: 4\nddhr: 3\nlfqz: 2\nvcrv: bgqd / wnbp\nchct: vwss + dgbf\nbpnp: gsmn + bbmw\ndgjn: brqf + wrtr\nhwlg: vzgg / wsnq\nvdnb: 5\nhssr: 2\nsvgg: vbfm * tdlf\nfwqf: 3\ndncl: pwcm + bflh\nllfl: stvb * wqqd\nldhp: svnm + sbgm\nhghh: rzlh + wdqd\nlrnq: 3\nsrrc: pdcz + pqpq\nvsls: 8\nvvhj: tnwg + ldhp\njggt: wbjb / ftbt\nfqdd: 17\nzgjr: wzbm * mbtq\nbnnv: zzcv * rqcz\njbll: 3\nzcdd: 3\nbwpn: ftbs * cplt\nlzvs: 3\ncrtd: rcwz * fbmd\nfpts: 2\ndvfm: bvrg * rgdz\ncbbh: 1\nllbb: vcrv + mgmj\ngssr: jsld * hsds\njftw: prqz + fflt\njhnd: 2\nwdgw: cjcv * wshl\nfnvn: 5\nmsbv: stsg * bqpn\nchwq: pftv * lcdw\npmhw: 2\nbhhj: 3\njnnh: tvpt - jnvw\npbpn: 2\nlbrd: djtf + sjrf\nrdfv: 5\ncsgw: 2\nbnvh: flpt + jrws\ncmfn: vpjc * mlcb\nzbms: djnj * jzql\nmzhb: gtqt + ggmn\nqnqh: 5\ndwmg: zlzw * zlnm\nvmvt: sqsz * jftw\nqvfn: vmbp / zstj\nzjvw: 2\nwrqh: rfmv * cdmw\njbfl: jtbm + zptt\nsglw: sbvq * rpqj\nnpht: hgpv * lbfm\nlznd: 2\nzlcl: 11\nfcdp: qqwq * ntjf\nbbmg: 3\nmfpd: 5\nnbqf: 5\nphbv: 3\nqwjg: ghcq * tmfq\nvdzs: 2\nltrl: pprj + wvtj\nrbzv: gzpt - spng\n';
+var $author$project$Days$Day22$puzzleInput = '\n                                                  ..........#..#......................#.........#.............#...#....#.#....#.........#.#...........\n                                                  .........##.#......#.......#...........#....#................##...#..#.....................#........\n                                                  ..#......................#.#.....................#..#....#.#.........#..##...#..#...........#.......\n                                                  ...............#....................................#.............#.................................\n                                                  ............#...#...#............#..........#........#.......#..#.....#....................#........\n                                                  .........................................#.....#..................#.....###..#............#......##.\n                                                  ......##...........##...................#..#...........#.#...#.............#.........#.......#......\n                                                  #..###.........................................................................#.#....#........#....\n                                                  ..#.#...............#............#.#...........#..............#.............#...........#..#....#...\n                                                  .#....#..#............#....#...#...........................#..........................#.............\n                                                  #.#........#.........#............#....#.....#...#..#....#..#..........#.#..........................\n                                                  ....#........................#..#..................#..............................#.........#.....#.\n                                                  ........##.......#.#......##.#...................##.....#..............#...#...##..........#........\n                                                  #................#.#....##...#...#.......#....#........#...#.................#.............#........\n                                                  ...#..#............#.............##.....#....#.....#...............#......#...#.....#...............\n                                                  ................#..................#...#..........#......#.#............#...........................\n                                                  .#........................#.#...#...#.......................#....###...#............##..............\n                                                  ..............#........#......#......#.....#...#....#..................#....#.#.....................\n                                                  ..#...........#.#...##.#...#..#......#...#..#..#........................................#...........\n                                                  ....#...................#..............#.#...................#..........#....#.#.......#......#....#\n                                                  .................#..........................................#.....#.#...#............#.........#....\n                                                  #...#.........##..................#....#..............#...........#.......#........#.....#.......#..\n                                                  .........#....#.#.........#......#...................#......#..#..........#.#.......................\n                                                  .........#.....##..........#.#.#...........#.........##.#...........#.....................#.........\n                                                  ..........#....#....#....#..............................#......#......#...#...#.......#.............\n                                                  ...........................#...................#....#........#..............#.##....................\n                                                  ..............##.....#...............#....#......#........#.............#...#.....#................#\n                                                  ......#.................#.#..#....#.....#.###....###.................#....#......#.##...#..........#\n                                                  ......#..............#.............#.......................................................##.......\n                                                  ..##.....#...........#..#...#....#.#.................#....#...........#.#........#...#..#..#........\n                                                  .........#...............#........#...#..................................#..................#.....##\n                                                  ...........#.....#............#...........#..........................#....#......#..................\n                                                  .#.#..#.....................#........#.#...#...#..#..............#........#.........................\n                                                  ......#.......#..#...............#..#.................#...............#.....#.....................#.\n                                                  ..........#.........................................#...#....#..........#...##...........#...#......\n                                                  .#.#...#...............................#......#...##..#.....................................#.......\n                                                  ...##...#.....#..........##..#........#.........#......#.................#...#............#.........\n                                                  .....##....#..#....................#..........#........#....#.........#............#....#....#.....#\n                                                  ....##............##........##................#..........#.#..#........#..................#.........\n                                                  ....................................#.....##...................#....#.####.....#.###....#....#......\n                                                  ........#......#..#............###.......#..........#......................#....#..#.............#..\n                                                  ............................#......#.##............#..................#....#..........#.............\n                                                  #....#.........................#....................#....#..............#......................##...\n                                                  ...#..#.##.........#......#...................#.......#..........#.....##...#..................#....\n                                                  ...##.#.............................#...#.....#...#....#..#.....#.......#.#....#.#..................\n                                                  ............#........##....................#...............................................#........\n                                                  ##......#...#..........##...........................................#.#.#..................#.....#.#\n                                                  ................#...........#..#.....#............#.......#..................#..........#.....#.....\n                                                  ....#.........#...#......#......#.......#........#..........#........#.#...#....#....#.##..#.......#\n                                                  ...#.............................#....#............#.#...........##.................................\n                                                  .............#....#....................#...#......\n                                                  ......................................#...........\n                                                  ....#.....#......................#.......#........\n                                                  ..................................................\n                                                  .#...........#.................#..................\n                                                  .....#.............................#.###.#.#......\n                                                  ............#.......##..................#.........\n                                                  ...#..#...........................................\n                                                  ..........................#............#..........\n                                                  ........................................#...#.#...\n                                                  ..#......#............#...........................\n                                                  ...........#..............#...#........#..........\n                                                  .....#............................................\n                                                  ....#.............................................\n                                                  ..#................#..#..#......#..#..........#.#.\n                                                  ..........#......##........#.......#..........#...\n                                                  ......................#...........................\n                                                  ........#.............#.......#............#......\n                                                  .#..................#.......#................##...\n                                                  .#..........................#.................#...\n                                                  ......##..#..............#......................#.\n                                                  #...#.........#...........#.#..#.......#..........\n                                                  .........#.......#..................#.............\n                                                  ......#............#..............................\n                                                  #...........#..............................#......\n                                                  ......................#..................#........\n                                                  ...#............#..#..#.#.........#.......#....#..\n                                                  ..#...............#......#..................#.....\n                                                  ..#.......#..............##...###.........#.......\n                                                  .#..........#.......#................#.....#......\n                                                  ......#...#.....#..#.##...........................\n                                                  .......#.#....##..........................#...#..#\n                                                  #...........#...........#.......#....#.........##.\n                                                  ...##...#....#......#.......#...............#.....\n                                                  #............#................#.#.......#.....##..\n                                                  ..........#..........#..#.....#....#...#.#.....#..\n                                                  ..................................................\n                                                  ...................#............#............#..#.\n                                                  ......#..#...................#....#...##...#......\n                                                  .#..#........#....#................#...##.........\n                                                  ....................#........#.#..................\n                                                  ..#.........#........#......#.....................\n                                                  ..#.........................#.#.#........##.......\n                                                  ..#................#.#...#.....#...........#...#..\n                                                  ......................##..........#.#.............\n                                                  #.......##....#...#.#.....#.......................\n                                                  ......#.......#..............#.................#..\n                                                  ...#............#........#............#......#...#\n                                                  ..........#..#.......#...#.....#...#..#..#...#....\n                                                  .#...........#.#............#...#.................\n..............##........#...#..............#..........#................................#............\n..............#................................##.......#..........................#..#.............\n..#......................#......................#........#....#............#.................#...#..\n..................#..#.#.....#..#......#...............#......................#..#.#.....#..........\n....#............#............#.................................#...............#..................#\n..........................#...............................#........#.....#..#......................#\n.......#......#...................#.....#.....#......#............#.........................#.......\n...................#.......................#.....................#.............#...#.#..............\n......#......#.............###...................#.#...............##.........#............#........\n......#.....#...........#.......#......#............#...............#...#..#...#...............#....\n..........#...#.##.......#.....#......#..................#.....#............#.......................\n...........#....#...#...#........#...#....#....#.........#.......................#......#...........\n............................#.#.............#....#..#..#........#..................#......##....#.#.\n...............#..................#.........................................................###.....\n......#....#..#......#........#...........#......#..#...#..#...#.#.................#......#.........\n.....................#..............##....#..............#.##....#..................................\n........#.............##.........................#...........#.........##........#####.#..##....#...\n..#.............##.......#........................##....................................#.......#...\n..#.....#.#.#................#..#..#.........#.#.#...........#.#.......#...#....#............#....#.\n...#..........#.#....#..........#.........................................#............#.#...#......\n..................#....................#...#.#.....#....##...#.....#.......#.............#..........\n............##..............#....##.......#............#............................................\n....##....................#..#..............#.......#.....................#..#.......#..............\n...#........##..........#..................#......#.................#...............................\n......................#......##.........#.............#..............#........#....#..........#.....\n........#......#...........#.......................##...#.#...#....#................#...............\n..#..#...............#.....#.....#.......#..............#...........#.......#........#.#.......#....\n.......#...#..............................#.......#....................#.........#......#........#..\n..............#...#..........#..#.#.#..............................#...........##...................\n..........#.....##..#.......#....#........#.........#................#....#.........#......#........\n#...#.....#.#....#...........#.......#.......#.............#.........#.............#................\n.#.............#.......................#....................#....................................#..\n........#......#...........................................#..#..................#..................\n....#........#..#.#.........................................#..............#........................\n.....#..#.............#..........##.....#...#..........#..................#.......#.#...............\n.........#.......................................#.........#....#..#.....#.............#...#........\n...........#..#................#...........#........#.........#.....#........##.#......#............\n.#.....##.....#.....#...........#.#......................#.......................#..................\n......##...#.#......#.............#...#.......###.........#.....##...#..................#.#........#\n.......#..#..................................#....#...#.....#..................................#....\n.#..#...........#.............#....#....................#...#......#....#.#.........#.......#.......\n.......#........#.#.#...#........#....#.....#..#..............#....#................#...............\n............#......................#.........................#.#.#.............................##...\n................#..#....#...................#.................#.#.........................#.........\n............#...................#....#...#..#.......#............................#................#.\n...............#....#......#........#..#..........................#.........#....##....##.#......#..\n#....#................................................................#...#..#.................#....\n.#....#.................#.......##...#.......#.......##.#....#..............#.................#.....\n.........#..#....#.........#.#...#........#......#...#.............##.#................#............\n.#....#.#..........#......#..#........#..............#.................##....#......##..#.....#.....\n#.......#........................#.....#..##..#...\n.....#.......#...#.....#..........#...............\n..#...........#...#........#...............#......\n.#.#........#...........................#.........\n.....##.............................#.....#.....#.\n....##..#..#..........................#......#....\n#...................##...#...................##...\n.....................#.#..#...................#...\n..............#..#.#....#.....#........#......##..\n....#......#.........................##..#........\n.......#............#...##......#....#.......##...\n.......##..............#................#..#......\n..........#.#.#...........#...#........#....#.....\n......#........###....................#.....#....#\n...........................#..#..#...........#....\n#.#...............#....###..##.....#.#....#.......\n........................#..................#...#..\n#...............#..#..........................#...\n.#.....#............#.............................\n...............##.....#.........#.................\n.........#......................#.................\n...#........#........#..................#..##.....\n...........#.........................#............\n..............#..................#.......#........\n.#..............................#.#.#.............\n..#.....#............#..#......#.....#............\n...#...#....#.........##...........#..............\n..##...........................#....##......#.....\n................#.................#.........##....\n.......#....#..........##.##..#...................\n...#.........#........#...........................\n...#......##....#....#..#...#.....#...............\n.............#.......#...................#........\n##...#..................#.......#.................\n..............#..#...............#..#............#\n..#......#........#......##.......................\n..........##...#.....##.........#..#..#...........\n.......#.......#.......#...#...............#......\n.#...#........#....................#.............#\n....#.#.......#....#....#.#...#..#...............#\n#......##....#.................#..##...........#..\n...........#...............#......................\n.#........#.....#................##...............\n#.......#.....#..#.#...............##..#.#........\n.##....#...........#..............................\n...#.#..........#......#...#.#................#.#.\n........#.......................#.#...............\n.............#.....#.................#............\n...................##..........#......#.#.......#.\n....#.#...##.#...........#............#.....#.....\n\n38L16L3L38L3R48R16R22R5L8R46L32R38R41L29L9R23R44L19R2R50R18R50L44L28L12R31R44R19R42R7R47L45L37L5R6L36R33L4R20R14L38L8L3L31R46R36R40L45R15L4L44R19L16L3R11R35L48R5R32L13R1L35L42R3L40R27R36R42L30L8R24R30L12R48R43L40L47L36L40R36R13R9R1R40L42L7L7L25L15L13R36R48L23R8L11R38L42L5L42R4L13R40L12R17R31R10L29R43L42R41L50R13L34R30R28R29L30L41L6R48L49L1R44L50R32R1R21L1R7R46L39R28L49R19L6L48L26R49R15L45L1R43R27R45L42L47R46L30L45L1R7L24L42R4R5L25L14R46L10L3L44L34R16R39L23L19L37L10R21L17R48L9L1L48R11R47L37L41L4R26L22R5R4L14R15L41L48R37R14R17L14R11L33R3R7R42R43R31L22L32R1R15R1L40R28L10R6R26L25R21R18R3L16L11L23L50R40L23L24L9L37L24R6L4L5L20L34R48R43R38L6L21R1L3R13L40L39R34L26L3L10L12L15L26R23R45R19R25L40R17R50R25L21L20R42R50R39R36L5L2L9R46L19R9L4L27R45R19R33R39L1L37L47R14R41R35R1L46R33R4R36L32R23L2L14R25L31R32R16R39R33R36R10L38L35R20R50L7L49R19L45R39L45L13L50L13L32L46L16R17L20L35R17R10R45R18R21L3L2L3L42R31L11R31R45R30R6R39L11L34L46R7R39R26R42R47R24L10L46R18R41R45L27R37R20R33L4L14R7L13R49R35R31L11L1R33L4R50R2R2R24R37R20R22R23L25R33L3L2R13L13L33R25L30R47R37L23R43L31L46R17R13L29L47L46R22L37R44L38L20L14L41R43R2R24L40L23R9R29L13L43L39R37L37L17R29L23L29L43R21R4R2L7R34L24R38R10L9R38L16R41L4R19L4L44R16L43R49L23L22L27L27R1L30R21R43R7R6R24L40R11R33L26L42L35L8R16L30R26R44R36L16L2R23R11R19R5R15R30L37L10L24R44L6R48R33L50R48L32R3R28L14R46L36L9R35L21L19L28R29R6R7R17R42L8R24R40R40L36R42L47L47L38R35R7R42R12L37R35L12R36L22R21L49R49R45R26L20R13L4R21R45L21R35L21R13R19R19L17L39L30R29R17L32L6L4R16R34R32L29L24L2L4R9L6R8R7L16L20L27L16L32R11R27R4R30L6R17L2R32R29R24R21R31R44L39L39L38R5L31L16R7L18L40R47R18R23L35L8R39R27L3L39R29L38L8R24L35R28R18L27L12L18R6R10R25R45R44R44L33L34R27R23R13R9R25L7L23L39L34R25L45R15R14R1L28R11L13R13L10L26L31L24L3L23R44R49L24R38L2R15R33R23R34L49L18R24R10L22L47R39R16R2R23L32R45R44R24R5R34R16R39R28L7L8R32L30R39R41L3L2R11R17R42R14L4L28R31R33R43L4L10R42L50L13R6L15L27L21L46R22R6L48R33R14L29R11R8R43R45L46R36L42L38L13R49R42L22R46R7R21L20L29R27R19R33L26L8R17R11L36L42R21R13L11R2R43L25R30L34R10L49L11L43R17L9R21R18L11R6R17R33R17R6L40R28R29R22L34L35R43R21R47R20L2L38R29L42R43R38R33L27R13L50L47L9L38L7L24R41R42R24L22R15L47R7L14L39R16R25R46L4R49R3R42L7L10R39R42L32L11L14R33R6R25R16R37L1R20L36L43L50R31L20R13R30L37L18R34R22R22L6L42L20L48L50R11R22R44L32R12R41R31L45R23R40R22R39R37L13L49L48L27L45R13L5L20R45R32L24L36L33R3R7L38L26L43R34L46R6L36L35R47R1R47R37R20R11R14R14L7L11L12L32L49L33L50R7L35R42R37L14L9R35L21L23R18R3R8R47R46L19L36L28R30R43L7R24R25L35R36L24L41L47R43L10R22L28R18R39L43L10L4R16R11R30L35R48R25L43L35L11R31L47L14L27R16R41L10R9R45R48L50R39L17L37R24R9R23R19R23R25R31L50R46R32L42L1L14L30L14L31L1R45R28R22L24L12R36L24L25L10L26L6L15R28R9L43R5R26R26R40L10L40R47L37R8R48L44R17R11L42L21L33R36R3L13R8R27L26R22R47R16R20R3R46L9L34L10R27L34R27L8L17L3R12R24L1R43R46L45L1L43L6L39R9R16R9L13L41R31L37L36R25L29R29L1L9L26R9L13R13R47R40L5L14L43L37L26R16L18L32R27L7L43R42R14L29L5L24L32R40R39R1L16L29R49R11L17L23L27R16R16L11R29R23L44R49R50R6R44R5R16L35R7L15R18R20R46L2R21R8L26R30L15L4L34R48L12L21R47R7L6L39R27L5R24L35L20L21L38L47R9L3L6R1R21R35R18R30L9L24R7L8R46L19R7R4L13L11L32L4R32L29R21R6R41L3R22L31L6R47R49R24R21R38R29L17R32L22L28R12L27L33R21R46R48L46R38L39R14L18L39R19R23L29R29L28L22R2L46L6L9L17R46R7L39L20R46R37R46R10R10L49R17L24R30R34R10R42R1L2R30L38R34L25R47L6R49L48R5R7R13L15L45L6R22L42L25L45L39R22R32R1R12R21L46L38R26R35L11R46R27R17R38L23R3R26L43L16L17R2R4R25R45L42L31R50L15R48L19R10L38R47R23L21R45L25R42L48L48L4L26R38R10R47R28R22L40R33R9L33R24L44R34L12R5L44L27R37R43L15R3R41R3L17R11L35R14L5L31R18L17L23R32R39R40L40L27L24L42L38R11L24L4L31L1L34L36R47L4R7R48R21L49R34R17R42R13R31R17L46L21R26R36L18R24R12L12L8R50R47L9R46L3L31R33R25R45R47L17L15L18L17R1L9L16L11R49L35R5R10L5R27L14L38L3R20R1L39R30L10R5R2L6L25R11R26L3R2L4R29L32L20R44R16L24L25R15L28L19R10L3L37R2R39R14R7L33L4R4L49L38L46R11R17L43R17R34R14R43L29R36R34L48R35L30L39L17R25L34R13R37R2L23R17R42L21L17L28R44L27R26L15L6R15R34R13R15L6L47R15L17L49L5R2R10R32L3L1R7R33L28L49L44L44R45R16L17R45R42L7L7R40L27L15R32R38R32R12R50R10L26L41R22R29R29L36R43R44R3L19L2R26R20R31L22L11R37R7L35L28R44L40R7R7R17R46L1R42R9R37R28R23R31L2R6L26R39L39L23L48R10R31L13R17R14L30L18L20R49L25R43L46L26R10R18R34R50R12L17R6L37R38R5R28R4R14L49L7L4L12R5L43L50L41L29L14R22L23R21L1R16L36R10L17L20L42R36L18R27L16L35R18R40L28R4L20R23R22R49L39R17L21L15L9R6L19L21R28R2R30L13L22R21R11R29R43R27L21L32L50L18L23L12R45L36R26R18L40R33L36R30R34R40R17L9L18R41R13L40R6L9R24L24L33L22L23L21R14R25R25R11R37R40R23L26R23R47L20R20R22R19R31L6R15L21R26R34L7R39R30R42L18L11L38L5L18R47L2R14R29R33R17R38R33R3R21R42L46L17R37L46L6R12L7R11L41L7R1L16R21L48R18R15R11R12R49L11R15L42R49R19R25L42R4L19R34R12L26R8L28L46L28R30R6R41L12R39R38L40R31R47R9R49R27R28L21L44L19L42R39L38R18L37R19R2L1R7L35R40R14R2R24R34L13R8L2L9R28L45R3L48R17L41R43R27L14L33L6R16L45L11L30R32R7R10R18R36R16R9L2L7R45R45R13R39R44L32R31L25L22R17L15R11L11L3L37R8L25R38R29L25L25L6L2R19R14L2L28L47R46R11L47R21L50R27L45L46L24R48R2L1L3L50R8R27L15R10L42R11L34R36R14L41L38L25L13R4R5L26R45R3R28L14L32L39R20L42L49L1R44R34R14L12L48R38R11R4L43L50R42L9R43L3L13L36L35R26R40R12L40R44R42L27L8R34R19L30R20L46L4R5L28L1R48L14L37R29R41L8R49R30L19L2R45L48R28L40L40L31L26L16L19L30R23R1R29R11R41R10R5R11L23R23R41R11L8R35R4L38R22L19R9L45L31L6L3R39R7L7L16R47R27L31R35R39R47R35R17R37L38R34L5L7R48L50L14R3R33R12R44L31L4L5R26R2R46L2R39R31R41R34R47R2L36R12L41R41R5R43L42L36R47R50R21R35L11R47L28R29L24R8L38L9L2R14L43R20R46R50L34R11L32L6R21R38R5L21R33R21L10R38L35R21L9L21L31L32L5R37L10R11L22L32L42R17R45R13R11L31L39L11L44R6L19R48L42R20L41L6R36L38L10L36R19R49R44R2R12R32L13R9L41L50R13R19L29R7R39L5L36R48R37R34R23R49R19R31L39L9L9L42L15L46R48R18R5L45L27L39L21R38R10L40R31R11R32R31R8R21L38L49L22R46R40R9L19L14L29\n';
 var $author$project$Days$Day23$puzzleInput = '#.##......#...#.###......###.........####.##...#.###...####.#....#.#.#.#\n..#.###..##.##.#.#.....#.###..###.#..........#..#...##..####.#.#..#..##.\n#..#.###...##.....##.#.#####.#..##.....##...#.#.#....##.#..###.###....#.\n#.###...###.#.##.#..#..#.##..##...##.#..##..#.##.##....#######...#..#...\n....#.#.###...#.#..###.#.#..##....#####.#...##..#.#...##.##.....###..#.#\n..###.#.#..#####..##.##....###......##.##..####.#.###....######.#.#.##..\n#...###.##.##..###.####.####.#...###..##...#.#..#####.#...##...#..##..##\n##.####....###.#####..#.#.###.##.#...#..##.##.###..#...##.#.#..###...#..\n####...##..#..####...##.##..##.##..#.##.......#..#.##.#...###..######.##\n.#.##.#.###.##.##........####.#...#.##...##..##.....#..##.#.###...######\n#.......#...#####.#...#.###...####..####....##..###.##..##..######....#.\n.##.###..#....#.#.#####.###..#.##......#...##..##...#..#.##.#...##..#..#\n##.###......####.#..#####.....#..##.####.#.#....##...##.#.#.##...#.#.#..\n.#.##..###.#.......#..##.##.#.#.........#.##.##.......##....##..#..#....\n###..####.##..##..#....#..#..#.#.##..#........#...##.##.#.##...#.#...#.#\n..#.#####.#..###.#.##..#..#...#.#...#...#..##.#.#..##..#.#...####..#...#\n#...#####..#.####.#.##.##.#...##.#...#.....##.....#..#.###..#.#...#..#..\n.##########...#..#..#......#.###.#......#..#.#..#..#.#..#..#.#.###.#...#\n.##..#.##.###.#...##.#...#.##.#.##..##...#.#..#...#.....#.######..#.#.##\n.#.#.....###......#.#.##.#..#...#....##.#..#.###...#.....###.##.####..##\n..#..#.#...#.###..#..####....##.#........##..###..####....###..###.###..\n#..##.###.#.#..#..#.##....#...#.#.###..#.#.....###..##..#####...##.#..#.\n#.#......##.#.#.#.###.#.#...###..######.###.##.#.#....#####..#.#..###.##\n........##.##.##..##.#.###.#..#.########.....#.#.##.##.#......########.#\n#..#.#.#...#..#.#....###.....###.###.#.##....##...#...#..#.#..##.###.###\n.#...####.#.#....#.####..#...##.#.##...#.#.####.#...#..##.###...#.###..#\n......#...#..##.##.###.#..#.....######..##.####.#......#..##.......####.\n...###.#..#.....#..#.####...#..#...#...##..#...##.##....####......###..#\n#.###...#.##.######.#...#...##..#.#..##.#.#....#####.####.#.#......#..##\n##.....#..####.#.#.###...#..#..#..#..#.#.#....###..##..#.#.#....#..#.##.\n.#.#.....####.#.#...........#.#.##.####...#.#...#..#.#..####.#..#.#.##.#\n...#..#...#.#.###..#.#..##...##.#.#..#.#####.#.##.###.#......#..##.#.###\n...#....##########.######...#.....#..#.##...###..#.####.#.####..##..##..\n#.##....#..#...####.......##.#..##.#.#..#######.....#.#.#.##..##..#.#...\n###..##..#..#.#..###..#.#.#..###....##..#.#.....##..#..#....#....###.#.#\n##.#.#..#.#######.......#..#.#.#...#..#.#..######..##..........##....#..\n......##..#######.#..#...#.#####.#.#.#..#.####.####..##.##.#.##....#....\n...#.###...######.#....#.#...###.##.#.#.###..#.#...####.#....#...#.#..#.\n#.#...#.###..#####.###..##.#....#...#.##...#..#...####.#...#.##.#..#.#.#\n##.#..##....##..#..######....##.##.....##..##....###....#####.#.##....##\n#..#.#..#..###.##..#....#.##.#####.###.#.##.#..#.#..#####..###..###.#.##\n.#.##...#.#..#....#.#.##.#.......#.....###.###.#.##.##...###.####......#\n#.#####.#.##.#.#.##.#..#####......#...#...##.###.#..#.#.#..#.##.....###.\n#....##.##....##.....#..#.#.#.#.#...###.#####....#..#.##.##.#.#.#.#.####\n#....##.##....#...####....##..#.#.#.#.##.##.#..##....##....##..#...###..\n##.#..##.#...#.##.#.#.##.#.#.#...#...#..##.###....#.##...###.#.#...####.\n.############.#.#..#.###.###.######...#####.####.....#.#.###..##.#######\n##...#.###..####..##...#...###...##..#.###...###.#.#..#.##..#######.###.\n#..#.###..#..##..#..#.##.###..###....##..#.#..#....#.#.##..#.###.....#.#\n#.#...#..#.##...###..##.##..###........#...##..#....###..##..#.#.###...#\n##....#......##.####..##...###...##..#...#..#.#.##.#...####.#.#.####..#.\n..#.#.###..##.##.#..####.###..####.....##.#...#.#.#...#.########.#.#....\n#..#.##..#..##......##.##...#..#.#..#####..##.#.##..##.###.#.#..######.#\n#..#..###.#..###.##..##....#..##..##...#.#...#..##..#####.###..###.####.\n...#..##..##.#...#.....##..........#.##.#..#####..##..###..#...##.##..##\n.#.#..##......#...#..#....#.######..#.#..##..#.......#.###.#.###..##....\n..#.###.#.#.#.###.###..######..####...#..#.##.###..#....##..#.#.#.#..###\n###.##.##.####.....####.##.##..##....###.#....###..###.##########.####..\n#.#...#.###....##.#.#.##.#.#.#....#####...#.##..###.#.......#.##.#.###.#\n.....##....#..#.....####.#.##..#.#..#....#.....#.######.##..#..###.#..#.\n.........#...###..#....#...##.............###..###...#..##..####.###.##.\n..#.#..#####.#.#..#.#...######.#.##..#...##.####...#...#.##..#.#.##.#...\n#...#.#...##.#..##..#.####.#.#.######...###...#..#...#.##.#.#...#.###.##\n.#####..#.#.##.#####...######.#..#.#.#.###...#...#.#.#.#.#..#..##.#...##\n###.##.#.#.##...##..###....##.#.#..#..#...#.###.#.#.....#..##...#....#.#\n##.#.##..#...###.#..#..###...#.##.#..#..####.#.#.##.#....#.#.#....#..###\n.#.#.#...##.#.######.#.##.#.......#.#......#..#..#.#.####...###..#....#.\n.#....####...#....#..#.##.######...####..#...#.####.####..#.##.#.#.###..\n###.......#.###.##...##..#....#####..##.#...#..###..#......#...#.#.##..#\n.#...##.#..##..#..###.##..#....#..#....##..#.##...###.##.#.####.##.#.###\n..##.#.#.##.#.###.##.##...#.#....#.#..###..##....#.##...#...#.###.##.##.\n#..#..##.##..#..#####..#.#.#.#.##....#####.#.#.....###.##....#.#...##..#\n';
 var $author$project$Days$Day24$puzzleInput = '#.####################################################################################################\n#>>^<^v>v<>^>>v<<.<<<^<vv^<^>v><^<v>><^>.<><^^>v<^>v>^^>v><v.^<.^>>>^>v^^^<vv^<><vvv>v>^vv<<>v^^<v><>#\n#>^>^><^v<>.v><><<<>><v><>vv^.><v^<^v^>v<<<v..<v.v^v.v<<v<>>^^<v^v.<^.^v><^v^.^^<v>..v<^>^<<^>.v.>v.>#\n#.>^>v<v^><v<v^><>^v>><>v<>^><>v^<^v<>v<>^<v<><^^v.v.>^^.v<<^v<>>.v>>v<^^.v<v^<^>>..>><<v.^>.<<<^v.^>#\n#<>^^^..v^^v^<<><<<^<>.>.vvv.v>^^.><.^>>>v^^>^^vv>v<^v>>^^<v>v^<<^>..^v^<>>>>>.>>><v^^^vv<>v^v<>^^.<>#\n#>v^vvv><>>v^v.v><v<<^.>.>>^<.^<^<>><^<><^>v.>v<>v><<>>><^v<.>v<^v<v^..<vv><><.^^^^<^.<v<<^^>>v^>^<><#\n#>^>^>^<<>^><<v^^^^^^^v^<<>>v^^>v>v<.><><^v^<v>>>>^<..>v<.^v><^<^v>v^^vvv^v^<v>>.^<<<.^^vv>vvv>^..<v>#\n#><vv.vv^v.>^>>v<<<v^>>^^>><v<<.^>>v>v^.<v<vv<<<.vv^<>^.<v>vv<.>^^v><><^<v<^><.^vv^^<><<.vv^<v<<v.v^>#\n#<^<v>.>^v^<v^^><vv.>>.<^>.^..><v^<<v^<^<<.<v<^v^v<^<.<<v<^v>^<<^v<>^<^v>vv^>vv>^<v.>^><v..>><v^<^^^>#\n#>^><v><<<>><^v^>v<><>v^><.v>>.>^v<.^><vvv<.>v<v>^>>v><^^^v^.v>^.^^>^v>>v^v<^v>.^.<^>^^v<.<<v^..<<.v>#\n#>vv>^.<<>><^>.<^><v<^<>>v><v>^.>v^<><.v.>^>>^><<v>^v..<^^^<vv^..^^<<<.v<<v<vv^v^<^><><v>.<<><^<v<^<<#\n#>^>v<^v^.<<v<<^^>^<>vvv<v^>^<v<.^v^>><>vv<>v<.^^>^<>>><>v<<>.>^<<>vvv^v.v<><<>^.v.>^><^^>>^>>><>v.^<#\n#>^<.^.<>v<.<^v>v<^^<>^>vvv..v.^><<^<.><...<.^>^>^vv<>v^^><<v>v^^<^^><<^>>vvv^<^^v>>vv<v<><v^<^v<^v^>#\n#.>>^.v<>v>><<..vv>^.>>^>^^.v>v.<^><>v<v^^><<v<.>>^<v<<><>.^<<.>>^<v<>v^>><v>^>..v<^<^.vv<>^^>>>v^>v<#\n#<>^^^<v><^v^vvv>^v^v><<>>^<vv^><<v.>>v>.v>^>>v<^vv.<><<>><<v<>>^.<<>v.v^^vv<.>^<^v.<^<vvv^v.vv><vv.>#\n#>vv.vv^><v>v>.<v^><v<vv^v<.v<<>^<^>^><v^>v>^<v><>v>>v>>>>v^.<v<vv>^v<^.^.^>>><>^<^<^.<v<.><v.^<^.><.#\n#>^vvv<>^v^^>^<^v<^>v<<^<vv.vvv<<<v<v^..^.<<v<<<>>^>v^v^>^><v.^<v<<v>^^v<v.>>>v^<v^<v>^<^^.>v<^<>^.v<#\n#<>^<<<<v<>^v>v^<vv<^v>v^^<>.^>^^<.>>v>v<<^<<<>v<v^v><>>.<<.^<>><<<v>v^>v^^<v^^.><vv>^^<v.v>^<v<.vv><#\n#<>vvv<^^.v^^.v.<^<^>.^^v>^v>>.vv.>.v<<^<^^>vvv^<<<vv^<vv<>>v^^<^.<^.>v.^>v><^^>>^>^<>.>.^<<<.v.<>^>>#\n#><>v<>>>><.^v>v><v>^<<><>^vv.^.<.>>vvvv><>^^><>v>v.^^<^<^v>v<^<.<^<>^^^^vvv>.>>><^vv<^^^>.^<<v^>>><>#\n#<<><^>>^>^^>><.v^^^.v^^^>.^v<vvv.^^<^^>^<>>><<>>><<.v<^>><<v<v^>vv^<>vv.<<>v<v^><<vv^^^>vvvv<<v<><<<#\n#<^<><>><<>^^>v<<^v<v>^^^>^^vvvv<^^vv<>><.<^^.vv^>>.<>^.v<><^^vv>^^>>^<^^v>.v<>>^v.v^>.^v<.<v.<>>>>v<#\n#<^<<^^^vv><^<>^^>^v<v^v^.<v.>v>><<^^>v^>v>><v<<><>^^.vv^><.^>vv^v<<>^><^>^>^v^<><>^.^<.^.^>>^<.>^><<#\n#>^.<<v>^.<<<^>v>>>^<.^>>>.^^<<^.v^<<>v^<<<^<><>^vvvv^>vv^^>.>>^>><>^^^^>v<^^>^^<^vv.v.^<<^<<^>v><.>>#\n#>vv^.^vv>^<>^v.^^<v>v>><^^^v<<>>^>>^^>^<^<<<^.v><^>v<<v^<^^^>vv><<v<.<v><^vv>^>^v^<^v>^<^vv<<^v<.^^>#\n#<v>vv<^>v^^<<^^<<<v>v><<<.v^>^<><vvv^>.^.v>v<^^vvvv>>^v^^v^^^<>>>>v>>^>v^.<>.>.^vvv^<^<.<^>^<.v<><.>#\n#.<.<^v<v><^>.^.v<>>^<>.<<^.vv^>v^v<..>^.^^vv^><.<>^<><^vv>^<.<>v..<^^<v^^v<<<v<><<>>vv<>^^<>^vvvvv><#\n#<.^v^>vvv<.v<.vv><^vv^>>.^>><><<v>v<^<<vv.<>v<vv^v>^>^^<v>^>^<<>^<<^>.v^^^><>.^^v>^...^<^>>>.>v^^vv<#\n#.<^v>^>^^<^v.v>.^<><<<>>vv>.^v<>.<<>>v^v<v>>^.^<^^<.v^<><vvv>><^.>.vv<.vv^>^><<.<.>><^>vv^^>>v^>^>.<#\n#.>^<>><v<.>vv<>>^<v.>^.<v^v.v<><>^<v^<v.<<^v<>v<<v>v^>^>v.>>v^.><^^.>v<v.v^.>^^<>^<.^<v^^><<>^vvv>><#\n#.^.^vv^..^>.v.<<v>^^^>^<^v<^>>v<>v>.<><>>.<v^<^>.<v.^^v^<v><>^>v.<^<<><>v.<<<^>.<<.^>^>^<^.>^v>>>.>>#\n#.^v>><>v<<.<^>^^<<>^>v>vv<>>^>>^.v^>.>^<v^v>>v^^><.v.<v>.>vv<<^v<v<v^v>v<v<.^<.^<<v>^^v.^v.<^>.v>^>>#\n#>^v>^<<>>vv>^<.<v^v<^>>^v>^v^<<><<^^^^v>^^^^^^^vv<^..<vvv><^.<..^>^^<^>v^>>>>vv>v<<<<>.>.>^.^<^.v<v>#\n#.^v.^>><.><<v^>^^.>><^v<..>..><.><><<v>>>v<>^.>v<vv^^<<.^.^^v<v..^<v^>.<vvv>^>v>^<^><>>>>v<>^>>vv^.>#\n#<v<vv^vvv><v^<^>>.v^v^>><.>><>>v^^<v>>>>.v^.^.<vv.>>>^v>^<>v^.^>v<vv.>>vvv^v^<vv<>v<^<^.<<^..v^.^v<<#\n#<.<v>^>v<^<.<><>.v<<^v<^<>^.vv<v<<v>v<^<^v>v<v^^vv<><..v<<<<.^^v<>>^<v>.^>>v<^>v>^><vvv<^>>.^v>^<.><#\n####################################################################################################.#\n';
 var $author$project$Days$Day25$puzzleInput = '\n1-=022001=-1-\n2-1020=0-01=2000\n1==-2=122-=2-21102\n1-0=1=-0-==0=--=-2\n1-0-1=--22=\n2=110---012022-21\n22==0\n2-0-10=112\n2210=1-=-1-011=2-\n1-=-=0212\n1=100011=21101=\n2-===02\n1--120\n1=--1=-000-=00=210\n2220=210-01\n1=011--1\n100212002=0=0\n2-=2=0=-00022\n200-\n1200=\n1=1221-01-01-22\n1=1=22==-1\n1-1=201-\n1=10\n2\n1--2=2=201020-=\n1-2-==211=-221=-\n100-20=-002=\n1-021\n20021--=1\n2--2=0\n1=010=2-=200-01-1\n2=1\n202102\n100-0-0=0-1-\n2-\n22-12=0010=-221=-\n1=1\n10--120\n1210-020=-1-210=1\n102-=1\n2=0012=1=10=22-\n2=0\n1=222\n2=-0000=-=11-\n1-11-21=02=10\n11201---=1=202110\n10-1=21202=1=10=0\n220102=2110-1\n21110101\n2--0-0--01-01---2\n1=10=1-1-1=0121-=2==\n1---=0=10021011\n111=1=21\n110220==20=2\n20--12==20\n10-11=1-01\n2=-==11=\n2==2-\n1-0\n220=-=-102==\n10-0-20\n21201=-211001=0-11-\n2=020-=20\n12=-1---2-=2-02\n10=-=20-121\n12-\n10-02--0=-==\n11-\n212-2--1-1-=122\n1=2-\n2020=-1-1002-==-01\n2==11201==10-2\n200-=-0-0-\n1--=====12\n12-=02-2-1\n21-2=21==10-2=201-\n102\n111=00\n2=-2-0--222=\n11--=\n2=0-102=2=\n1=2-22-=20121-1-12\n1-==1-0=--\n100\n1=0=220002\n11-0-2\n12\n1-020120020\n2-==\n1020==-02\n220=-1\n2=-0==-2=021-000\n112==\n11=1-01=0-2=-10=2==\n1=1001\n2-=\n10-1==1=-2111-=2\n1=-0==\n2112===0-202=1\n102=-\n1=12=\n1=200=01=22-0\n1-2-=2\n211220=-01===-1==2\n1101-12=--=2020\n110001-001-==2=\n';
@@ -6171,7 +6172,7 @@ var $elm$parser$Parser$Advanced$consumeBase = _Parser_consumeBase;
 var $elm$parser$Parser$Advanced$consumeBase16 = _Parser_consumeBase16;
 var $elm$parser$Parser$Advanced$bumpOffset = F2(
 	function (newOffset, s) {
-		return {be: s.be + (newOffset - s.c), e: s.e, f: s.f, c: newOffset, bQ: s.bQ, b: s.b};
+		return {bh: s.bh + (newOffset - s.c), e: s.e, f: s.f, c: newOffset, bS: s.bS, b: s.b};
 	});
 var $elm$parser$Parser$Advanced$chompBase10 = _Parser_chompBase10;
 var $elm$parser$Parser$Advanced$isAsciiCode = _Parser_isAsciiCode;
@@ -6202,7 +6203,7 @@ var $elm$parser$Parser$Advanced$AddRight = F2(
 	});
 var $elm$parser$Parser$Advanced$DeadEnd = F4(
 	function (row, col, problem, contextStack) {
-		return {be: col, cd: contextStack, bI: problem, bQ: row};
+		return {bh: col, ce: contextStack, bK: problem, bS: row};
 	});
 var $elm$parser$Parser$Advanced$Empty = {$: 0};
 var $elm$parser$Parser$Advanced$fromState = F2(
@@ -6210,7 +6211,7 @@ var $elm$parser$Parser$Advanced$fromState = F2(
 		return A2(
 			$elm$parser$Parser$Advanced$AddRight,
 			$elm$parser$Parser$Advanced$Empty,
-			A4($elm$parser$Parser$Advanced$DeadEnd, s.bQ, s.be, x, s.e));
+			A4($elm$parser$Parser$Advanced$DeadEnd, s.bS, s.bh, x, s.e));
 	});
 var $elm$parser$Parser$Advanced$finalizeInt = F5(
 	function (invalid, handler, startOffset, _v0, s) {
@@ -6250,7 +6251,7 @@ var $elm$parser$Parser$Advanced$finalizeFloat = F6(
 			return A2(
 				$elm$parser$Parser$Advanced$Bad,
 				true,
-				A4($elm$parser$Parser$Advanced$fromInfo, s.bQ, s.be - (floatOffset + s.c), invalid, s.e));
+				A4($elm$parser$Parser$Advanced$fromInfo, s.bS, s.bh - (floatOffset + s.c), invalid, s.e));
 		} else {
 			if (_Utils_eq(s.c, floatOffset)) {
 				return A2(
@@ -6296,37 +6297,37 @@ var $elm$parser$Parser$Advanced$number = function (c) {
 			var baseOffset = zeroOffset + 1;
 			return A3($elm$parser$Parser$Advanced$isAsciiCode, 120, zeroOffset, s.b) ? A5(
 				$elm$parser$Parser$Advanced$finalizeInt,
-				c.cs,
-				c.br,
+				c.ct,
+				c.bt,
 				baseOffset,
 				A2($elm$parser$Parser$Advanced$consumeBase16, baseOffset, s.b),
 				s) : (A3($elm$parser$Parser$Advanced$isAsciiCode, 111, zeroOffset, s.b) ? A5(
 				$elm$parser$Parser$Advanced$finalizeInt,
-				c.cs,
-				c.bE,
+				c.ct,
+				c.bG,
 				baseOffset,
 				A3($elm$parser$Parser$Advanced$consumeBase, 8, baseOffset, s.b),
 				s) : (A3($elm$parser$Parser$Advanced$isAsciiCode, 98, zeroOffset, s.b) ? A5(
 				$elm$parser$Parser$Advanced$finalizeInt,
-				c.cs,
-				c.bb,
+				c.ct,
+				c.be,
 				baseOffset,
 				A3($elm$parser$Parser$Advanced$consumeBase, 2, baseOffset, s.b),
 				s) : A6(
 				$elm$parser$Parser$Advanced$finalizeFloat,
-				c.cs,
-				c.bk,
-				c.bv,
-				c.bl,
+				c.ct,
+				c.bn,
+				c.bx,
+				c.bo,
 				_Utils_Tuple2(zeroOffset, 0),
 				s)));
 		} else {
 			return A6(
 				$elm$parser$Parser$Advanced$finalizeFloat,
-				c.cs,
-				c.bk,
-				c.bv,
-				c.bl,
+				c.ct,
+				c.bn,
+				c.bx,
+				c.bo,
 				A3($elm$parser$Parser$Advanced$consumeBase, 10, s.c, s.b),
 				s);
 		}
@@ -6336,13 +6337,13 @@ var $elm$parser$Parser$Advanced$int = F2(
 	function (expecting, invalid) {
 		return $elm$parser$Parser$Advanced$number(
 			{
-				bb: $elm$core$Result$Err(invalid),
-				bk: expecting,
-				bl: $elm$core$Result$Err(invalid),
-				br: $elm$core$Result$Err(invalid),
-				bv: $elm$core$Result$Ok($elm$core$Basics$identity),
-				cs: invalid,
-				bE: $elm$core$Result$Err(invalid)
+				be: $elm$core$Result$Err(invalid),
+				bn: expecting,
+				bo: $elm$core$Result$Err(invalid),
+				bt: $elm$core$Result$Err(invalid),
+				bx: $elm$core$Result$Ok($elm$core$Basics$identity),
+				ct: invalid,
+				bG: $elm$core$Result$Err(invalid)
 			});
 	});
 var $elm$parser$Parser$int = A2($elm$parser$Parser$Advanced$int, $elm$parser$Parser$ExpectingInt, $elm$parser$Parser$ExpectingInt);
@@ -6353,10 +6354,10 @@ var $elm$parser$Parser$Advanced$keeper = F2(
 var $elm$parser$Parser$keeper = $elm$parser$Parser$Advanced$keeper;
 var $elm$parser$Parser$DeadEnd = F3(
 	function (row, col, problem) {
-		return {be: col, bI: problem, bQ: row};
+		return {bh: col, bK: problem, bS: row};
 	});
 var $elm$parser$Parser$problemToDeadEnd = function (p) {
-	return A3($elm$parser$Parser$DeadEnd, p.bQ, p.be, p.bI);
+	return A3($elm$parser$Parser$DeadEnd, p.bS, p.bh, p.bK);
 };
 var $elm$parser$Parser$Advanced$bagToList = F2(
 	function (bag, list) {
@@ -6388,7 +6389,7 @@ var $elm$parser$Parser$Advanced$run = F2(
 	function (_v0, src) {
 		var parse = _v0;
 		var _v1 = parse(
-			{be: 1, e: _List_Nil, f: 1, c: 0, bQ: 1, b: src});
+			{bh: 1, e: _List_Nil, f: 1, c: 0, bS: 1, b: src});
 		if (!_v1.$) {
 			var value = _v1.b;
 			return $elm$core$Result$Ok(value);
@@ -6429,7 +6430,7 @@ var $elm$parser$Parser$Advanced$token = function (_v0) {
 	var expecting = _v0.b;
 	var progress = !$elm$core$String$isEmpty(str);
 	return function (s) {
-		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.c, s.bQ, s.be, s.b);
+		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, str, s.c, s.bS, s.bh, s.b);
 		var newOffset = _v1.a;
 		var newRow = _v1.b;
 		var newCol = _v1.c;
@@ -6440,7 +6441,7 @@ var $elm$parser$Parser$Advanced$token = function (_v0) {
 			$elm$parser$Parser$Advanced$Good,
 			progress,
 			0,
-			{be: newCol, e: s.e, f: s.f, c: newOffset, bQ: newRow, b: s.b});
+			{bh: newCol, e: s.e, f: s.f, c: newOffset, bS: newRow, b: s.b});
 	};
 };
 var $elm$parser$Parser$Advanced$symbol = $elm$parser$Parser$Advanced$token;
@@ -6778,7 +6779,7 @@ var $elm$parser$Parser$Advanced$keyword = function (_v0) {
 	var expecting = _v0.b;
 	var progress = !$elm$core$String$isEmpty(kwd);
 	return function (s) {
-		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, kwd, s.c, s.bQ, s.be, s.b);
+		var _v1 = A5($elm$parser$Parser$Advanced$isSubString, kwd, s.c, s.bS, s.bh, s.b);
 		var newOffset = _v1.a;
 		var newRow = _v1.b;
 		var newCol = _v1.c;
@@ -6795,7 +6796,7 @@ var $elm$parser$Parser$Advanced$keyword = function (_v0) {
 			$elm$parser$Parser$Advanced$Good,
 			progress,
 			0,
-			{be: newCol, e: s.e, f: s.f, c: newOffset, bQ: newRow, b: s.b});
+			{bh: newCol, e: s.e, f: s.f, c: newOffset, bS: newRow, b: s.b});
 	};
 };
 var $elm$parser$Parser$keyword = function (kwd) {
@@ -6815,7 +6816,7 @@ var $elm$parser$Parser$Advanced$chompWhileHelp = F5(
 					$elm$parser$Parser$Advanced$Good,
 					_Utils_cmp(s0.c, offset) < 0,
 					0,
-					{be: col, e: s0.e, f: s0.f, c: offset, bQ: row, b: s0.b});
+					{bh: col, e: s0.e, f: s0.f, c: offset, bS: row, b: s0.b});
 			} else {
 				if (_Utils_eq(newOffset, -2)) {
 					var $temp$isGood = isGood,
@@ -6847,7 +6848,7 @@ var $elm$parser$Parser$Advanced$chompWhileHelp = F5(
 	});
 var $elm$parser$Parser$Advanced$chompWhile = function (isGood) {
 	return function (s) {
-		return A5($elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.c, s.bQ, s.be, s);
+		return A5($elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.c, s.bS, s.bh, s);
 	};
 };
 var $elm$parser$Parser$Advanced$spaces = $elm$parser$Parser$Advanced$chompWhile(
@@ -7088,7 +7089,7 @@ var $author$project$Days$Day07$TerminalLineCommand = function (a) {
 };
 var $elm$parser$Parser$Advanced$chompUntilEndOr = function (str) {
 	return function (s) {
-		var _v0 = A5(_Parser_findSubString, str, s.c, s.bQ, s.be, s.b);
+		var _v0 = A5(_Parser_findSubString, str, s.c, s.bS, s.bh, s.b);
 		var newOffset = _v0.a;
 		var newRow = _v0.b;
 		var newCol = _v0.c;
@@ -7097,7 +7098,7 @@ var $elm$parser$Parser$Advanced$chompUntilEndOr = function (str) {
 			$elm$parser$Parser$Advanced$Good,
 			_Utils_cmp(s.c, adjustedOffset) < 0,
 			0,
-			{be: newCol, e: s.e, f: s.f, c: adjustedOffset, bQ: newRow, b: s.b});
+			{bh: newCol, e: s.e, f: s.f, c: adjustedOffset, bS: newRow, b: s.b});
 	};
 };
 var $elm$parser$Parser$chompUntilEndOr = $elm$parser$Parser$Advanced$chompUntilEndOr;
@@ -8019,17 +8020,17 @@ var $author$project$Days$Day10$run1 = A2(
 				$elm$core$List$foldl,
 				F2(
 					function (instr, _v0) {
-						var reg = _v0.a2;
-						var multiplier = _v0.aZ;
-						var sum = _v0.aR;
+						var reg = _v0.a5;
+						var multiplier = _v0.a0;
+						var sum = _v0.aU;
 						var newReg = A2($author$project$Days$Day10$callInstruction, instr, reg);
-						return {aZ: multiplier + 40, a2: newReg, aR: sum + (multiplier * newReg)};
+						return {a0: multiplier + 40, a5: newReg, aU: sum + (multiplier * newReg)};
 					}),
-				{aZ: 20, a2: 1, aR: 0}),
+				{a0: 20, a5: 1, aU: 0}),
 			A2(
 				$elm$core$Basics$composeR,
 				function ($) {
-					return $.aR;
+					return $.aU;
 				},
 				$elm$core$String$fromInt))));
 var $author$project$Days$Day10$listWithNElements = F2(
@@ -8175,11 +8176,11 @@ var $author$project$Days$Day11$parseMonkey = function (input) {
 		return $elm$core$Maybe$Just(
 			{
 				ai: 0,
-				aW: $author$project$Days$Day11$parseToMonkeyLine(falseTo),
+				aZ: $author$project$Days$Day11$parseToMonkeyLine(falseTo),
 				_: $author$project$Days$Day11$parseItemsLine(item),
-				a0: $author$project$Days$Day11$parsePperationLine(operation),
-				aS: $author$project$Days$Day11$parseToMonkeyLine(divisible),
-				a7: $author$project$Days$Day11$parseToMonkeyLine(trueTo)
+				a3: $author$project$Days$Day11$parsePperationLine(operation),
+				aV: $author$project$Days$Day11$parseToMonkeyLine(divisible),
+				ba: $author$project$Days$Day11$parseToMonkeyLine(trueTo)
 			});
 	} else {
 		return $elm$core$Maybe$Nothing;
@@ -8232,7 +8233,7 @@ var $author$project$Days$Day11$reduceWorry = F3(
 				A2(
 					$elm$core$List$map,
 					function ($) {
-						return $.aS;
+						return $.aV;
 					},
 					$elm$core$Array$toList(monkeys)));
 			return A2($elm$core$Basics$modBy, modder, level);
@@ -8257,8 +8258,8 @@ var $author$project$Days$Day11$processMonkeyItems = F3(
 						$author$project$Days$Day11$reduceWorry,
 						worryReduction,
 						monkeys,
-						monkey.a0(worryLevel));
-					var toMonkey = (!A2($elm$core$Basics$modBy, monkey.aS, newWarryLevel)) ? monkey.a7 : monkey.aW;
+						monkey.a3(worryLevel));
+					var toMonkey = (!A2($elm$core$Basics$modBy, monkey.aV, newWarryLevel)) ? monkey.ba : monkey.aZ;
 					var newMonkeys = A3(
 						$author$project$Days$Day11$arrayUpdate,
 						idx,
@@ -9327,17 +9328,17 @@ var $elm$parser$Parser$Advanced$sequenceEnd = F5(
 var $elm$parser$Parser$Advanced$sequence = function (i) {
 	return A2(
 		$elm$parser$Parser$Advanced$skip,
-		$elm$parser$Parser$Advanced$token(i.cS),
+		$elm$parser$Parser$Advanced$token(i.cT),
 		A2(
 			$elm$parser$Parser$Advanced$skip,
-			i.cR,
+			i.cS,
 			A5(
 				$elm$parser$Parser$Advanced$sequenceEnd,
-				$elm$parser$Parser$Advanced$token(i.ci),
-				i.cR,
-				i.ct,
-				$elm$parser$Parser$Advanced$token(i.cQ),
-				i.cX)));
+				$elm$parser$Parser$Advanced$token(i.cj),
+				i.cS,
+				i.cu,
+				$elm$parser$Parser$Advanced$token(i.cR),
+				i.cY)));
 };
 var $elm$parser$Parser$Advanced$Forbidden = 0;
 var $elm$parser$Parser$Advanced$Mandatory = 2;
@@ -9364,12 +9365,12 @@ var $elm$parser$Parser$toToken = function (str) {
 var $elm$parser$Parser$sequence = function (i) {
 	return $elm$parser$Parser$Advanced$sequence(
 		{
-			ci: $elm$parser$Parser$toToken(i.ci),
-			ct: i.ct,
-			cQ: $elm$parser$Parser$toToken(i.cQ),
-			cR: i.cR,
-			cS: $elm$parser$Parser$toToken(i.cS),
-			cX: $elm$parser$Parser$toAdvancedTrailing(i.cX)
+			cj: $elm$parser$Parser$toToken(i.cj),
+			cu: i.cu,
+			cR: $elm$parser$Parser$toToken(i.cR),
+			cS: i.cS,
+			cT: $elm$parser$Parser$toToken(i.cT),
+			cY: $elm$parser$Parser$toAdvancedTrailing(i.cY)
 		});
 };
 function $author$project$Days$Day13$cyclic$packageParser() {
@@ -9389,15 +9390,15 @@ function $author$project$Days$Day13$cyclic$packageListParser() {
 			}),
 		$elm$parser$Parser$sequence(
 			{
-				ci: ']',
-				ct: $elm$parser$Parser$lazy(
+				cj: ']',
+				cu: $elm$parser$Parser$lazy(
 					function (_v0) {
 						return $author$project$Days$Day13$cyclic$packageParser();
 					}),
-				cQ: ',',
-				cR: $elm$parser$Parser$spaces,
-				cS: '[',
-				cX: 1
+				cR: ',',
+				cS: $elm$parser$Parser$spaces,
+				cT: '[',
+				cY: 1
 			}));
 }
 var $author$project$Days$Day13$packageParser = $author$project$Days$Day13$cyclic$packageParser();
@@ -9686,15 +9687,15 @@ var $author$project$Days$Day14$positionParser = A2(
 	$elm$parser$Parser$int);
 var $author$project$Days$Day14$lineParser = $elm$parser$Parser$sequence(
 	{
-		ci: '\n',
-		ct: $author$project$Days$Day14$positionParser,
-		cQ: '->',
-		cR: $elm$parser$Parser$chompWhile(
+		cj: '\n',
+		cu: $author$project$Days$Day14$positionParser,
+		cR: '->',
+		cS: $elm$parser$Parser$chompWhile(
 			function (c) {
 				return c === ' ';
 			}),
-		cS: '',
-		cX: 1
+		cT: '',
+		cY: 1
 	});
 var $elm$parser$Parser$Done = function (a) {
 	return {$: 1, a: a};
@@ -9818,7 +9819,7 @@ var $elm$parser$Parser$Advanced$chompUntil = function (_v0) {
 	var str = _v0.a;
 	var expecting = _v0.b;
 	return function (s) {
-		var _v1 = A5($elm$parser$Parser$Advanced$findSubString, str, s.c, s.bQ, s.be, s.b);
+		var _v1 = A5($elm$parser$Parser$Advanced$findSubString, str, s.c, s.bS, s.bh, s.b);
 		var newOffset = _v1.a;
 		var newRow = _v1.b;
 		var newCol = _v1.c;
@@ -9829,7 +9830,7 @@ var $elm$parser$Parser$Advanced$chompUntil = function (_v0) {
 			$elm$parser$Parser$Advanced$Good,
 			_Utils_cmp(s.c, newOffset) < 0,
 			0,
-			{be: newCol, e: s.e, f: s.f, c: newOffset, bQ: newRow, b: s.b});
+			{bh: newCol, e: s.e, f: s.f, c: newOffset, bS: newRow, b: s.b});
 	};
 };
 var $elm$parser$Parser$chompUntil = function (str) {
@@ -10188,15 +10189,15 @@ var $author$project$Days$Day16$valveNameParser = $elm$parser$Parser$getChompedSt
 		$elm$parser$Parser$chompWhile($elm$core$Char$isAlpha)));
 var $author$project$Days$Day16$listValveNameParser = $elm$parser$Parser$sequence(
 	{
-		ci: '\n',
-		ct: $author$project$Days$Day16$valveNameParser,
-		cQ: ',',
-		cR: $elm$parser$Parser$chompWhile(
+		cj: '\n',
+		cu: $author$project$Days$Day16$valveNameParser,
+		cR: ',',
+		cS: $elm$parser$Parser$chompWhile(
 			function (c) {
 				return c === ' ';
 			}),
-		cS: '',
-		cX: 0
+		cT: '',
+		cY: 0
 	});
 var $elm$parser$Parser$token = function (str) {
 	return $elm$parser$Parser$Advanced$token(
@@ -10439,7 +10440,7 @@ var $author$project$Days$Day17$nextShape = function (tower) {
 		_Utils_update(
 			tower,
 			{ae: tower.ae + 1}),
-		{S: leftBottom, aQ: shape});
+		{S: leftBottom, aT: shape});
 };
 var $elm$core$Set$map = F2(
 	function (func, set) {
@@ -10457,7 +10458,7 @@ var $elm$core$Set$map = F2(
 				set));
 	});
 var $author$project$Days$Day17$movingShapeToAbsolute = function (_v0) {
-	var shape = _v0.aQ;
+	var shape = _v0.aT;
 	var leftBottom = _v0.S;
 	var _v1 = leftBottom;
 	var x = _v1.a;
@@ -10529,7 +10530,7 @@ var $author$project$Days$Day17$shapeWidth = function (shape) {
 };
 var $author$project$Days$Day17$isColliding = F2(
 	function (tower, movingShape) {
-		var shape = movingShape.aQ;
+		var shape = movingShape.aT;
 		var leftBottom = movingShape.S;
 		var _v0 = leftBottom;
 		var x = _v0.a;
@@ -11074,11 +11075,11 @@ var $author$project$Days$Day19$oreObsidianCost = F2(
 var $author$project$Days$Day19$buildBlueprint = F7(
 	function (id, oreRobot, clayRobot, obsidianRobotA, obsidianRobotB, geodeRobotA, geodeRobotB) {
 		return {
-			aG: $author$project$Days$Day19$oreCost(clayRobot),
+			aI: $author$project$Days$Day19$oreCost(clayRobot),
 			an: A2($author$project$Days$Day19$oreObsidianCost, geodeRobotA, geodeRobotB),
-			aI: id,
-			aL: A2($author$project$Days$Day19$oreClayCost, obsidianRobotA, obsidianRobotB),
-			aM: $author$project$Days$Day19$oreCost(oreRobot)
+			aL: id,
+			aO: A2($author$project$Days$Day19$oreClayCost, obsidianRobotA, obsidianRobotB),
+			aP: $author$project$Days$Day19$oreCost(oreRobot)
 		};
 	});
 var $author$project$Days$Day19$blueprintParser = A2(
@@ -11200,11 +11201,11 @@ var $author$project$Days$Day19$actionBlueprint = F2(
 	function (action, blueprint) {
 		switch (action) {
 			case 1:
-				return blueprint.aM;
+				return blueprint.aP;
 			case 2:
-				return blueprint.aG;
+				return blueprint.aI;
 			case 3:
-				return blueprint.aL;
+				return blueprint.aO;
 			case 4:
 				return blueprint.an;
 			default:
@@ -11337,7 +11338,7 @@ var $author$project$Days$Day19$run1 = function (blueprints) {
 		$elm$core$List$foldl,
 		F2(
 			function (blueprint, acc) {
-				return acc + (blueprint.aI * A5($author$project$Days$Day19$playRounds, blueprint, 23, $author$project$Days$Day19$startInventory, 0, _List_Nil));
+				return acc + (blueprint.aL * A5($author$project$Days$Day19$playRounds, blueprint, 23, $author$project$Days$Day19$startInventory, 0, _List_Nil));
 			}),
 		0,
 		blueprints);
@@ -11702,13 +11703,13 @@ var $elm$parser$Parser$Advanced$float = F2(
 	function (expecting, invalid) {
 		return $elm$parser$Parser$Advanced$number(
 			{
-				bb: $elm$core$Result$Err(invalid),
-				bk: expecting,
-				bl: $elm$core$Result$Ok($elm$core$Basics$identity),
-				br: $elm$core$Result$Err(invalid),
-				bv: $elm$core$Result$Ok($elm$core$Basics$toFloat),
-				cs: invalid,
-				bE: $elm$core$Result$Err(invalid)
+				be: $elm$core$Result$Err(invalid),
+				bn: expecting,
+				bo: $elm$core$Result$Ok($elm$core$Basics$identity),
+				bt: $elm$core$Result$Err(invalid),
+				bx: $elm$core$Result$Ok($elm$core$Basics$toFloat),
+				ct: invalid,
+				bG: $elm$core$Result$Err(invalid)
 			});
 	});
 var $elm$parser$Parser$float = A2($elm$parser$Parser$Advanced$float, $elm$parser$Parser$ExpectingFloat, $elm$parser$Parser$ExpectingFloat);
@@ -12098,14 +12099,740 @@ var $author$project$Days$Day21$solution = function (input) {
 		return _Utils_Tuple2('invalid', 'input');
 	}
 };
+var $author$project$Days$Day22$PuzzlePartA = 0;
+var $author$project$Days$Day22$PuzzlePartB = 1;
+var $author$project$Days$Day22$East = 3;
+var $author$project$Days$Day22$directionToFacing = function (dir) {
+	switch (dir) {
+		case 0:
+			return 3;
+		case 1:
+			return 1;
+		case 2:
+			return 2;
+		default:
+			return 0;
+	}
+};
+var $author$project$Days$Day22$TurnLeft = {$: 1};
+var $author$project$Days$Day22$TurnRight = {$: 0};
+var $author$project$Days$Day22$Walk = function (a) {
+	return {$: 2, a: a};
+};
+var $author$project$Days$Day22$commandParser = $elm$parser$Parser$oneOf(
+	_List_fromArray(
+		[
+			A2(
+			$elm$parser$Parser$ignorer,
+			$elm$parser$Parser$succeed($author$project$Days$Day22$TurnRight),
+			$elm$parser$Parser$symbol('R')),
+			A2(
+			$elm$parser$Parser$ignorer,
+			$elm$parser$Parser$succeed($author$project$Days$Day22$TurnLeft),
+			$elm$parser$Parser$symbol('L')),
+			A2(
+			$elm$parser$Parser$keeper,
+			$elm$parser$Parser$succeed(
+				function (i) {
+					return $author$project$Days$Day22$Walk(i);
+				}),
+			$elm$parser$Parser$int)
+		]));
+var $author$project$Days$Day22$commandListParser = A2(
+	$elm$parser$Parser$loop,
+	_List_Nil,
+	function (list) {
+		return $elm$parser$Parser$oneOf(
+			_List_fromArray(
+				[
+					A2(
+					$elm$parser$Parser$map,
+					function (c) {
+						return $elm$parser$Parser$Loop(
+							A2($elm$core$List$cons, c, list));
+					},
+					$author$project$Days$Day22$commandParser),
+					A2(
+					$elm$parser$Parser$map,
+					function (_v0) {
+						return $elm$parser$Parser$Done(
+							$elm$core$List$reverse(list));
+					},
+					$elm$parser$Parser$oneOf(
+						_List_fromArray(
+							[
+								$elm$parser$Parser$symbol('\n'),
+								$elm$parser$Parser$end
+							])))
+				]));
+	});
+var $author$project$Days$Day22$Open = 0;
+var $author$project$Days$Day22$Wall = 1;
 var $elm$parser$Parser$Advanced$getPosition = function (s) {
 	return A3(
 		$elm$parser$Parser$Advanced$Good,
 		false,
-		_Utils_Tuple2(s.bQ, s.be),
+		_Utils_Tuple2(s.bS, s.bh),
 		s);
 };
 var $elm$parser$Parser$getPosition = $elm$parser$Parser$Advanced$getPosition;
+var $author$project$Days$Day22$locationsToMap = function (locations) {
+	var _v0 = A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v1, _v2) {
+				var x = _v1.a;
+				var y = _v1.b;
+				var w = _v2.a;
+				var h = _v2.b;
+				return _Utils_Tuple2(
+					A2($elm$core$Basics$max, x, w),
+					A2($elm$core$Basics$max, y, h));
+			}),
+		_Utils_Tuple2(0, 0),
+		$elm$core$Dict$keys(locations));
+	var width = _v0.a;
+	var height = _v0.b;
+	return {aK: height + 2, az: locations, aH: width + 2};
+};
+var $author$project$Days$Day22$mapParser = A2(
+	$elm$parser$Parser$loop,
+	$elm$core$Dict$empty,
+	function (dict) {
+		return $elm$parser$Parser$oneOf(
+			_List_fromArray(
+				[
+					A2(
+					$elm$parser$Parser$map,
+					function (_v0) {
+						return $elm$parser$Parser$Done(
+							$author$project$Days$Day22$locationsToMap(dict));
+					},
+					$elm$parser$Parser$symbol('\n\n')),
+					A2(
+					$elm$parser$Parser$map,
+					function (_v1) {
+						return $elm$parser$Parser$Loop(dict);
+					},
+					$elm$parser$Parser$oneOf(
+						_List_fromArray(
+							[
+								$elm$parser$Parser$symbol(' '),
+								$elm$parser$Parser$symbol('\n')
+							]))),
+					A2(
+					$elm$parser$Parser$keeper,
+					A2(
+						$elm$parser$Parser$keeper,
+						$elm$parser$Parser$succeed(
+							F2(
+								function (_v2, location) {
+									var line = _v2.a;
+									var column = _v2.b;
+									return $elm$parser$Parser$Loop(
+										A3(
+											$elm$core$Dict$insert,
+											_Utils_Tuple2(column - 1, line - 2),
+											location,
+											dict));
+								})),
+						$elm$parser$Parser$getPosition),
+					$elm$parser$Parser$oneOf(
+						_List_fromArray(
+							[
+								A2(
+								$elm$parser$Parser$ignorer,
+								$elm$parser$Parser$succeed(1),
+								$elm$parser$Parser$symbol('#')),
+								A2(
+								$elm$parser$Parser$ignorer,
+								$elm$parser$Parser$succeed(0),
+								$elm$parser$Parser$symbol('.'))
+							])))
+				]));
+	});
+var $author$project$Days$Day22$puzzleParser = A2(
+	$elm$parser$Parser$keeper,
+	A2(
+		$elm$parser$Parser$keeper,
+		$elm$parser$Parser$succeed($elm$core$Tuple$pair),
+		$author$project$Days$Day22$mapParser),
+	$author$project$Days$Day22$commandListParser);
+var $author$project$Days$Day22$North = 0;
+var $author$project$Days$Day22$South = 1;
+var $author$project$Days$Day22$West = 2;
+var $author$project$Days$Day22$turnLeft = function (dir) {
+	switch (dir) {
+		case 0:
+			return 2;
+		case 1:
+			return 3;
+		case 2:
+			return 1;
+		default:
+			return 0;
+	}
+};
+var $author$project$Days$Day22$turnRight = function (dir) {
+	switch (dir) {
+		case 0:
+			return 3;
+		case 1:
+			return 2;
+		case 2:
+			return 0;
+		default:
+			return 1;
+	}
+};
+var $author$project$Days$Day22$PuzzleInput = 1;
+var $author$project$Days$Day22$TestInput = 0;
+var $author$project$Days$Day22$Bottom = 2;
+var $author$project$Days$Day22$Front = 0;
+var $author$project$Days$Day22$Left = 3;
+var $author$project$Days$Day22$Rear = 5;
+var $author$project$Days$Day22$Right = 4;
+var $author$project$Days$Day22$Top = 1;
+var $author$project$Days$Day22$getCube = F2(
+	function (inputType, _v0) {
+		var _v1 = _v0.a;
+		var x = _v1.a;
+		var y = _v1.b;
+		if (inputType === 1) {
+			return (y < 50) ? ((x < 100) ? 1 : 4) : ((y < 100) ? 0 : ((y < 150) ? ((x < 50) ? 3 : 2) : 5));
+		} else {
+			return (y < 4) ? 1 : ((y < 8) ? ((x < 4) ? 5 : ((x < 8) ? 3 : 0)) : ((x < 12) ? 2 : 4));
+		}
+	});
+var $author$project$Days$Day22$nextLocationHelperA = F2(
+	function (map, _v0) {
+		var _v1 = _v0.a;
+		var x = _v1.a;
+		var y = _v1.b;
+		var currentDirection = _v0.b;
+		return _Utils_Tuple2(
+			function () {
+				switch (currentDirection) {
+					case 0:
+						return _Utils_Tuple2(
+							x,
+							A2($elm$core$Basics$modBy, map.aK, y - 1));
+					case 1:
+						return _Utils_Tuple2(
+							x,
+							A2($elm$core$Basics$modBy, map.aK, y + 1));
+					case 2:
+						return _Utils_Tuple2(
+							A2($elm$core$Basics$modBy, map.aH, x - 1),
+							y);
+					default:
+						return _Utils_Tuple2(
+							A2($elm$core$Basics$modBy, map.aH, x + 1),
+							y);
+				}
+			}(),
+			currentDirection);
+	});
+var $author$project$Days$Day22$switchCube = F3(
+	function (inputType, whereAmI, _v0) {
+		var _v1 = _v0.a;
+		var x = _v1.a;
+		var y = _v1.b;
+		var currentDirection = _v0.b;
+		if (inputType === 1) {
+			var _v3 = _Utils_Tuple2(whereAmI, currentDirection);
+			switch (_v3.b) {
+				case 0:
+					switch (_v3.a) {
+						case 0:
+							var _v4 = _v3.a;
+							var _v5 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								0);
+						case 1:
+							var _v12 = _v3.a;
+							var _v13 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(0, x + 100),
+								3);
+						case 2:
+							var _v20 = _v3.a;
+							var _v21 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								0);
+						case 3:
+							var _v28 = _v3.a;
+							var _v29 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(50, x + 50),
+								3);
+						case 4:
+							var _v36 = _v3.a;
+							var _v37 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x - 100, 199),
+								0);
+						default:
+							var _v44 = _v3.a;
+							var _v45 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								0);
+					}
+				case 1:
+					switch (_v3.a) {
+						case 0:
+							var _v6 = _v3.a;
+							var _v7 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								1);
+						case 1:
+							var _v14 = _v3.a;
+							var _v15 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								1);
+						case 2:
+							var _v22 = _v3.a;
+							var _v23 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(49, x + 100),
+								2);
+						case 3:
+							var _v30 = _v3.a;
+							var _v31 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								1);
+						case 4:
+							var _v38 = _v3.a;
+							var _v39 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(99, x - 50),
+								2);
+						default:
+							var _v46 = _v3.a;
+							var _v47 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x + 100, 0),
+								1);
+					}
+				case 2:
+					switch (_v3.a) {
+						case 0:
+							var _v8 = _v3.a;
+							var _v9 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(y - 50, 100),
+								1);
+						case 1:
+							var _v16 = _v3.a;
+							var _v17 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(0, 149 - y),
+								3);
+						case 2:
+							var _v24 = _v3.a;
+							var _v25 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								2);
+						case 3:
+							var _v32 = _v3.a;
+							var _v33 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(50, 149 - y),
+								3);
+						case 4:
+							var _v40 = _v3.a;
+							var _v41 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								2);
+						default:
+							var _v48 = _v3.a;
+							var _v49 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(y - 100, 0),
+								1);
+					}
+				default:
+					switch (_v3.a) {
+						case 0:
+							var _v10 = _v3.a;
+							var _v11 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(y + 50, 49),
+								0);
+						case 1:
+							var _v18 = _v3.a;
+							var _v19 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								3);
+						case 2:
+							var _v26 = _v3.a;
+							var _v27 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(149, 149 - y),
+								2);
+						case 3:
+							var _v34 = _v3.a;
+							var _v35 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								3);
+						case 4:
+							var _v42 = _v3.a;
+							var _v43 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(99, 149 - y),
+								2);
+						default:
+							var _v50 = _v3.a;
+							var _v51 = _v3.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(y - 100, 149),
+								0);
+					}
+			}
+		} else {
+			var _v52 = _Utils_Tuple2(whereAmI, currentDirection);
+			switch (_v52.b) {
+				case 0:
+					switch (_v52.a) {
+						case 0:
+							var _v53 = _v52.a;
+							var _v54 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								0);
+						case 1:
+							var _v61 = _v52.a;
+							var _v62 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(11 - x, 4),
+								1);
+						case 2:
+							var _v69 = _v52.a;
+							var _v70 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								0);
+						case 3:
+							var _v77 = _v52.a;
+							var _v78 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(8, x - 4),
+								3);
+						case 4:
+							var _v85 = _v52.a;
+							var _v86 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(11, 19 - x),
+								2);
+						default:
+							var _v93 = _v52.a;
+							var _v94 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(11 - x, 0),
+								1);
+					}
+				case 1:
+					switch (_v52.a) {
+						case 0:
+							var _v55 = _v52.a;
+							var _v56 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								1);
+						case 1:
+							var _v63 = _v52.a;
+							var _v64 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								1);
+						case 2:
+							var _v71 = _v52.a;
+							var _v72 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(11 - x, 7),
+								0);
+						case 3:
+							var _v79 = _v52.a;
+							var _v80 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(8, 15 - x),
+								3);
+						case 4:
+							var _v87 = _v52.a;
+							var _v88 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(0, 19 - x),
+								3);
+						default:
+							var _v95 = _v52.a;
+							var _v96 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(11 - x, 11),
+								0);
+					}
+				case 2:
+					switch (_v52.a) {
+						case 0:
+							var _v57 = _v52.a;
+							var _v58 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								2);
+						case 1:
+							var _v65 = _v52.a;
+							var _v66 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(y + 4, 4),
+								1);
+						case 2:
+							var _v73 = _v52.a;
+							var _v74 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(15 - y, 7),
+								0);
+						case 3:
+							var _v81 = _v52.a;
+							var _v82 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								2);
+						case 4:
+							var _v89 = _v52.a;
+							var _v90 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								2);
+						default:
+							var _v97 = _v52.a;
+							var _v98 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(19 - y, 11),
+								0);
+					}
+				default:
+					switch (_v52.a) {
+						case 0:
+							var _v59 = _v52.a;
+							var _v60 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(19 - y, 8),
+								1);
+						case 1:
+							var _v67 = _v52.a;
+							var _v68 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(15, 11 - y),
+								2);
+						case 2:
+							var _v75 = _v52.a;
+							var _v76 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								3);
+						case 3:
+							var _v83 = _v52.a;
+							var _v84 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								3);
+						case 4:
+							var _v91 = _v52.a;
+							var _v92 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(11, 11 - y),
+								2);
+						default:
+							var _v99 = _v52.a;
+							var _v100 = _v52.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x, y),
+								3);
+					}
+			}
+		}
+	});
+var $author$project$Days$Day22$nextLocation = F3(
+	function (puzzlePart, map, vector) {
+		nextLocation:
+		while (true) {
+			var _v0 = A2($author$project$Days$Day22$nextLocationHelperA, map, vector);
+			var nextLoc = _v0.a;
+			var nextDir = _v0.b;
+			var _v1 = A2($elm$core$Dict$get, nextLoc, map.az);
+			if (!_v1.$) {
+				if (_v1.a === 1) {
+					var _v2 = _v1.a;
+					return $elm$core$Maybe$Nothing;
+				} else {
+					var _v3 = _v1.a;
+					return $elm$core$Maybe$Just(
+						_Utils_Tuple2(nextLoc, nextDir));
+				}
+			} else {
+				if (!puzzlePart) {
+					var $temp$puzzlePart = puzzlePart,
+						$temp$map = map,
+						$temp$vector = _Utils_Tuple2(nextLoc, nextDir);
+					puzzlePart = $temp$puzzlePart;
+					map = $temp$map;
+					vector = $temp$vector;
+					continue nextLocation;
+				} else {
+					var inputType = (map.aH === 17) ? 0 : 1;
+					var _v5 = A3(
+						$author$project$Days$Day22$switchCube,
+						inputType,
+						A2($author$project$Days$Day22$getCube, inputType, vector),
+						vector);
+					var newLoc = _v5.a;
+					var newDir = _v5.b;
+					var _v6 = A2($elm$core$Dict$get, newLoc, map.az);
+					if (!_v6.$) {
+						if (_v6.a === 1) {
+							var _v7 = _v6.a;
+							return $elm$core$Maybe$Nothing;
+						} else {
+							var _v8 = _v6.a;
+							return $elm$core$Maybe$Just(
+								_Utils_Tuple2(newLoc, newDir));
+						}
+					} else {
+						return $elm$core$Maybe$Nothing;
+					}
+				}
+			}
+		}
+	});
+var $author$project$Days$Day22$walkStep = F4(
+	function (puzzlePart, map, steps, vector) {
+		walkStep:
+		while (true) {
+			if (!steps) {
+				return vector;
+			} else {
+				var _v0 = A3($author$project$Days$Day22$nextLocation, puzzlePart, map, vector);
+				if (_v0.$ === 1) {
+					return vector;
+				} else {
+					var _new = _v0.a;
+					var $temp$puzzlePart = puzzlePart,
+						$temp$map = map,
+						$temp$steps = steps - 1,
+						$temp$vector = _new;
+					puzzlePart = $temp$puzzlePart;
+					map = $temp$map;
+					steps = $temp$steps;
+					vector = $temp$vector;
+					continue walkStep;
+				}
+			}
+		}
+	});
+var $author$project$Days$Day22$walk = F4(
+	function (puzzlePart, map, commands, _v0) {
+		walk:
+		while (true) {
+			var currentPos = _v0.a;
+			var currentDirection = _v0.b;
+			if (!commands.b) {
+				return _Utils_Tuple2(currentPos, currentDirection);
+			} else {
+				switch (commands.a.$) {
+					case 0:
+						var _v2 = commands.a;
+						var nextCommands = commands.b;
+						var $temp$puzzlePart = puzzlePart,
+							$temp$map = map,
+							$temp$commands = nextCommands,
+							$temp$_v0 = _Utils_Tuple2(
+							currentPos,
+							$author$project$Days$Day22$turnRight(currentDirection));
+						puzzlePart = $temp$puzzlePart;
+						map = $temp$map;
+						commands = $temp$commands;
+						_v0 = $temp$_v0;
+						continue walk;
+					case 1:
+						var _v3 = commands.a;
+						var nextCommands = commands.b;
+						var $temp$puzzlePart = puzzlePart,
+							$temp$map = map,
+							$temp$commands = nextCommands,
+							$temp$_v0 = _Utils_Tuple2(
+							currentPos,
+							$author$project$Days$Day22$turnLeft(currentDirection));
+						puzzlePart = $temp$puzzlePart;
+						map = $temp$map;
+						commands = $temp$commands;
+						_v0 = $temp$_v0;
+						continue walk;
+					default:
+						var steps = commands.a.a;
+						var nextCommands = commands.b;
+						return A4(
+							$author$project$Days$Day22$walk,
+							puzzlePart,
+							map,
+							nextCommands,
+							A4(
+								$author$project$Days$Day22$walkStep,
+								puzzlePart,
+								map,
+								steps,
+								_Utils_Tuple2(currentPos, currentDirection)));
+				}
+			}
+		}
+	});
+var $author$project$Days$Day22$runPart = F2(
+	function (puzzlePart, input) {
+		var _v0 = A2($elm$parser$Parser$run, $author$project$Days$Day22$puzzleParser, input);
+		if (!_v0.$) {
+			var _v1 = _v0.a;
+			var map = _v1.a;
+			var commands = _v1.b;
+			var startPos = A2(
+				$elm$core$Maybe$withDefault,
+				_Utils_Tuple2(0, 0),
+				$elm$core$List$head(
+					A2(
+						$elm$core$List$filter,
+						function (_v4) {
+							var line = _v4.b;
+							return !line;
+						},
+						$elm$core$Dict$keys(map.az))));
+			var _v2 = A4(
+				$author$project$Days$Day22$walk,
+				puzzlePart,
+				map,
+				commands,
+				_Utils_Tuple2(startPos, 3));
+			var _v3 = _v2.a;
+			var x = _v3.a;
+			var y = _v3.b;
+			var direction = _v2.b;
+			return $elm$core$String$fromInt(
+				(((y + 1) * 1000) + ((x + 1) * 4)) + $author$project$Days$Day22$directionToFacing(direction));
+		} else {
+			return 'Error';
+		}
+	});
+var $author$project$Days$Day22$solution = function (input) {
+	return _Utils_Tuple2(
+		A2($author$project$Days$Day22$runPart, 0, input),
+		A2($author$project$Days$Day22$runPart, 1, input));
+};
 var $author$project$Days$Day23$elvesPositionParser = A2(
 	$elm$parser$Parser$loop,
 	$elm$core$Set$empty,
@@ -12506,8 +13233,8 @@ var $elm$core$Dict$map = F2(
 var $author$project$Days$Day24$mapHelperToMap = function (_v0) {
 	var lines = _v0.P;
 	var columns = _v0.O;
-	var maxLines = _v0.aA;
-	var maxColumns = _v0.az;
+	var maxLines = _v0.aB;
+	var maxColumns = _v0.aA;
 	var addMax = function (m) {
 		return $elm$core$Dict$map(
 			F2(
@@ -12531,7 +13258,7 @@ var $author$project$Days$Day24$mapHelperToMap = function (_v0) {
 			_List_Nil,
 			maxLines,
 			A2(addMax, maxColumns, lines)),
-		aK: _Utils_Tuple2(maxColumns, maxLines)
+		aN: _Utils_Tuple2(maxColumns, maxLines)
 	};
 };
 var $author$project$Days$Day24$downwards = F3(
@@ -12602,13 +13329,13 @@ var $author$project$Days$Day24$mapParserHelper = F3(
 				{
 					O: A3($elm$core$Dict$insert, columnNr, newColumn, map.O),
 					P: A3($elm$core$Dict$insert, lineNr, newLine, map.P),
-					az: A2($elm$core$Basics$max, map.az, columnNr),
-					aA: A2($elm$core$Basics$max, map.aA, lineNr)
+					aA: A2($elm$core$Basics$max, map.aA, columnNr),
+					aB: A2($elm$core$Basics$max, map.aB, lineNr)
 				}));
 	});
 var $author$project$Days$Day24$mapParser = A2(
 	$elm$parser$Parser$loop,
-	{O: $elm$core$Dict$empty, P: $elm$core$Dict$empty, az: 0, aA: 0},
+	{O: $elm$core$Dict$empty, P: $elm$core$Dict$empty, aA: 0, aB: 0},
 	function (map) {
 		return $elm$parser$Parser$oneOf(
 			_List_fromArray(
@@ -12721,7 +13448,7 @@ var $author$project$Days$Day24$breathFirstSearch = F4(
 						queue,
 						A2(
 							$elm$core$Set$filter,
-							$author$project$Days$Day24$inBox(map.aK),
+							$author$project$Days$Day24$inBox(map.aN),
 							neighbors)));
 				var $temp$map = map,
 					$temp$goal = goal,
@@ -12745,7 +13472,7 @@ var $author$project$Days$Day24$go = F4(
 			minute);
 	});
 var $author$project$Days$Day24$mapGoal = function (_v0) {
-	var max = _v0.aK;
+	var max = _v0.aN;
 	var _v1 = max;
 	var x = _v1.a;
 	var y = _v1.b;
@@ -12964,6 +13691,9 @@ var $author$project$Main$days = $elm$core$Array$fromList(
 			_Utils_Tuple2(
 			'Day 21',
 			_Utils_Tuple2($author$project$Days$Day21$puzzleInput, $author$project$Days$Day21$solution)),
+			_Utils_Tuple2(
+			'Day 22',
+			_Utils_Tuple2($author$project$Days$Day22$puzzleInput, $author$project$Days$Day22$solution)),
 			_Utils_Tuple2(
 			'Day 23',
 			_Utils_Tuple2($author$project$Days$Day23$puzzleInput, $author$project$Days$Day23$solution)),
@@ -13474,7 +14204,7 @@ var $author$project$Main$view = function (model) {
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
-	{cr: $author$project$Main$ShowList, cZ: $author$project$Main$update, c_: $author$project$Main$view});
+	{cs: $author$project$Main$ShowList, c_: $author$project$Main$update, c$: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
 
